@@ -181,6 +181,7 @@ class MailingSendView(CreateView):
         mailing.status = 'completed'
         mailing.save()
 
+
         messages.success(self.request, 'Рассылка успешно отправлена')
         return super().form_valid(form)
 
