@@ -10,13 +10,14 @@ class ClientForm(ModelForm):
     """ Форма Создания клиента"""
     class Meta:
         model = Clients
-        fields = ['email', 'name', 'comment']
+        fields = ['email', 'name', 'comment', 'location']
 
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
         self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите email'})
         self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Имя'})
         self.fields['comment'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Напишите комментарий'})
+        self.fields['location'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите город'})
 
     def clean_email(self):
         """ Валидация email"""
@@ -31,12 +32,13 @@ class MessageForm(ModelForm):
 
     class Meta:
         model = Message
-        fields = ['header', 'content']
+        fields = ['header', 'content', 'product']
 
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
         self.fields['header'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Заголовок'})
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Контент'})
+        self.fields['product'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите товар'})
 
 
 class MailingSendForm(forms.ModelForm):
@@ -65,8 +67,12 @@ class MailingSendForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'avatar', 'country', 'phone_number', 'role',]
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'avatar': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'country': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'role': forms.TextInput(attrs={'class': 'form-control'}),
         }

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, \
     PasswordResetCompleteView, PasswordResetConfirmView
+from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.template.loader import render_to_string
@@ -10,10 +11,11 @@ from django.utils.crypto import get_random_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 from itsdangerous import URLSafeTimedSerializer
 from Users.forms import UserRegisterForm, CustomAuthenticationForm
 from Users.models import User
+from clients.models import EmailStatistics
 from config import settings
 from django.core.mail import send_mail
 
@@ -74,6 +76,23 @@ def confirm_email(request, uidb64, token):
         messages.error(request, 'Ссылка для подтверждения недействительна или истекла.')
         messages.error(request, f"Ошибка при подтверждении email: {e}")
     return redirect('Users:register')
+
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'user_detail.html'
+    context_object_name = 'user'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        stats = EmailStatistics.objects.filter(user=self.object).values(
+            'mailing__datetime_start'
+        ).annotate(
+            total_success=Sum('success_attempt_mailing'),
+            total_failed=Sum('failed_attempt_mailing')
+        )
+        context['user_statistics'] = list(stats)
+        return context
 
 
 class CustomLoginView(LoginView):
@@ -165,3 +184,5 @@ class UnBlockUserConfirmationView(LoginRequiredMixin, View):
         user.save()
         messages.success(request, 'Пользователь успешно разблокирован.')
         return redirect('Users:user_list')
+
+

@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block title %} Удаление  клиента {% endblock %}
 {% block content %}
-<h1>Удаление клиента</h1>
+<h3 class="mt-3 mb-2">Удаление клиента</h3>
 <p>Вы уверены что хотите удалить клиента "{{ object.name }}"?</p>
 <form method="post">
     {% csrf_token %}
 
-    <button type="submit" class="btn btn-danger">Удалить</button>
-    <a href="{% url 'clients:client_list' %}" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-danger btn-sm mt-2 mb-2">Удалить</button>
+    <a href="{% url 'clients:client_list' %}" class="btn btn-primary btn-sm mt-2 mb-2">Отмена</a>
 </form>
 {% endblock %}

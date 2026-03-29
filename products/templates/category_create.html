@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Создание категории {% endblock %}
+{% block content %}
+
+
+<h3 class="mt-3 mb-2">Создание категории</h3>
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-sm mt-4 mb-4">Сохранить</button>
+    <a href="{% url 'products:category_list' %}" class="btn btn-secondary btn-sm mt-4 mb-4">Отмена</a>
+</form>
+
+{% endblock %}

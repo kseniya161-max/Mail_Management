@@ -1,18 +1,76 @@
+<style>
+    .no-bullets {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    .custom-link {
+        border-radius: 50px;
+        padding: 20px 20px;
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+    }
+    .list-group-item {
+        border-radius: 1rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
 {% extends 'base.html' %}
 
 {% block title %} Ваш профиль {% endblock %}
 
 {% block content %}
-<h3>Профиль пользователя</h3>
-<p>Имя: {{ user_profile.username }}</p>
-<p>Email: {{ user_profile.email }}</p>
-<a href="{% url 'clients:user_profile_edit' %}" class='btn btn-primary mb-3'>Редактировать профиль</a>
-{% if user_profile.role == 'manager' %}
+<div class="container mt-4">
+    <h2 class="mt-5 mb-5">{{ user_profile.username }} ({{ user_profile.role }})</h2>
 
-<ul class="list-unstyled">
-    <li>
-<a href="{% url 'Users:user_list' %}" class='btn btn-primary mb-3'>Список пользователей</a>
-    </li>
-</ul>
-{% endif %}
+    <div class="row">
+        <div class="col-md-3">
+            {% if user_profile.avatar %}
+                <img src="{{ user_profile.avatar.url }}" alt="Аватар" style="width: 200px; height: 200px; border-radius: 50%;">
+            {% else %}
+                <p>Загрузите аватар </p>
+            {% endif %}
+            <a href="{% url 'clients:user_profile_edit' %}" class="nav-link mt-3">
+            <i class="bi bi-pencil"></i> Редактировать профиль
+            </a>
+        </div>
+
+        <div class="col-md-5">
+            <p>Имя: {{ user_profile.username }}</p>
+            <p>Email: {{ user_profile.email }}</p>
+            <p>Страна: {{ user_profile.country }}</p>
+            <p>Телефон: {{ user_profile.phone_number }}</p>
+            <p>Роль Пользователя: {{ user_profile.role }}</p>
+        </div>
+
+        {% if user_profile.role == 'manager' %}
+            <div class="col-md-4">
+            <ul class="list-group no-bullets ">
+                <li>
+                    <a href="{% url 'clients:email_statistic' %}" class="list-group-item custom-link list-group-item-success">Статистика рассылок</a>
+                </li>
+                <li>
+                    <a href="{% url 'products:category_list' %}" class="list-group-item custom-link  list-group-item-info">Список категорий</a>
+                </li>
+                <li>
+                    <a href="{% url 'Users:user_list' %}" class="list-group-item custom-link  list-group-item-secondary">Список пользователей</a>
+                </li>
+                <li>
+                    <a href="{% url 'products:product_list' %}" class="list-group-item custom-link  list-group-item-primary">Список продуктов</a>
+                </li>
+                <li>
+                    <a href="{% url 'clients:mailing_list' %}" class="list-group-item custom-link  list-group-item-success">Список рассылок</a>
+                </li>
+                <li>
+                    <a href="{% url 'clients:message_list' %}" class="list-group-item custom-link  list-group-item-info">Список сообщений</a>
+                </li>
+                <li>
+                    <a href="{% url 'clients:client_list' %}" class="list-group-item custom-link  list-group-item-primary">Список клиентов</a>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

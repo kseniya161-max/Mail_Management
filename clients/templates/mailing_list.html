@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block title %} Список Рассылок {% endblock %}
 {% block content %}
-<h3 style="text-align: center; margin: 20px 0;">Список Рассылок</h3>
-<a href="{% url 'clients:mailing_add' %}" class='btn btn-primary mb-3'>Создать Рассылку</a>
-<a href="{% url 'clients:mailing_send' %}" class='btn btn-primary mb-3'>Отправка рассылок</a>
+<h3 class="mt-3 mb-2">Список Рассылок</h3>
+<a href="{% url 'clients:mailing_add' %}" class='btn btn-primary btn-sm mt-4 mb-4'>Создать Рассылку</a>
+<a href="{% url 'clients:mailing_send' %}" class='btn btn-primary btn-sm mt-4 mb-4'>Отправка рассылок</a>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -32,12 +32,12 @@
                 {% endfor %}
             </td>
             <td>
-                <a href="{% url 'clients:mailing_update' mail.pk %}" class='btn btn-primary mb-3'>Редактировать</a>
-                <a href="{% url 'clients:mailing_delete' mail.pk %}" class='btn btn-danger mb-3'>Удалить</a>
+                <a href="{% url 'clients:mailing_update' mail.id %}" class='btn btn-primary btn-sm mt-2 mb-2'>Редактировать</a>
+                <a href="{% url 'clients:mailing_delete' mail.id %}" class='btn btn-danger btn-sm mt-2 mb-2'>Удалить</a>
                 {% if user.role == 'manager' %}
                 <form method="get" action="{% url 'clients:deactivate_mailing_confirm' mail.id %}">
                 {% csrf_token %}
-                <button type="submit" class='btn btn-danger'>Отключить</button>
+                <button type="submit" class='btn btn-danger btn-sm mt-2 mb-2'>Отключить</button>
                 </form>
                 {% endif %}
             </td>

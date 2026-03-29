@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Редактирование рассылок {% endblock %}
 {% block content %}
-<h1>Редактирование</h1>
+<h3 class="mt-3 mb-2">Редактирование</h3>
 
 
 <form method="post" novalidate>
@@ -38,8 +38,8 @@
         {{ form.recipients.errors }}
     </div>
 
-    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-    <a href="{% url 'clients:mailing_list' %}" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-primary btn-sm mt-3 mb-3">Сохранить изменения</button>
+    <a href="{% url 'clients:mailing_list' %}" class="btn btn-secondary btn-sm mt-3 mb-3">Отмена</a>
 </form>
 
 {% endblock %}

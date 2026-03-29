@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
+from django.db.models import Sum
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils import cache
@@ -27,6 +28,10 @@ class ClientListView(LoginRequiredMixin, ListView):
         if not queryset:
             queryset = super().get_queryset().filter(user=self.request.user)
             cache.set(f'clients_{self.request.user.id}', queryset, 60 * 15)
+
+        location = self.request.GET.get('location')
+        if location:
+            queryset = queryset.filter(location__icontains=location)
 
         return queryset
 
@@ -88,8 +93,8 @@ class MessageCreateView(CreateView):
 
 class MessageUpdateView(UpdateView):
     model = Message
+    form_class = MessageForm
     template_name = 'message_update.html'
-    fields = ['header', 'content']
     success_url = reverse_lazy('clients:message_list')
 
 
@@ -157,8 +162,8 @@ class MailingDeleteView(DeleteView):
 
     def get_queryset(self):
         if self.request.user.role == 'manager':
-            return Mailing.objects.filter(user=self.request.user)
-        return super().get_queryset()
+            return Mailing.objects.all()
+        return Mailing.objects.filter(user=self.request.user)
 
 
 class MailingSendView(CreateView):
@@ -176,6 +181,7 @@ class MailingSendView(CreateView):
         mailing.status = 'completed'
         mailing.save()
 
+
         messages.success(self.request, 'Рассылка успешно отправлена')
         return super().form_valid(form)
 
@@ -183,6 +189,7 @@ class MailingSendView(CreateView):
         print(mailing.recipients.all())
         success_count = 0
         failed_count = 0
+        print(f'Current user: {self.request.user}')
         for recipient in mailing.recipients.all():
             try:
                 print(recipient.email)
@@ -206,6 +213,7 @@ class MailingSendView(CreateView):
                     server_response=str(e)
                 )
                 failed_count += 1
+        print(f"User: {self.request.user}")
         EmailStatistics.objects.update_or_create(
             user=self.request.user,
             mailing=mailing,
@@ -214,6 +222,8 @@ class MailingSendView(CreateView):
                 'failed_attempt_mailing': failed_count,
             }
         )
+        print(f"EmailStatistics created/updated for user: {self.request.user}, mailing: {mailing}, "
+              f"success: {success_count}, failed: {failed_count}")
 
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
@@ -234,7 +244,27 @@ class EmailStatisticsView(LoginRequiredMixin, ListView):
     context_object_name = 'statistic'
 
     def get_queryset(self):
-        return EmailStatistics.objects.filter(user=self.request.user)
+        if self.request.user.role == 'manager':
+            return EmailStatistics.objects.select_related('mailing').values(
+                'mailing__message__header', 'mailing__status', 'user__username'
+            ).annotate(
+                total_success=Sum('success_attempt_mailing'),
+                total_failed=Sum('failed_attempt_mailing')
+            ).order_by('mailing__message__header')
+        else:
+            return EmailStatistics.objects.filter(user=self.request.user).select_related('mailing').values(
+                'mailing__message__header', 'mailing__status', 'user__username'
+            ).annotate(
+                total_success=Sum('success_attempt_mailing'),
+                total_failed=Sum('failed_attempt_mailing')
+            ).order_by('mailing__message__header')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_success'] = sum(stat['total_success'] for stat in self.object_list)
+        context['total_failed'] = sum(stat['total_failed'] for stat in self.object_list)
+        context['total_attempts'] = context['total_success'] + context['total_failed']
+        return context
 
 
 class ManegerClientListView(ListView):
@@ -264,7 +294,13 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_profile'] = self.request.user
+        return context
+
     def form_valid(self, form):
+        messages.success(self.request, 'Профиль успешно обновлен!')
         return super().form_valid(form)
 
 

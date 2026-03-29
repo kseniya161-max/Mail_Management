@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Отправление рассылок {% endblock %}
 {% block content %}
-<h2 style="text-align: center;">Отправка рассылки</h2>
+<h3 class="mt-3 mb-2">Отправка рассылки</h3>
 
 <form method="post" novalidate>
     {% csrf_token %}
@@ -38,8 +38,8 @@
     </div>
 
 
-    <button type="submit" class="btn btn-primary">Отправить рассылку</button>
-    <a href="{% url 'clients:mailing_list' %}" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-primary btn-sm mt-3 mb-3">Отправить рассылку</button>
+    <a href="{% url 'clients:mailing_list' %}" class="btn btn-secondary btn-sm mt-3 mb-3">Отмена</a>
 </form>
 
 {% endblock %}

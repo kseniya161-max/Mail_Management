@@ -3,23 +3,27 @@
 {% block title %}Статистика рассылок{% endblock %}
 
 {% block content %}
-<h2>Статистика рассылок</h2>
+<h3 class="mt-3 mb-3">Статистика рассылок</h3>
 
 {% if statistic %}
     <table class="table">
         <thead>
             <tr>
                 <th>Рассылка</th>
+                <th>Пользователь</th>
                 <th>Успешные попытки</th>
                 <th>Неуспешные попытки</th>
+                <th>Итого</th>
             </tr>
         </thead>
         <tbody>
             {% for stat in statistic %}
                 <tr>
-                    <td>{{ stat.mailing }}</td>
-                    <td>{{ stat.success_attempt_mailing }}</td>
-                    <td>{{ stat.failed_attempt_mailing }}</td>
+                    <td>{{ stat.mailing__message__header }} - Статус: {{ stat.mailing__status }}</td>
+                    <td>{{ stat.user__username }}</td>
+                    <td>{{ stat.total_success }}</td>
+                    <td>{{ stat.total_failed }}</td>
+                    <td>{{ stat.total_success|add:stat.total_failed }}</td>
                 </tr>
             {% endfor %}
         </tbody>

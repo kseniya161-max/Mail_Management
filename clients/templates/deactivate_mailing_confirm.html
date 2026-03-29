@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block title %} Блокировка пользователя{% endblock %}
 {% block content %}
-<h3>Подтверждение отключения рассылки</h3>
+<h3 class="mt-3 mb-2">Подтверждение отключения рассылки</h3>
 <p>Вы уверены, что хотите отключить рассылку "{{ mailing.message.header }}"?</p>
 <form method="post">
     {% csrf_token %}
-     <button type="submit" class="btn btn-danger">Отключить</button>
-     <a href="{% url 'clients:mailing_list' %}" class="btn btn-secondary">Отмена</a>
+     <button type="submit" class="btn btn-danger btn-sm mt-3 mb-3">Отключить</button>
+     <a href="{% url 'clients:mailing_list' %}" class="btn btn-primary btn-sm mt-3 mb-3">Отмена</a>
 </form>
 {% endblock %}

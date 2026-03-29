@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block title %} Разблокировка пользователя{% endblock %}
 {% block content %}
-<h3>Разблокировка пользователя</h3>
+<h3 >Разблокировка пользователя</h3>
 <p>Вы уверены что хотите разблокировать пользователя "{{ user.username }}"?</p>
 <form method="post">
     {% csrf_token %}
 
-    <button type="submit" class="btn btn-danger">Разблокировать</button>
-    <a href="{% url 'Users:user_list' %}" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class='btn btn-primary btn-sm mt-2 mb-2'>Разблокировать</button>
+    <a href="{% url 'Users:user_list' %}" class="btn btn-secondary btn-sm mt-2 mb-2">Отмена</a>
 </form>
 {% endblock %}

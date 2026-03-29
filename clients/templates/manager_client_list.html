@@ -3,7 +3,7 @@
 {% block title %}Список Клиентов{% endblock %}
 
 {% block content %}
-<h3 style="text-align: center; margin: 20px 0;">Список Клиентов</h3>
+<h3 class="mt-3 mb-2">Список Клиентов</h3>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -22,8 +22,8 @@
             <td>{{ client.email }}</td>
             <td>{{ client.comment }}</td>
             <td>
-                <a href="{% url 'clients:client_update' client.pk %}" class='btn btn-primary'>Редактировать</a>
-                <a href="{% url 'clients:client_delete' client.pk %}" class='btn btn-danger'>Удалить</a>
+                <a href="{% url 'clients:client_update' client.pk %}" class='btn btn-primary btn-sm mt-3 mb-3'>Редактировать</a>
+                <a href="{% url 'clients:client_delete' client.pk %}" class='btn btn-danger btn-sm mt-3 mb-3'>Удалить</a>
             </td>
         </tr>
         {% empty %}

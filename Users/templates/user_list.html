@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Список пользователей сайта {% endblock %}
 {% block content %}
-<h3>Список пользователей сайта</h3>
+<h3 class="mt-3 mb-3">Список пользователей сайта</h3>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -24,12 +24,13 @@
             <td>
                 <form method="get" action="{% url 'Users:user_block_confirm' user.id %}" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class='btn btn-primary mb-3'>Заблокировать</button>
+                    <button type="submit" class='btn btn-danger btn-sm mt-3 mb-3'>Заблокировать</button>
                 </form>
                 <form method="get" action="{% url 'Users:user_unblock_confirm' user.id %}" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class='btn btn-danger mb-3'>Разблокировать</button>
+                    <button type="submit" class='btn btn-primary btn-sm mt-3 mb-3'>Разблокировать</button>
                 </form>
+                 <a href="{% url 'Users:user_detail' user.id %}" class='btn btn-primary btn-sm mt-2 mb-2'>Подробнее</a>
             </td>
         </tr>
         {% empty %}

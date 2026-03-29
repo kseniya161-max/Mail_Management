@@ -3,11 +3,11 @@
 {% block title %}Авторизация{% endblock %}
 
 {% block content %}
-<h2>Вход в систему</h2>
+<h3 class="mt-3 mb-3">Вход в систему</h3>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Войти</button>
+    <button type="submit" class="btn btn-primary btn-sm mt-3 mb-3">Войти</button>
 </form>
 
 <p>
@@ -18,7 +18,7 @@
 {% if messages %}
     <ul class="messages">
         {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
     </ul>
 {% endif %}
