@@ -1,5 +1,5 @@
 [project]
-name = "djangoproject-7"
+name = "DjangoProject_7"
 version = "0.1.0"
 description = ""
 authors = [
@@ -7,8 +7,8 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.13"
+
 dependencies = [
-    "django (>=5.2.8,<6.0.0)",
     "django (>=5.2.8,<6.0.0)",
     "psycopg2 (>=2.9.11,<3.0.0)",
     "python-dotenv (>=1.2.1,<2.0.0)",
@@ -20,7 +20,8 @@ dependencies = [
     "whitenoise (>=6.12.0,<7.0.0)",
     "dj-database-url (>=3.1.2,<4.0.0)"
 ]
-
+[tool.poetry]
+package-mode = false
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
