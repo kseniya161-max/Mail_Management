@@ -49,7 +49,8 @@ class CreateUserView(CreateView):
         s = URLSafeTimedSerializer(settings.SECRET_KEY)
         token = s.dumps(user.email, salt='email-confirmation')
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        confirmation_link = f"http://localhost:8000/users/confirm/{uid}/{token}/"
+        confirmation_link = f"https://{settings.SITE_DOMAIN}/users/confirm/{uid}/{token}/"
+        # confirmation_link = f"http://localhost:8000/users/confirm/{uid}/{token}/"
         subject = 'Подтверждение email'
         message = render_to_string('email_confirmation.html', {
             'confirmation_link': confirmation_link,
