@@ -300,7 +300,11 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        messages.success(self.request, 'Профиль успешно обновлен!')
+        user = form.save(commit=False)
+        if 'avatar' in self.request.FILES:
+            user.avatar = self.request.FILES['avatar']
+        user.save()
+        messages.success(self.request, 'Профиль успешно обновлён!')
         return super().form_valid(form)
 
 
