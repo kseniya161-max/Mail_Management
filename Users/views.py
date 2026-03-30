@@ -38,8 +38,17 @@ class CreateUserView(CreateView):
     template_name = 'register.html'
     success_url = reverse_lazy('Users:login')
 
+    # def form_valid(self, form):
+    #     user = form.save()
+    #     self.send_confirmation_email(user)
+    #     messages.success(self.request, 'Ваш аккаунт был успешно создан! Проверьте Вашу почту для подтверждения.')
+    #     return super().form_valid(form)
+
     def form_valid(self, form):
-        user = form.save()
+        user = form.save(commit=False)
+        if 'avatar' in self.request.FILES:
+            user.avatar = self.request.FILES['avatar']
+        user.save()
         self.send_confirmation_email(user)
         messages.success(self.request, 'Ваш аккаунт был успешно создан! Проверьте Вашу почту для подтверждения.')
         return super().form_valid(form)
