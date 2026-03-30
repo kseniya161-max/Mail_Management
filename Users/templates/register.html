@@ -4,7 +4,7 @@
 
 {% block content %}
 <h3 class="mt-3 mb-3">Зарегистрироваться</h3>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-danger btn-sm mt-2 mb-2">Подтвердить регистрацию</button>
