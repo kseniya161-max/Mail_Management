@@ -38,8 +38,7 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        response = super().form_valid(form)
-        return response
+        return super().form_valid(form)
 
 
 class ClientUpdateView(UpdateView):
@@ -48,10 +47,12 @@ class ClientUpdateView(UpdateView):
     template_name = 'client_edit.html'
     success_url = reverse_lazy('clients:client_list')
 
+    def get_queryset(self):
+        return Clients.objects.filter(user=self.request.user)
+
     def form_valid(self, form):
         form.instance.user = self.request.user
-        response = super().form_valid(form)
-        return response
+        return super().form_valid(form)
 
 
 class ClientDeleteView(DeleteView):
@@ -62,9 +63,9 @@ class ClientDeleteView(DeleteView):
     def get_queryset(self):
         return Clients.objects.filter(user=self.request.user)
 
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
-        return response
+    # def delete(self, request, *args, **kwargs):
+    #     response = super().delete(request, *args, **kwargs)
+    #     return response
 
 
 class MessageListView(ListView):
@@ -86,11 +87,17 @@ class MessageUpdateView(UpdateView):
     template_name = 'message_update.html'
     success_url = reverse_lazy('clients:message_list')
 
+    def get_queryset(self):
+        return Message.objects.filter(user=self.request.user)
+
 
 class MessageDeleteView(DeleteView):
     model = Message
     template_name = 'message_delete.html'
     success_url = reverse_lazy('clients:message_list')
+
+    def get_queryset(self):
+        return Message.objects.filter(user=self.request.user)
 
 
 class MailingListView(ListView):
