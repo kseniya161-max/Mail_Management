@@ -6,12 +6,12 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <div class="form-group">
-        <label for="{{ form.avatar.id }}">Аватар:</label>
-        {% if user_profile.avatar %}
-            <img src="{{ user.avatar.url }}" alt="Аватар" style="width: 200px; height: 200px; border-radius: 80%;">
-        {% endif %}
-    </div>
+
+{% if user_profile.avatar %}
+    <img src="{{ user_profile.avatar.url }}" style="width:200px;">
+{% else %}
+    <p>Аватар не загружен</p>
+{% endif %}
 
     <button type="submit" class="btn btn-primary btn-sm mt-3 mb-3">Сохранить</button>
     <a href="{% url 'clients:user_profile' %}" class="btn btn-secondary btn-sm mt-3 mb-3">Отмена</a>
