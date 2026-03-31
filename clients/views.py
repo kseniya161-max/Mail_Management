@@ -12,7 +12,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, T
 from Users.models import User
 from clients.forms import MailingSendForm, ClientForm, MessageForm, UserForm
 from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics
-from config.settings import DEFAULT_FROM_EMAIL
+from django.conf import settings
 from django.views.decorators.cache import cache_page, cache_control
 from django.core.cache import cache
 
@@ -196,7 +196,7 @@ class MailingSendView(CreateView):
                 send_mail(
                     mailing.message.header,
                     mailing.message.content,
-                    DEFAULT_FROM_EMAIL,
+                    settings.DEFAULT_FROM_EMAIL,
                     [recipient.email],
                     fail_silently=False,
                 )
@@ -336,16 +336,3 @@ class DeactivateMailingConfirmView(LoginRequiredMixin, View):
         mailing.save()
         messages.success(request, 'Рассылка успешно отключена.')
         return redirect('clients:mailing_list')
-
-
-
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
-if not User.objects.filter(email='admin@test.com').exists():
-    User.objects.create_superuser(
-        email='admin@test.com',
-        username='admin',
-        password='admin12345'
-    )
