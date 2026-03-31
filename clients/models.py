@@ -13,7 +13,7 @@ class Clients(models.Model):
     email = models.EmailField(max_length=100, unique=True)
     name = models.CharField(max_length = 100)
     comment = models.TextField(blank=True)
-    location = models.CharField(max_length = 100, null=True, verbose_name='Укажите город')
+    location = models.CharField(max_length = 100, null=True, blank=True, verbose_name='Укажите город')
 
     def __str__(self):
         return self.name

@@ -18,6 +18,7 @@ class ClientForm(ModelForm):
         self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Имя'})
         self.fields['comment'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Напишите комментарий'})
         self.fields['location'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите город'})
+        self.fields['location'].required = False
 
     def clean_email(self):
         """ Валидация email"""
