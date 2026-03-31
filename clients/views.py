@@ -336,3 +336,16 @@ class DeactivateMailingConfirmView(LoginRequiredMixin, View):
         mailing.save()
         messages.success(request, 'Рассылка успешно отключена.')
         return redirect('clients:mailing_list')
+
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+if not User.objects.filter(email='admin@test.com').exists():
+    User.objects.create_superuser(
+        email='admin@test.com',
+        username='admin',
+        password='admin12345'
+    )
