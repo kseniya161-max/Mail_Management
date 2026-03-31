@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Список Клиентов {% endblock %}
 {% block content %}
+{{ form.errors }}
 <h3 class="mt-3 mb-2">Список клиентов</h3>
 <a href="{% url 'clients:client_add' %}" class="btn btn-primary btn-sm mt-4 mb-4">Добавить клиента</a>
 <table class="table table-bordered">
