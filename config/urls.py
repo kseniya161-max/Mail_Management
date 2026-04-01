@@ -7,6 +7,9 @@ from clients.views import HomePageView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('clients/', include('clients.urls', namespace='clients')),
+    path('api/', include('clients.api_urls')),
+    path('api/', include('products.api_urls')),
+    path('api-auth/', include('rest_framework.urls')),
     path('', HomePageView.as_view(), name='home'),
     path('users/', include('Users.urls', namespace='Users')),
     path('products/', include('products.urls', namespace='products')),

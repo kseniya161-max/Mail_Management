@@ -167,48 +167,57 @@ class MailingSendView(CreateView):
     success_url = reverse_lazy('clients:mailing_list')
 
     def form_valid(self, form):
-        mailing = form.save()
+        mailing = form.save(commit=False)
+        mailing.user = self.request.user
         mailing.status = 'started'
         mailing.save()
-        print(mailing.recipients.all())
+        form.save_m2m()
 
         self.send_mailing(mailing)
+
         mailing.status = 'completed'
         mailing.save()
 
-
-        messages.success(self.request, 'Рассылка успешно отправлена')
-        return super().form_valid(form)
+        messages.success(self.request, 'Рассылка обработана')
+        return redirect(self.success_url)
 
     def send_mailing(self, mailing):
-        print(mailing.recipients.all())
         success_count = 0
         failed_count = 0
-        print(f'Current user: {self.request.user}')
+
         for recipient in mailing.recipients.all():
             try:
-                print(recipient.email)
-                send_mail(
+                sent_count = send_mail(
                     mailing.message.header,
                     mailing.message.content,
                     settings.DEFAULT_FROM_EMAIL,
                     [recipient.email],
                     fail_silently=False,
                 )
-                MailingAttempt.objects.create(
-                    mailing=mailing,
-                    status='success',
-                    server_response='Письмо успешно отправлено'
-                )
-                success_count += 1
+
+                if sent_count == 1:
+                    MailingAttempt.objects.create(
+                        mailing=mailing,
+                        status='success',
+                        server_response=f'SMTP accepted message for {recipient.email}',
+                    )
+                    success_count += 1
+                else:
+                    MailingAttempt.objects.create(
+                        mailing=mailing,
+                        status='failed',
+                        server_response=f'SMTP did not accept message for {recipient.email}',
+                    )
+                    failed_count += 1
+
             except Exception as e:
                 MailingAttempt.objects.create(
                     mailing=mailing,
                     status='failed',
-                    server_response=str(e)
+                    server_response=str(e),
                 )
                 failed_count += 1
-        print(f"User: {self.request.user}")
+
         EmailStatistics.objects.update_or_create(
             user=self.request.user,
             mailing=mailing,
@@ -217,9 +226,6 @@ class MailingSendView(CreateView):
                 'failed_attempt_mailing': failed_count,
             }
         )
-        print(f"EmailStatistics created/updated for user: {self.request.user}, mailing: {mailing}, "
-              f"success: {success_count}, failed: {failed_count}")
-
 
 @method_decorator(cache_page(60 * 3), name='dispatch')
 class HomePageView(TemplateView):
