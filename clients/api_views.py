@@ -1,3 +1,4 @@
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -10,6 +11,7 @@ class ClientViewSet(ModelViewSet):
     queryset = Clients.objects.all()
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
 
     def get_queryset(self):
         return Clients.objects.filter(user=self.request.user)
