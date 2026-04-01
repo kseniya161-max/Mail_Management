@@ -150,6 +150,21 @@ redis = ">=4.0.2"
 hiredis = ["redis[hiredis] (>=4.0.2)"]
 
 [[package]]
+name = "djangorestframework"
+version = "3.17.1"
+description = "Web APIs for Django, made easy."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "djangorestframework-3.17.1-py3-none-any.whl", hash = "sha256:c3c74dd3e83a5a3efc37b3c18d92bd6f86a6791c7b7d4dff62bb068500e76457"},
+    {file = "djangorestframework-3.17.1.tar.gz", hash = "sha256:a6def5f447fe78ff853bff1d47a3c59bf38f5434b031780b351b0c73a62db1a5"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+
+[[package]]
 name = "flake8"
 version = "7.3.0"
 description = "the modular source code checker: pep8 pyflakes and co"
@@ -555,4 +570,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "0302b0f8f6ec2c1fbd6b4625e24175028f7835228847c88489465fdd270e40b0"
+content-hash = "f211d295533166eff0eb5757642aa29f9f900d2e437a3a3f87dfb4cb2788fe96"
