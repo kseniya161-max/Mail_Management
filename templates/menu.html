@@ -16,6 +16,7 @@
             <li><a class="nav-link" href="{% url 'clients:mailing_send' %}">Отправить рассылку</a></li>
             <li><a class="nav-link" href="{% url 'products:category_list' %}">Список Категорий</a></li>
             <li><a class="nav-link" href="{% url 'products:product_list' %}">Продукты</a></li>
+            <li><a class="nav-link" href="{% url 'clients:offer_file_create' %}">Сформировать Предложение</a></li>
                     <form method="post" action="{% url 'Users:logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-link">Выйти</button>

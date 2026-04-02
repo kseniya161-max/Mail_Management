@@ -24,11 +24,29 @@ class Clients(models.Model):
         ]
 
 
+class OfferFile(models.Model):
+    name = models.CharField(max_length=200, verbose_name='Название файла')
+    file = models.FileField(upload_to='price_files/', verbose_name='Файл')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создатель файла')
+    products = models.ManyToManyField(Product, verbose_name='Выбранные продукты')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Сгенерированный файл'
+        verbose_name_plural = 'Сгенерированные файлы'
+
+
+
 class Message(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     header = models.CharField(max_length=200)
     content = models.TextField()
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Наименование товара')
+    offer_file = models.ForeignKey(OfferFile, on_delete=models.SET_NULL, null=True, blank=True,verbose_name='Прикрепленный файл')
 
     def __str__(self):
         return self.header
@@ -91,17 +109,3 @@ class EmailStatistics(models.Model):
         return f'Количество успешных рассылок{self.success_attempt_mailing}, Количество неуспешных рассылок{self.failed_attempt_mailing}'
 
 
-class OfferFile(models.Model):
-    name = models.CharField(max_length=200, verbose_name='Название файла')
-    file = models.FileField(upload_to='price_files/', verbose_name='Файл')
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создатель файла')
-    products = models.ManyToManyField(Product, verbose_name='Выбранные продукты')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Сгенерированный файл'
-        verbose_name_plural = 'Сгенерированные файлы'

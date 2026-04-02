@@ -35,13 +35,14 @@ class MessageForm(ModelForm):
 
     class Meta:
         model = Message
-        fields = ['header', 'content', 'product']
+        fields = ['header', 'content', 'product', 'offer_file']
 
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
         self.fields['header'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Заголовок'})
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Контент'})
         self.fields['product'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите товар'})
+        self.fields['offer_file'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Файл'})
 
 
 class MailingSendForm(forms.ModelForm):
@@ -80,12 +81,6 @@ class UserForm(forms.ModelForm):
             'role': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
-
-class OfferFileForm(forms.ModelForm):
-    """ Форма для создания файла"""
-    class Meta:
-        model = OfferFile
-        fields = '__all__'
 
 class OfferFileForm(forms.Form):
     products = forms.ModelMultipleChoiceField(
