@@ -69,7 +69,7 @@ class ClientDeleteView(DeleteView):
     #     return response
 
 
-class MessageListView(ListView):
+class MessageListView(LoginRequiredMixin,ListView):
     model = Message
     template_name = 'message_list.html'
     context_object_name = 'list_messages'
@@ -101,7 +101,7 @@ class MessageDeleteView(DeleteView):
         return Message.objects.filter(user=self.request.user)
 
 
-class MailingListView(ListView):
+class MailingListView(LoginRequiredMixin,ListView):
     model = Mailing
     template_name = 'mailing_list.html'
     context_object_name = 'list_mailing'
@@ -162,7 +162,7 @@ class MailingDeleteView(DeleteView):
         return Mailing.objects.filter(user=self.request.user)
 
 
-class MailingSendView(CreateView):
+class MailingSendView(LoginRequiredMixin,CreateView):
     form_class = MailingSendForm
     template_name = 'mailing_send.html'
     success_url = reverse_lazy('clients:mailing_list')

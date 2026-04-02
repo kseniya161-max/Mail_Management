@@ -9,7 +9,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'clients:home' %}">Главная</a>
             </li>
-            {% if user.is_authenticated %}
             <li><a class="nav-link" href="{% url 'clients:client_list' %}">Список клиентов</a></li>
             <li><a class="nav-link" href="{% url 'clients:message_list' %}">Список сообщений</a></li>
             <li><a class="nav-link" href="{% url 'clients:mailing_list' %}">Список рассылок</a></li>
@@ -17,6 +16,7 @@
             <li><a class="nav-link" href="{% url 'products:category_list' %}">Список Категорий</a></li>
             <li><a class="nav-link" href="{% url 'products:product_list' %}">Продукты</a></li>
             <li><a class="nav-link" href="{% url 'clients:offer_file_create' %}">Сформировать Предложение</a></li>
+            {% if user.is_authenticated %}
                     <form method="post" action="{% url 'Users:logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-link">Выйти</button>
@@ -25,6 +25,7 @@
                     {% else %}
             <li><a class="nav-link" href="{% url 'Users:register' %}">Регистрация</a></li>
             <li><a class="nav-link" href="{% url 'Users:login' %}">Войти</a></li>
+
             {% endif %}
             </ul>
             <ul class="navbar-nav ml-auto">
