@@ -13,7 +13,7 @@ from clients.forms import MailingSendForm, ClientForm, MessageForm, UserForm
 from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics
 from django.conf import settings
 from django.views.decorators.cache import cache_page
-from clients.services import send_email_via_resend
+from clients.services import send_email_via_resend, send_email_via_brevo
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -188,7 +188,7 @@ class MailingSendView(CreateView):
 
         for recipient in mailing.recipients.all():
             try:
-                response = send_email_via_resend(
+                response = send_email_via_brevo(
                     to_email=recipient.email,
                     subject=mailing.message.header,
                     body=mailing.message.content,
