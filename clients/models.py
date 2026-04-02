@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.db import models
-from django.db.models import PositiveIntegerField
+from django.db.models import PositiveIntegerField, CharField
 from django.utils import timezone
 
 from Users.models import User
@@ -91,3 +91,17 @@ class EmailStatistics(models.Model):
         return f'Количество успешных рассылок{self.success_attempt_mailing}, Количество неуспешных рассылок{self.failed_attempt_mailing}'
 
 
+class OfferFile(models.Model):
+    name = models.CharField(max_length=200, verbose_name='Название файла')
+    file = models.FileField(upload_to='price_files/', verbose_name='Файл')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создатель файла')
+    products = models.ManyToManyField(Product, verbose_name='Выбранные продукты')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Сгенерированный файл'
+        verbose_name_plural = 'Сгенерированные файлы'
