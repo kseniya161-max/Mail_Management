@@ -15,7 +15,7 @@ class CategoryListView(LoginRequiredMixin,ListView):
         return super().get_queryset()
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'category_create.html'
@@ -23,7 +23,7 @@ class CategoryCreateView(CreateView):
     success_url = reverse_lazy('products:category_list')
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'category_update.html'
@@ -31,14 +31,14 @@ class CategoryUpdateView(UpdateView):
     success_url = reverse_lazy('products:category_list')
 
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
     template_name = 'category_detail.html'
     context_object_name = 'category_detail'
 
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(LoginRequiredMixin,DeleteView):
     model = Category
     template_name = 'category_delete.html'
     context_object_name = 'category_delete'
@@ -54,7 +54,7 @@ class ProductListView(LoginRequiredMixin,ListView):
         return super().get_queryset()
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin,CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'product_create.html'
@@ -62,7 +62,7 @@ class ProductCreateView(CreateView):
     success_url = reverse_lazy('products:product_list')
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin,UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'product_update.html'
@@ -70,7 +70,7 @@ class ProductUpdateView(UpdateView):
     success_url = reverse_lazy('products:product_list')
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin,DeleteView):
     model = Product
     template_name = 'product_delete.html'
     context_object_name = 'product_delete'

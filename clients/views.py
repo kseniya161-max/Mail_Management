@@ -42,7 +42,7 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdateView(UpdateView):
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Clients
     form_class = ClientForm
     template_name = 'client_edit.html'
@@ -56,7 +56,7 @@ class ClientUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Clients
     template_name = 'client_delete.html'
     success_url = reverse_lazy('clients:client_list')
@@ -75,14 +75,14 @@ class MessageListView(LoginRequiredMixin,ListView):
     context_object_name = 'list_messages'
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
     template_name = 'message_create.html'
     success_url = reverse_lazy('clients:message_list')
 
 
-class MessageUpdateView(UpdateView):
+class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     form_class = MessageForm
     template_name = 'message_update.html'
@@ -92,7 +92,7 @@ class MessageUpdateView(UpdateView):
         return Message.objects.filter(user=self.request.user)
 
 
-class MessageDeleteView(DeleteView):
+class MessageDeleteView(LoginRequiredMixin,DeleteView):
     model = Message
     template_name = 'message_delete.html'
     success_url = reverse_lazy('clients:message_list')
@@ -116,7 +116,7 @@ class MailingListView(LoginRequiredMixin,ListView):
             return Mailing.objects.none()
 
 
-class MailingCreateView(CreateView):
+class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingSendForm
     template_name = 'mailing_create.html'
@@ -127,7 +127,7 @@ class MailingCreateView(CreateView):
         return super().form_valid(form)
 
 
-class MailingUpdateView(UpdateView):
+class MailingUpdateView(LoginRequiredMixin,UpdateView):
     model = Mailing
     form_class = MailingSendForm
     template_name = 'mailing_update.html'
@@ -151,7 +151,7 @@ class MailingUpdateView(UpdateView):
             return self.form_invalid(form)
 
 
-class MailingDeleteView(DeleteView):
+class MailingDeleteView(LoginRequiredMixin,DeleteView):
     model = Mailing
     template_name = 'mailing_delete.html'
     success_url = reverse_lazy('clients:mailing_list')
@@ -266,7 +266,7 @@ class EmailStatisticsView(LoginRequiredMixin, ListView):
         return context
 
 
-class ManegerClientListView(ListView):
+class ManegerClientListView(LoginRequiredMixin,ListView):
     model = Clients
     template_name = 'manager_client_list.html'
     context_object_name = 'list_clients'
