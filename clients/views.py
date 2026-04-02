@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from django.db.models import Sum
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
@@ -13,6 +13,7 @@ from clients.forms import MailingSendForm, ClientForm, MessageForm, UserForm
 from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics
 from django.conf import settings
 from django.views.decorators.cache import cache_page
+from clients.services import send_email_via_resend
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -187,28 +188,18 @@ class MailingSendView(CreateView):
 
         for recipient in mailing.recipients.all():
             try:
-                sent_count = send_mail(
-                    mailing.message.header,
-                    mailing.message.content,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [recipient.email],
-                    fail_silently=False,
+                response = send_email_via_resend(
+                    to_email=recipient.email,
+                    subject=mailing.message.header,
+                    body=mailing.message.content,
                 )
 
-                if sent_count == 1:
-                    MailingAttempt.objects.create(
-                        mailing=mailing,
-                        status='success',
-                        server_response=f'SMTP accepted message for {recipient.email}',
-                    )
-                    success_count += 1
-                else:
-                    MailingAttempt.objects.create(
-                        mailing=mailing,
-                        status='failed',
-                        server_response=f'SMTP did not accept message for {recipient.email}',
-                    )
-                    failed_count += 1
+                MailingAttempt.objects.create(
+                    mailing=mailing,
+                    status='success',
+                    server_response=str(response),
+                )
+                success_count += 1
 
             except Exception as e:
                 MailingAttempt.objects.create(
@@ -226,6 +217,52 @@ class MailingSendView(CreateView):
                 'failed_attempt_mailing': failed_count,
             }
         )
+
+    # def send_mailing(self, mailing):
+    #     success_count = 0
+    #     failed_count = 0
+    #
+    #     for recipient in mailing.recipients.all():
+    #         try:
+    #             sent_count = send_mail(
+    #                 mailing.message.header,
+    #                 mailing.message.content,
+    #                 settings.DEFAULT_FROM_EMAIL,
+    #                 [recipient.email],
+    #                 fail_silently=False,
+    #             )
+    #
+    #             if sent_count == 1:
+    #                 MailingAttempt.objects.create(
+    #                     mailing=mailing,
+    #                     status='success',
+    #                     server_response=f'SMTP accepted message for {recipient.email}',
+    #                 )
+    #                 success_count += 1
+    #             else:
+    #                 MailingAttempt.objects.create(
+    #                     mailing=mailing,
+    #                     status='failed',
+    #                     server_response=f'SMTP did not accept message for {recipient.email}',
+    #                 )
+    #                 failed_count += 1
+    #
+    #         except Exception as e:
+    #             MailingAttempt.objects.create(
+    #                 mailing=mailing,
+    #                 status='failed',
+    #                 server_response=str(e),
+    #             )
+    #             failed_count += 1
+    #
+    #     EmailStatistics.objects.update_or_create(
+    #         user=self.request.user,
+    #         mailing=mailing,
+    #         defaults={
+    #             'success_attempt_mailing': success_count,
+    #             'failed_attempt_mailing': failed_count,
+    #         }
+    #     )
 
 @method_decorator(cache_page(60 * 3), name='dispatch')
 class HomePageView(TemplateView):
