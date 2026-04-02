@@ -2,8 +2,10 @@ from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 
 from Users.models import User
-from clients.models import Message, Clients, Mailing
+from clients.models import Message, Clients, Mailing, OfferFile
 from django import forms
+
+from products.models import Product
 
 
 class ClientForm(ModelForm):
@@ -77,3 +79,17 @@ class UserForm(forms.ModelForm):
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
             'role': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+class OfferFileForm(forms.ModelForm):
+    """ Форма для создания файла"""
+    class Meta:
+        model = OfferFile
+        fields = '__all__'
+
+class OfferFileForm(forms.Form):
+    products = forms.ModelMultipleChoiceField(
+        queryset=Product.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label='Выберите продукты'
+    )

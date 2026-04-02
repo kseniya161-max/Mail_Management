@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Сформировать файл{% endblock %}
+
+{% block content %}
+<h3 class="mt-3 mb-3">Сформировать Excel-файл</h3>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-sm">Сформировать файл</button>
+    <a href="{% url 'clients:user_profile' %}" class="btn btn-secondary btn-sm">Отмена</a>
+</form>
+{% endblock %}
