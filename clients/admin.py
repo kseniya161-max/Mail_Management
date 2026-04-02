@@ -12,7 +12,7 @@
 
 
 from django.contrib import admin
-from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics
+from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics, OfferFile
 
 
 @admin.register(Clients)
@@ -44,3 +44,17 @@ class MailingAttemptAdmin(admin.ModelAdmin):
 @admin.register(EmailStatistics)
 class EmailStatisticsAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'mailing', 'success_attempt_mailing', 'failed_attempt_mailing')
+
+
+
+
+@admin.register(OfferFile)
+class OfferFileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'created_by', 'name', 'file', 'created_at', 'get_products')
+    search_fields = ('name', 'created_by__email')
+    list_filter = ('created_at',)
+
+    def get_products(self, obj):
+        return ", ".join(product.name for product in obj.products.all())
+
+    get_products.short_description = 'Продукты'
