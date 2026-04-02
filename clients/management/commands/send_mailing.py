@@ -43,3 +43,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS('Рассылка успешно отправлена'))
         except Mailing.DoesNotExist:
             self.stdout.write(self.style.ERROR('Рассылка с таким ID не найдена'))
+
