@@ -188,7 +188,7 @@ class MailingSendView(CreateView):
 
         for recipient in mailing.recipients.all():
             try:
-                response = send_email_via_brevo(
+                response = send_email_via_resend(
                     to_email=recipient.email,
                     subject=mailing.message.header,
                     body=mailing.message.content,
