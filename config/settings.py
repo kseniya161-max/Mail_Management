@@ -155,4 +155,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 RESEND_API_KEY = os.getenv('RESEND_API_KEY')
 RESEND_FROM_EMAIL = os.getenv('RESEND_FROM_EMAIL')
 
-
+BREVO_API_KEY = os.getenv('BREVO_API_KEY')
+BREVO_FROM_EMAIL = os.getenv('BREVO_FROM_EMAIL')
+BREVO_FROM_NAME = os.getenv('BREVO_FROM_NAME')

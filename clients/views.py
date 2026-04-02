@@ -9,11 +9,11 @@ from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView, DetailView
 
 from Users.models import User
-from clients.forms import MailingSendForm, ClientForm, MessageForm, UserForm
-from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics
+from clients.forms import MailingSendForm, ClientForm, MessageForm, UserForm, OfferFileForm
+from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics, OfferFile
 from django.conf import settings
 from django.views.decorators.cache import cache_page
-from clients.services import send_email_via_resend
+from clients.services import send_email_via_resend, send_email_via_brevo, generate_offer_file
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -374,3 +374,29 @@ class DeactivateMailingConfirmView(LoginRequiredMixin, View):
         mailing.save()
         messages.success(request, 'Рассылка успешно отключена.')
         return redirect('clients:mailing_list')
+
+
+
+class OfferFileCreateView(LoginRequiredMixin, View):
+    template_name = 'offer_file_create.html'
+    model = OfferFile
+
+    def get(self, request):
+        form = OfferFileForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = OfferFileForm(request.POST)
+
+        if form.is_valid():
+            products = form.cleaned_data['products']
+            offer_file = generate_offer_file(
+                user=request.user,
+                products_queryset=products,
+                file_name='offer_file.xlsx'
+            )
+
+            messages.success(request, 'Файл успешно сформирован.')
+            return redirect('clients:user_profile')
+
+        return render(request, self.template_name, {'form': form})
