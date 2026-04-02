@@ -42,7 +42,7 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdateView(UpdateView):
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Clients
     form_class = ClientForm
     template_name = 'client_edit.html'
@@ -56,7 +56,7 @@ class ClientUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Clients
     template_name = 'client_delete.html'
     success_url = reverse_lazy('clients:client_list')
@@ -69,20 +69,20 @@ class ClientDeleteView(DeleteView):
     #     return response
 
 
-class MessageListView(ListView):
+class MessageListView(LoginRequiredMixin,ListView):
     model = Message
     template_name = 'message_list.html'
     context_object_name = 'list_messages'
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
     template_name = 'message_create.html'
     success_url = reverse_lazy('clients:message_list')
 
 
-class MessageUpdateView(UpdateView):
+class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     form_class = MessageForm
     template_name = 'message_update.html'
@@ -92,7 +92,7 @@ class MessageUpdateView(UpdateView):
         return Message.objects.filter(user=self.request.user)
 
 
-class MessageDeleteView(DeleteView):
+class MessageDeleteView(LoginRequiredMixin,DeleteView):
     model = Message
     template_name = 'message_delete.html'
     success_url = reverse_lazy('clients:message_list')
@@ -101,7 +101,7 @@ class MessageDeleteView(DeleteView):
         return Message.objects.filter(user=self.request.user)
 
 
-class MailingListView(ListView):
+class MailingListView(LoginRequiredMixin,ListView):
     model = Mailing
     template_name = 'mailing_list.html'
     context_object_name = 'list_mailing'
@@ -116,7 +116,7 @@ class MailingListView(ListView):
             return Mailing.objects.none()
 
 
-class MailingCreateView(CreateView):
+class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingSendForm
     template_name = 'mailing_create.html'
@@ -127,7 +127,7 @@ class MailingCreateView(CreateView):
         return super().form_valid(form)
 
 
-class MailingUpdateView(UpdateView):
+class MailingUpdateView(LoginRequiredMixin,UpdateView):
     model = Mailing
     form_class = MailingSendForm
     template_name = 'mailing_update.html'
@@ -151,7 +151,7 @@ class MailingUpdateView(UpdateView):
             return self.form_invalid(form)
 
 
-class MailingDeleteView(DeleteView):
+class MailingDeleteView(LoginRequiredMixin,DeleteView):
     model = Mailing
     template_name = 'mailing_delete.html'
     success_url = reverse_lazy('clients:mailing_list')
@@ -162,7 +162,7 @@ class MailingDeleteView(DeleteView):
         return Mailing.objects.filter(user=self.request.user)
 
 
-class MailingSendView(CreateView):
+class MailingSendView(LoginRequiredMixin,CreateView):
     form_class = MailingSendForm
     template_name = 'mailing_send.html'
     success_url = reverse_lazy('clients:mailing_list')
@@ -188,10 +188,15 @@ class MailingSendView(CreateView):
 
         for recipient in mailing.recipients.all():
             try:
+                attached_file = None
+                if mailing.message.offer_file and mailing.message.offer_file.file:
+                    attached_file = mailing.message.offer_file.file
+
                 response = send_email_via_resend(
                     to_email=recipient.email,
                     subject=mailing.message.header,
                     body=mailing.message.content,
+                    file=attached_file,
                 )
 
                 MailingAttempt.objects.create(
@@ -218,51 +223,7 @@ class MailingSendView(CreateView):
             }
         )
 
-    # def send_mailing(self, mailing):
-    #     success_count = 0
-    #     failed_count = 0
-    #
-    #     for recipient in mailing.recipients.all():
-    #         try:
-    #             sent_count = send_mail(
-    #                 mailing.message.header,
-    #                 mailing.message.content,
-    #                 settings.DEFAULT_FROM_EMAIL,
-    #                 [recipient.email],
-    #                 fail_silently=False,
-    #             )
-    #
-    #             if sent_count == 1:
-    #                 MailingAttempt.objects.create(
-    #                     mailing=mailing,
-    #                     status='success',
-    #                     server_response=f'SMTP accepted message for {recipient.email}',
-    #                 )
-    #                 success_count += 1
-    #             else:
-    #                 MailingAttempt.objects.create(
-    #                     mailing=mailing,
-    #                     status='failed',
-    #                     server_response=f'SMTP did not accept message for {recipient.email}',
-    #                 )
-    #                 failed_count += 1
-    #
-    #         except Exception as e:
-    #             MailingAttempt.objects.create(
-    #                 mailing=mailing,
-    #                 status='failed',
-    #                 server_response=str(e),
-    #             )
-    #             failed_count += 1
-    #
-    #     EmailStatistics.objects.update_or_create(
-    #         user=self.request.user,
-    #         mailing=mailing,
-    #         defaults={
-    #             'success_attempt_mailing': success_count,
-    #             'failed_attempt_mailing': failed_count,
-    #         }
-    #     )
+
 
 @method_decorator(cache_page(60 * 3), name='dispatch')
 class HomePageView(TemplateView):
@@ -305,7 +266,7 @@ class EmailStatisticsView(LoginRequiredMixin, ListView):
         return context
 
 
-class ManegerClientListView(ListView):
+class ManegerClientListView(LoginRequiredMixin,ListView):
     model = Clients
     template_name = 'manager_client_list.html'
     context_object_name = 'list_clients'
