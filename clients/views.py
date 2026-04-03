@@ -6,13 +6,14 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView, DetailView
-
+from clients.services.mailing_service import MailingService
 from Users.models import User
 from clients.forms import MailingSendForm, ClientForm, MessageForm, UserForm, OfferFileForm
 from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics, OfferFile
 from django.conf import settings
 from django.views.decorators.cache import cache_page
-from clients.services import send_email_via_resend, send_email_via_brevo, generate_offer_file
+from clients.services.file_service import generate_offer_file
+from clients.services.email_service import send_email_via_resend, send_email_via_brevo
 from clients.tasks import send_mailing_task
 
 
@@ -178,7 +179,7 @@ class MailingSendView(LoginRequiredMixin,CreateView):
             send_mailing_task.delay(mailing.id)
             messages.success(self.request, 'Рассылка поставлена в очередь на отправку')
         else:
-            self.send_mailing(mailing)
+            MailingService.send_mailing(mailing, self.request.user)
             mailing.status = 'completed'
             mailing.save()
             messages.success(self.request, 'Рассылка отправлена')
@@ -188,46 +189,46 @@ class MailingSendView(LoginRequiredMixin,CreateView):
 
 
 
-    def send_mailing(self, mailing):
-        success_count = 0
-        failed_count = 0
-
-        for recipient in mailing.recipients.all():
-            try:
-                attached_file = None
-                if mailing.message.offer_file and mailing.message.offer_file.file:
-                    attached_file = mailing.message.offer_file.file
-
-                response = send_email_via_resend(
-                    to_email=recipient.email,
-                    subject=mailing.message.header,
-                    body=mailing.message.content,
-                    file=attached_file,
-                )
-
-                MailingAttempt.objects.create(
-                    mailing=mailing,
-                    status='success',
-                    server_response=str(response),
-                )
-                success_count += 1
-
-            except Exception as e:
-                MailingAttempt.objects.create(
-                    mailing=mailing,
-                    status='failed',
-                    server_response=str(e),
-                )
-                failed_count += 1
-
-        EmailStatistics.objects.update_or_create(
-            user=self.request.user,
-            mailing=mailing,
-            defaults={
-                'success_attempt_mailing': success_count,
-                'failed_attempt_mailing': failed_count,
-            }
-        )
+    # def send_mailing(self, mailing):
+    #     success_count = 0
+    #     failed_count = 0
+    #
+    #     for recipient in mailing.recipients.all():
+    #         try:
+    #             attached_file = None
+    #             if mailing.message.offer_file and mailing.message.offer_file.file:
+    #                 attached_file = mailing.message.offer_file.file
+    #
+    #             response = send_email_via_resend(
+    #                 to_email=recipient.email,
+    #                 subject=mailing.message.header,
+    #                 body=mailing.message.content,
+    #                 file=attached_file,
+    #             )
+    #
+    #             MailingAttempt.objects.create(
+    #                 mailing=mailing,
+    #                 status='success',
+    #                 server_response=str(response),
+    #             )
+    #             success_count += 1
+    #
+    #         except Exception as e:
+    #             MailingAttempt.objects.create(
+    #                 mailing=mailing,
+    #                 status='failed',
+    #                 server_response=str(e),
+    #             )
+    #             failed_count += 1
+    #
+    #     EmailStatistics.objects.update_or_create(
+    #         user=self.request.user,
+    #         mailing=mailing,
+    #         defaults={
+    #             'success_attempt_mailing': success_count,
+    #             'failed_attempt_mailing': failed_count,
+    #         }
+    #     )
 
 
 
