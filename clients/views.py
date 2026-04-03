@@ -82,6 +82,10 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     template_name = 'message_create.html'
     success_url = reverse_lazy('clients:message_list')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 
 class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
@@ -187,48 +191,6 @@ class MailingSendView(LoginRequiredMixin,CreateView):
         return redirect(self.success_url)
 
 
-
-
-    # def send_mailing(self, mailing):
-    #     success_count = 0
-    #     failed_count = 0
-    #
-    #     for recipient in mailing.recipients.all():
-    #         try:
-    #             attached_file = None
-    #             if mailing.message.offer_file and mailing.message.offer_file.file:
-    #                 attached_file = mailing.message.offer_file.file
-    #
-    #             response = send_email_via_resend(
-    #                 to_email=recipient.email,
-    #                 subject=mailing.message.header,
-    #                 body=mailing.message.content,
-    #                 file=attached_file,
-    #             )
-    #
-    #             MailingAttempt.objects.create(
-    #                 mailing=mailing,
-    #                 status='success',
-    #                 server_response=str(response),
-    #             )
-    #             success_count += 1
-    #
-    #         except Exception as e:
-    #             MailingAttempt.objects.create(
-    #                 mailing=mailing,
-    #                 status='failed',
-    #                 server_response=str(e),
-    #             )
-    #             failed_count += 1
-    #
-    #     EmailStatistics.objects.update_or_create(
-    #         user=self.request.user,
-    #         mailing=mailing,
-    #         defaults={
-    #             'success_attempt_mailing': success_count,
-    #             'failed_attempt_mailing': failed_count,
-    #         }
-    #     )
 
 
 
@@ -360,8 +322,7 @@ class OfferFileCreateView(LoginRequiredMixin, View):
             products = form.cleaned_data['products']
             offer_file = generate_offer_file(
                 user=request.user,
-                products_queryset=products,
-                file_name='offer_file.xlsx'
+                products_queryset=products
             )
 
             messages.success(request, 'Файл успешно сформирован.')
