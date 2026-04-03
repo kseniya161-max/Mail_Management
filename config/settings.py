@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_spectacular',
     'Users',
     'clients',
     'products',
@@ -169,3 +170,22 @@ CELERY_TIMEZONE = TIME_ZONE
 
 
 USE_CELERY = os.getenv('USE_CELERY', 'False') == 'True'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Mail Management API',
+    'DESCRIPTION': 'API для управления клиентами и рассылками',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
