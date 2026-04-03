@@ -81,6 +81,14 @@
 ### 7. Фоновая отправка
 - Фоновая отправка рассылок через Celery.
 - Использование Redis в качестве брокера очередей для обработки задач.
+- Поддерживаются два режима отправки рассылок:
+- асинхронный режим через Celery + Redis
+- синхронный режим как fallback для окружений без фонового worker
+
+Celery и Redis используются для фоновой обработки задач локально. 
+Для production/free-hosting предусмотрен fallback на синхронную отправку без Celery worker.
+
+### 8. Redis используется как брокер очередей для Celery.
 
 ## Технологии
 
@@ -106,7 +114,12 @@
 3. poetry shell
 4. python manage.py migrate
 5. python manage.py runserver
-Для работы Email API необходимо добавить переменные окружения:
+6. Запуск Redis:
+   `redis-server`
+8. Запуск Celery worker:
+   `celery -A config worker --loglevel=info --pool=solo`
+
+9. Для работы Email API необходимо добавить переменные окружения:
 
 - `RESEND_API_KEY`
 - `RESEND_FROM_EMAIL`
