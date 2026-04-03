@@ -114,7 +114,11 @@ Celery и Redis используются для фоновой обработк�
 3. poetry shell
 4. python manage.py migrate
 5. python manage.py runserver
-6. Запуск Redis:
+6. Для локальной асинхронной отправки писем используются Celery и Redis.
+Пример переменной окружения:
+- `USE_CELERY=True` — локальный асинхронный режим
+- `USE_CELERY=False` — синхронный fallback-режим
+7. Запуск Redis:
    `redis-server`
 8. Запуск Celery worker:
    `celery -A config worker --loglevel=info --pool=solo`
