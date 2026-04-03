@@ -1,7 +1,15 @@
+from datetime import datetime
 from openpyxl import Workbook
 from io import BytesIO
 from django.core.files.base import ContentFile
 from clients.models import OfferFile
+import re
+
+
+def slugify_name(name):
+    name = name.lower()
+    name = re.sub(r'[^a-z0-9]+', '_', name)
+    return name.strip('_')
 
 
 def generate_offer_file(user, products_queryset, file_name=None):
@@ -26,7 +34,19 @@ def generate_offer_file(user, products_queryset, file_name=None):
     buffer.seek(0)
 
     if not file_name:
-        file_name = 'offer_file.xlsx'
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M')
+
+        first_product = products_queryset.first()
+
+        if first_product:
+            base_name = slugify_name(first_product.name[:20])
+        else:
+            base_name = 'offer'
+
+        count = products_queryset.count()
+
+        file_name = f'offer_{base_name}_{count}items_{timestamp}.xlsx'
+
 
     offer_file = OfferFile.objects.create(
         name=file_name,

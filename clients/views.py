@@ -322,8 +322,7 @@ class OfferFileCreateView(LoginRequiredMixin, View):
             products = form.cleaned_data['products']
             offer_file = generate_offer_file(
                 user=request.user,
-                products_queryset=products,
-                file_name='offer_file.xlsx'
+                products_queryset=products
             )
 
             messages.success(request, 'Файл успешно сформирован.')
