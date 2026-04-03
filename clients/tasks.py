@@ -1,5 +1,4 @@
 from celery import shared_task
-
 from clients.models import Mailing, MailingAttempt, EmailStatistics
 from clients.services import send_email_via_resend
 
