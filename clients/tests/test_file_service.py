@@ -18,7 +18,8 @@ def test_generate_offer_file():
     offer_file = generate_offer_file(user, qs)
 
     assert offer_file is not None
-    assert offer_file.name.startswith('offer')
+    assert offer_file.name.startswith('offer_')
     assert offer_file.file is not None
     assert offer_file.file.name.endswith('.xlsx')
     assert offer_file.products.count() == 1
+    assert offer_file.created_by == user
