@@ -7,6 +7,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:16
@@ -22,11 +23,11 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-  env:
-    DATABASE_URL: postgres://ci_user:ci_password@localhost:5432/ci_db
-    SECRET_KEY: ci-secret-key
-    DEBUG: "False"
-    USE_CELERY: "False"
+    env:
+      DATABASE_URL: postgres://ci_user:ci_password@localhost:5432/ci_db
+      SECRET_KEY: ci-secret-key
+      DEBUG: "False"
+      USE_CELERY: "False"
 
     steps:
       - name: Checkout code
