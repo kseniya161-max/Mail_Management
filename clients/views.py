@@ -344,9 +344,9 @@ class OfferFileCreateView(LoginRequiredMixin, View):
         form = OfferFileForm(request.POST)
 
         if form.is_valid():
-            products = form.cleaned_data["products"]
-            offer_file = generate_offer_file(
-                user=request.user, products_queryset=products
+            generate_offer_file(
+                user=request.user,
+                products_queryset=form.cleaned_data["products"]
             )
 
             messages.success(request, "Файл успешно сформирован.")
