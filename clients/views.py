@@ -86,7 +86,6 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
         return Clients.objects.filter(user=self.request.user)
 
 
-
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
     template_name = "message_list.html"
