@@ -49,3 +49,7 @@ jobs:
       - name: Run tests
         run: |
           poetry run pytest
+
+      - name: Run flake8
+        run: |
+          poetry run flake8 .

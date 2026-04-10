@@ -85,9 +85,6 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return Clients.objects.filter(user=self.request.user)
 
-    # def delete(self, request, *args, **kwargs):
-    #     response = super().delete(request, *args, **kwargs)
-    #     return response
 
 
 class MessageListView(LoginRequiredMixin, ListView):
