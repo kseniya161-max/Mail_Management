@@ -31,6 +31,20 @@
 
 Это позволяет сохранить работоспособность рассылок в условиях ограничений бесплатного хостинга.
 
+### CI (Continuous Integration)
+
+В проекте настроен CI с использованием GitHub Actions.
+
+При каждом `push` и `pull request` автоматически выполняется:
+
+- запуск unit-тестов (pytest)
+- проверка кода линтером (flake8)
+- проверка форматирования (black --check)
+- запуск в изолированном окружении с PostgreSQL
+
+Это позволяет гарантировать стабильность кода и предотвращает попадание ошибок в основной код проекта.
+
+
 ## Быстрый тест функционала
 
 1. Зарегистрируйтесь в системе
@@ -41,6 +55,7 @@
 
 Примечание:
 На бесплатном тарифе Resend письма отправляются только на подтверждённый email.
+
 
 ## Функционал
 
@@ -136,14 +151,25 @@ Celery и Redis используются для фоновой обработк�
 - Django
 - Django REST Framework
 - PostgreSQL
-- Render
-- WhiteNoise
-- Pillow
+- Celery
+- Redis
+
 - OpenPyXL
 - Resend API
 - Brevo API
-- Celery
-- Redis
+
+- pytest
+- pytest-django
+- unittest.mock
+
+- flake8
+- black
+
+- GitHub Actions (CI)
+
+- Render
+- WhiteNoise
+- Pillow
 
 
 ### Установка
