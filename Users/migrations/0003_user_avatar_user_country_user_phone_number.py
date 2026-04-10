@@ -6,23 +6,36 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('Users', '0002_user_role'),
+        ("Users", "0002_user_role"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='avatar',
-            field=models.ImageField(blank=True, help_text='Загрузите аватар', null=True, upload_to='avatars/'),
+            model_name="user",
+            name="avatar",
+            field=models.ImageField(
+                blank=True,
+                help_text="Загрузите аватар",
+                null=True,
+                upload_to="avatars/",
+            ),
         ),
         migrations.AddField(
-            model_name='user',
-            name='country',
-            field=models.CharField(blank=True, help_text='Введите страну', max_length=15, null=True, verbose_name='Страна проживания'),
+            model_name="user",
+            name="country",
+            field=models.CharField(
+                blank=True,
+                help_text="Введите страну",
+                max_length=15,
+                null=True,
+                verbose_name="Страна проживания",
+            ),
         ),
         migrations.AddField(
-            model_name='user',
-            name='phone_number',
-            field=models.CharField(blank=True, help_text='Введите номер телефона', max_length=15, null=True),
+            model_name="user",
+            name="phone_number",
+            field=models.CharField(
+                blank=True, help_text="Введите номер телефона", max_length=15, null=True
+            ),
         ),
     ]

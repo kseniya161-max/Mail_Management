@@ -6,33 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('Users', '0003_user_avatar_user_country_user_phone_number'),
+        ("Users", "0003_user_avatar_user_country_user_phone_number"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='avatar',
-            field=models.ImageField(blank=True, null=True, upload_to='avatars/'),
+            model_name="user",
+            name="avatar",
+            field=models.ImageField(blank=True, null=True, upload_to="avatars/"),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='country',
+            model_name="user",
+            name="country",
             field=models.CharField(blank=True, max_length=15, null=True),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='email',
-            field=models.EmailField(max_length=50, unique=True, verbose_name='Email'),
+            model_name="user",
+            name="email",
+            field=models.EmailField(max_length=50, unique=True, verbose_name="Email"),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='phone_number',
+            model_name="user",
+            name="phone_number",
             field=models.CharField(blank=True, max_length=15, null=True),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='username',
+            model_name="user",
+            name="username",
             field=models.CharField(max_length=50, unique=True),
         ),
     ]

@@ -6,13 +6,13 @@ from clients.models import Mailing, MailingAttempt
 
 
 class Command(BaseCommand):
-    help = 'Отправка рассылки'
+    help = "Отправка рассылки"
 
     def add_arguments(self, parser):
-        parser.add_argument('mailing_id', type=int, help='ID рассылки на отправку')
+        parser.add_argument("mailing_id", type=int, help="ID рассылки на отправку")
 
     def handle(self, *args, **kwargs):
-        mailing_id = kwargs['mailing_id']
+        mailing_id = kwargs["mailing_id"]
         try:
             mailing = Mailing.objects.get(id=mailing_id)
             recipients = mailing.recipients.all()
@@ -22,25 +22,24 @@ class Command(BaseCommand):
                     send_mail(
                         mailing.message.header,
                         mailing.message.content,
-                        'baharevaxen@yandex.ru',
+                        "baharevaxen@yandex.ru",
                         [recipient.email],
                     )
 
                     MailingAttempt.objects.create(
                         mailing=mailing,
-                        status='Успешно',
-                        response='Письмо отправлено',
-                        attempt_time=timezone.now()
+                        status="Успешно",
+                        response="Письмо отправлено",
+                        attempt_time=timezone.now(),
                     )
                 except Exception as e:
                     MailingAttempt.objects.create(
                         mailing=mailing,
-                        status='Не успешно',
+                        status="Не успешно",
                         response=str(e),
-                        attempt_time=timezone.now()
+                        attempt_time=timezone.now(),
                     )
 
-            self.stdout.write(self.style.SUCCESS('Рассылка успешно отправлена'))
+            self.stdout.write(self.style.SUCCESS("Рассылка успешно отправлена"))
         except Mailing.DoesNotExist:
-            self.stdout.write(self.style.ERROR('Рассылка с таким ID не найдена'))
-
+            self.stdout.write(self.style.ERROR("Рассылка с таким ID не найдена"))

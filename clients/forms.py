@@ -9,76 +9,110 @@ from products.models import Product
 
 
 class ClientForm(ModelForm):
-    """ Форма Создания клиента"""
+    """Форма Создания клиента"""
+
     class Meta:
         model = Clients
-        fields = ['email', 'name', 'comment', 'location']
+        fields = ["email", "name", "comment", "location"]
 
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
-        self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите email'})
-        self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Имя'})
-        self.fields['comment'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Напишите комментарий'})
-        self.fields['location'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите город'})
-        self.fields['location'].required = False
+        self.fields["email"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите email"}
+        )
+        self.fields["name"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите Имя"}
+        )
+        self.fields["comment"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Напишите комментарий"}
+        )
+        self.fields["location"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите город"}
+        )
+        self.fields["location"].required = False
 
     def clean_email(self):
-        """ Валидация email"""
-        email = self.cleaned_data.get('email')
+        """Валидация email"""
+        email = self.cleaned_data.get("email")
         if Clients.objects.filter(email=email).exists():
-            raise ValidationError('Пользовталь с таким email уже существует')
+            raise ValidationError("Пользовталь с таким email уже существует")
         return email
 
 
 class MessageForm(ModelForm):
-    """ Форма Создания сообщения"""
+    """Форма Создания сообщения"""
 
     class Meta:
         model = Message
-        fields = ['header', 'content', 'product', 'offer_file']
+        fields = ["header", "content", "product", "offer_file"]
 
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
-        self.fields['header'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Заголовок'})
-        self.fields['content'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите Контент'})
-        self.fields['product'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите товар'})
-        self.fields['offer_file'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Файл'})
+        self.fields["header"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите Заголовок"}
+        )
+        self.fields["content"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите Контент"}
+        )
+        self.fields["product"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите товар"}
+        )
+        self.fields["offer_file"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Файл"}
+        )
 
 
 class MailingSendForm(forms.ModelForm):
     class Meta:
         model = Mailing
-        fields = ['recipients', 'message', 'status', 'datetime_start', 'datetime_end']
+        fields = ["recipients", "message", "status", "datetime_start", "datetime_end"]
 
     def __init__(self, *args, **kwargs):
         super(MailingSendForm, self).__init__(*args, **kwargs)
-        self.fields['recipients'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите получателя'})
-        self.fields['message'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Выберите сообщение'})
-        self.fields['status'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Выберите статус'})
-        self.fields['datetime_start'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Дата старта'})
-        self.fields['datetime_end'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Дата окончания'})
+        self.fields["recipients"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите получателя"}
+        )
+        self.fields["message"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Выберите сообщение"}
+        )
+        self.fields["status"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Выберите статус"}
+        )
+        self.fields["datetime_start"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Дата старта"}
+        )
+        self.fields["datetime_end"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Дата окончания"}
+        )
 
     def clean(self):
         cleaned_data = super().clean()
         print(cleaned_data)
-        datetime_start = cleaned_data.get('datetime_start')
-        datetime_end = cleaned_data.get('datetime_end')
-        if datetime_start and datetime_end and  datetime_end < datetime_start:
-            raise ValidationError('Дата завершения не может быть больше даты начала')
+        datetime_start = cleaned_data.get("datetime_start")
+        datetime_end = cleaned_data.get("datetime_end")
+        if datetime_start and datetime_end and datetime_end < datetime_start:
+            raise ValidationError("Дата завершения не может быть больше даты начала")
         return cleaned_data
 
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'avatar', 'country', 'phone_number', 'role',]
+        fields = [
+            "username",
+            "email",
+            "avatar",
+            "country",
+            "phone_number",
+            "role",
+        ]
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'avatar': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'country': forms.TextInput(attrs={'class': 'form-control'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'role': forms.TextInput(attrs={'class': 'form-control'}),
+            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "avatar": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "country": forms.TextInput(attrs={"class": "form-control"}),
+            "phone_number": forms.TextInput(attrs={"class": "form-control"}),
+            "role": forms.TextInput(attrs={"class": "form-control"}),
         }
 
 
@@ -86,5 +120,5 @@ class OfferFileForm(forms.Form):
     products = forms.ModelMultipleChoiceField(
         queryset=Product.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        label='Выберите продукты'
+        label="Выберите продукты",
     )

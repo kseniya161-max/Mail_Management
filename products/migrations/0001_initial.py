@@ -8,36 +8,83 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, verbose_name='Категория продукта')),
-                ('photo', models.ImageField(blank=True, null=True, upload_to='photo/category/', verbose_name='Фото')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=50, verbose_name="Категория продукта"),
+                ),
+                (
+                    "photo",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="photo/category/",
+                        verbose_name="Фото",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Категория',
-                'verbose_name_plural': 'Категории',
-                'permissions': [('can_manage_category', 'Can manage category')],
+                "verbose_name": "Категория",
+                "verbose_name_plural": "Категории",
+                "permissions": [("can_manage_category", "Can manage category")],
             },
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, unique=True, verbose_name='Наименование продукта')),
-                ('quantity', models.IntegerField(verbose_name='Количество')),
-                ('photo', models.ImageField(blank=True, null=True, upload_to='photo/product/', verbose_name='фото')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='products.category', verbose_name='Категория')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=50, unique=True, verbose_name="Наименование продукта"
+                    ),
+                ),
+                ("quantity", models.IntegerField(verbose_name="Количество")),
+                (
+                    "photo",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="photo/product/",
+                        verbose_name="фото",
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="products",
+                        to="products.category",
+                        verbose_name="Категория",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Продукт',
-                'verbose_name_plural': 'Продукты',
-                'permissions': [('can_manage_product', 'Can manage product')],
+                "verbose_name": "Продукт",
+                "verbose_name_plural": "Продукты",
+                "permissions": [("can_manage_product", "Can manage product")],
             },
         ),
     ]

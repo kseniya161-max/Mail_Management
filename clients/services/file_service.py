@@ -8,8 +8,8 @@ import re
 
 def slugify_name(name):
     name = name.lower()
-    name = re.sub(r'[^a-z0-9]+', '_', name)
-    return name.strip('_')
+    name = re.sub(r"[^a-z0-9]+", "_", name)
+    return name.strip("_")
 
 
 def generate_offer_file(user, products_queryset, file_name=None):
@@ -17,47 +17,44 @@ def generate_offer_file(user, products_queryset, file_name=None):
 
     workbook = Workbook()
     worksheet = workbook.active
-    worksheet.title = 'Предложение'
+    worksheet.title = "Предложение"
 
-    worksheet.append(['Название', 'Категория', 'Количество', 'Описание'])
+    worksheet.append(["Название", "Категория", "Количество", "Описание"])
 
     for product in products_queryset:
-        worksheet.append([
-            product.name,
-            product.category.name if product.category else '',
-            product.quantity,
-            product.description or '',
-        ])
+        worksheet.append(
+            [
+                product.name,
+                product.category.name if product.category else "",
+                product.quantity,
+                product.description or "",
+            ]
+        )
 
     buffer = BytesIO()
     workbook.save(buffer)
     buffer.seek(0)
 
     if not file_name:
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M')
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M")
 
         first_product = products_queryset.first()
 
         if first_product:
             base_name = slugify_name(first_product.name[:20])
         else:
-            base_name = 'offer'
+            base_name = "offer"
 
         count = products_queryset.count()
 
-        file_name = f'offer_{base_name}_{count}items_{timestamp}.xlsx'
-
+        file_name = f"offer_{base_name}_{count}items_{timestamp}.xlsx"
 
     offer_file = OfferFile.objects.create(
         name=file_name,
         created_by=user,
     )
 
-    offer_file.file.save(
-        file_name,
-        ContentFile(buffer.read()),
-        save=True
-    )
+    offer_file.file.save(file_name, ContentFile(buffer.read()), save=True)
 
     offer_file.products.set(products_queryset)
 

@@ -7,13 +7,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clients', '0011_alter_mailing_datetime_end'),
+        ("clients", "0011_alter_mailing_datetime_end"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='mailing',
-            name='datetime_end',
-            field=models.DateTimeField(default=datetime.datetime(2025, 12, 5, 14, 28, 59, 729211, tzinfo=datetime.timezone.utc)),
+            model_name="mailing",
+            name="datetime_end",
+            field=models.DateTimeField(
+                default=datetime.datetime(
+                    2025, 12, 5, 14, 28, 59, 729211, tzinfo=datetime.timezone.utc
+                )
+            ),
         ),
     ]

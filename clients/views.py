@@ -5,11 +5,31 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView, DetailView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    TemplateView,
+    DetailView,
+)
 from clients.services.mailing_service import MailingService
 from Users.models import User
-from clients.forms import MailingSendForm, ClientForm, MessageForm, UserForm, OfferFileForm
-from clients.models import Clients, Message, Mailing, MailingAttempt, EmailStatistics, OfferFile
+from clients.forms import (
+    MailingSendForm,
+    ClientForm,
+    MessageForm,
+    UserForm,
+    OfferFileForm,
+)
+from clients.models import (
+    Clients,
+    Message,
+    Mailing,
+    MailingAttempt,
+    EmailStatistics,
+    OfferFile,
+)
 from django.conf import settings
 from django.views.decorators.cache import cache_page
 from clients.services.file_service import generate_offer_file
@@ -19,13 +39,13 @@ from clients.tasks import send_mailing_task
 
 class ClientListView(LoginRequiredMixin, ListView):
     model = Clients
-    template_name = 'client_list.html'
-    context_object_name = 'list_clients'
+    template_name = "client_list.html"
+    context_object_name = "list_clients"
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(user=self.request.user)
 
-        location = self.request.GET.get('location')
+        location = self.request.GET.get("location")
         if location:
             queryset = queryset.filter(location__icontains=location)
 
@@ -35,8 +55,8 @@ class ClientListView(LoginRequiredMixin, ListView):
 class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Clients
     form_class = ClientForm
-    template_name = 'client_create.html'
-    success_url = reverse_lazy('clients:client_list')
+    template_name = "client_create.html"
+    success_url = reverse_lazy("clients:client_list")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -46,8 +66,8 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Clients
     form_class = ClientForm
-    template_name = 'client_edit.html'
-    success_url = reverse_lazy('clients:client_list')
+    template_name = "client_edit.html"
+    success_url = reverse_lazy("clients:client_list")
 
     def get_queryset(self):
         return Clients.objects.filter(user=self.request.user)
@@ -59,28 +79,24 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Clients
-    template_name = 'client_delete.html'
-    success_url = reverse_lazy('clients:client_list')
+    template_name = "client_delete.html"
+    success_url = reverse_lazy("clients:client_list")
 
     def get_queryset(self):
         return Clients.objects.filter(user=self.request.user)
 
-    # def delete(self, request, *args, **kwargs):
-    #     response = super().delete(request, *args, **kwargs)
-    #     return response
 
-
-class MessageListView(LoginRequiredMixin,ListView):
+class MessageListView(LoginRequiredMixin, ListView):
     model = Message
-    template_name = 'message_list.html'
-    context_object_name = 'list_messages'
+    template_name = "message_list.html"
+    context_object_name = "list_messages"
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
-    template_name = 'message_create.html'
-    success_url = reverse_lazy('clients:message_list')
+    template_name = "message_create.html"
+    success_url = reverse_lazy("clients:message_list")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -90,30 +106,30 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     form_class = MessageForm
-    template_name = 'message_update.html'
-    success_url = reverse_lazy('clients:message_list')
+    template_name = "message_update.html"
+    success_url = reverse_lazy("clients:message_list")
 
     def get_queryset(self):
         return Message.objects.filter(user=self.request.user)
 
 
-class MessageDeleteView(LoginRequiredMixin,DeleteView):
+class MessageDeleteView(LoginRequiredMixin, DeleteView):
     model = Message
-    template_name = 'message_delete.html'
-    success_url = reverse_lazy('clients:message_list')
+    template_name = "message_delete.html"
+    success_url = reverse_lazy("clients:message_list")
 
     def get_queryset(self):
         return Message.objects.filter(user=self.request.user)
 
 
-class MailingListView(LoginRequiredMixin,ListView):
+class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
-    template_name = 'mailing_list.html'
-    context_object_name = 'list_mailing'
+    template_name = "mailing_list.html"
+    context_object_name = "list_mailing"
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            if self.request.user.role == 'manager':
+            if self.request.user.role == "manager":
                 return Mailing.objects.all()
             else:
                 return Mailing.objects.filter(user=self.request.user)
@@ -124,28 +140,28 @@ class MailingListView(LoginRequiredMixin,ListView):
 class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingSendForm
-    template_name = 'mailing_create.html'
-    success_url = reverse_lazy('clients:mailing_list')
+    template_name = "mailing_create.html"
+    success_url = reverse_lazy("clients:mailing_list")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
 
-class MailingUpdateView(LoginRequiredMixin,UpdateView):
+class MailingUpdateView(LoginRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingSendForm
-    template_name = 'mailing_update.html'
-    success_url = reverse_lazy('clients:mailing_list')
+    template_name = "mailing_update.html"
+    success_url = reverse_lazy("clients:mailing_list")
 
     def get_queryset(self):
-        if self.request.user.role == 'manager':
+        if self.request.user.role == "manager":
             return Mailing.objects.filter(user=self.request.user)
         return super().get_queryset()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['instance'] = self.get_object()
+        kwargs["instance"] = self.get_object()
         return kwargs
 
     def form_valid(self, form):
@@ -156,89 +172,95 @@ class MailingUpdateView(LoginRequiredMixin,UpdateView):
             return self.form_invalid(form)
 
 
-class MailingDeleteView(LoginRequiredMixin,DeleteView):
+class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
-    template_name = 'mailing_delete.html'
-    success_url = reverse_lazy('clients:mailing_list')
+    template_name = "mailing_delete.html"
+    success_url = reverse_lazy("clients:mailing_list")
 
     def get_queryset(self):
-        if self.request.user.role == 'manager':
+        if self.request.user.role == "manager":
             return Mailing.objects.all()
         return Mailing.objects.filter(user=self.request.user)
 
 
-class MailingSendView(LoginRequiredMixin,CreateView):
+class MailingSendView(LoginRequiredMixin, CreateView):
     form_class = MailingSendForm
-    template_name = 'mailing_send.html'
-    success_url = reverse_lazy('clients:mailing_list')
+    template_name = "mailing_send.html"
+    success_url = reverse_lazy("clients:mailing_list")
 
     def form_valid(self, form):
         mailing = form.save(commit=False)
         mailing.user = self.request.user
-        mailing.status = 'started'
+        mailing.status = "started"
         mailing.save()
         form.save_m2m()
 
         if settings.USE_CELERY:
             send_mailing_task.delay(mailing.id)
-            messages.success(self.request, 'Рассылка поставлена в очередь на отправку')
+            messages.success(self.request, "Рассылка поставлена в очередь на отправку")
         else:
             MailingService.send_mailing(mailing, self.request.user)
-            mailing.status = 'completed'
+            mailing.status = "completed"
             mailing.save()
-            messages.success(self.request, 'Рассылка отправлена')
+            messages.success(self.request, "Рассылка отправлена")
 
         return redirect(self.success_url)
 
 
-
-
-
-@method_decorator(cache_page(60 * 3), name='dispatch')
+@method_decorator(cache_page(60 * 3), name="dispatch")
 class HomePageView(TemplateView):
-    template_name = 'home.html'
+    template_name = "home.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['total_mailing'] = Mailing.objects.count()
-        context['active_mailing'] = Mailing.objects.filter(status='started').count()
-        context['unique_recipients'] = Clients.objects.count()
+        context["total_mailing"] = Mailing.objects.count()
+        context["active_mailing"] = Mailing.objects.filter(status="started").count()
+        context["unique_recipients"] = Clients.objects.count()
         return context
 
 
 class EmailStatisticsView(LoginRequiredMixin, ListView):
     model = EmailStatistics
-    template_name = 'email_statistic.html'
-    context_object_name = 'statistic'
+    template_name = "email_statistic.html"
+    context_object_name = "statistic"
 
     def get_queryset(self):
-        if self.request.user.role == 'manager':
-            return EmailStatistics.objects.select_related('mailing').values(
-                'mailing__message__header', 'mailing__status', 'user__username'
-            ).annotate(
-                total_success=Sum('success_attempt_mailing'),
-                total_failed=Sum('failed_attempt_mailing')
-            ).order_by('mailing__message__header')
+        if self.request.user.role == "manager":
+            return (
+                EmailStatistics.objects.select_related("mailing")
+                .values("mailing__message__header", "mailing__status", "user__username")
+                .annotate(
+                    total_success=Sum("success_attempt_mailing"),
+                    total_failed=Sum("failed_attempt_mailing"),
+                )
+                .order_by("mailing__message__header")
+            )
         else:
-            return EmailStatistics.objects.filter(user=self.request.user).select_related('mailing').values(
-                'mailing__message__header', 'mailing__status', 'user__username'
-            ).annotate(
-                total_success=Sum('success_attempt_mailing'),
-                total_failed=Sum('failed_attempt_mailing')
-            ).order_by('mailing__message__header')
+            return (
+                EmailStatistics.objects.filter(user=self.request.user)
+                .select_related("mailing")
+                .values("mailing__message__header", "mailing__status", "user__username")
+                .annotate(
+                    total_success=Sum("success_attempt_mailing"),
+                    total_failed=Sum("failed_attempt_mailing"),
+                )
+                .order_by("mailing__message__header")
+            )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['total_success'] = sum(stat['total_success'] for stat in self.object_list)
-        context['total_failed'] = sum(stat['total_failed'] for stat in self.object_list)
-        context['total_attempts'] = context['total_success'] + context['total_failed']
+        context["total_success"] = sum(
+            stat["total_success"] for stat in self.object_list
+        )
+        context["total_failed"] = sum(stat["total_failed"] for stat in self.object_list)
+        context["total_attempts"] = context["total_success"] + context["total_failed"]
         return context
 
 
-class ManegerClientListView(LoginRequiredMixin,ListView):
+class ManegerClientListView(LoginRequiredMixin, ListView):
     model = Clients
-    template_name = 'manager_client_list.html'
-    context_object_name = 'list_clients'
+    template_name = "manager_client_list.html"
+    context_object_name = "list_clients"
 
     def get_queryset(self):
         return Clients.objects.all()
@@ -246,8 +268,8 @@ class ManegerClientListView(LoginRequiredMixin,ListView):
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
-    template_name = 'user_profile.html'
-    context_object_name = 'user_profile'
+    template_name = "user_profile.html"
+    context_object_name = "user_profile"
 
     def get_object(self):
         return self.request.user
@@ -256,76 +278,73 @@ class UserProfileView(LoginRequiredMixin, DetailView):
 class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
-    template_name = 'user_profile_update.html'
-    success_url = reverse_lazy('clients:user_profile')
+    template_name = "user_profile_update.html"
+    success_url = reverse_lazy("clients:user_profile")
 
     def get_object(self):
         return self.request.user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_profile'] = self.request.user
+        context["user_profile"] = self.request.user
         return context
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        if 'avatar' in self.request.FILES:
-            user.avatar = self.request.FILES['avatar']
+        if "avatar" in self.request.FILES:
+            user.avatar = self.request.FILES["avatar"]
         user.save()
-        messages.success(self.request, 'Профиль успешно обновлён!')
+        messages.success(self.request, "Профиль успешно обновлён!")
         return super().form_valid(form)
 
 
 class DeactivateMailingView(LoginRequiredMixin, View):
     def post(self, request, mailing_id):
-        if request.user.role != 'manager':
-            messages.error(request, 'Только менеджер может отключить рассылку.')
-            return redirect('clients:mailing_list')
+        if request.user.role != "manager":
+            messages.error(request, "Только менеджер может отключить рассылку.")
+            return redirect("clients:mailing_list")
 
         mailing = get_object_or_404(Mailing, id=mailing_id)
-        mailing.status = 'closed'
+        mailing.status = "closed"
         mailing.save()
-        messages.success(request, 'Рассылка успешно отключена.')
-        return redirect('clients:mailing_list')
+        messages.success(request, "Рассылка успешно отключена.")
+        return redirect("clients:mailing_list")
 
 
 class DeactivateMailingConfirmView(LoginRequiredMixin, View):
     def get(self, request, mailing_id):
         mailing = get_object_or_404(Mailing, id=mailing_id)
-        return render(request, 'deactivate_mailing_confirm.html', {'mailing': mailing})
+        return render(request, "deactivate_mailing_confirm.html", {"mailing": mailing})
 
     def post(self, request, mailing_id):
-        if request.user.role != 'manager':
-            messages.error(request, 'Только менеджер может отключить рассылку.')
-            return redirect('clients:mailing_list')
+        if request.user.role != "manager":
+            messages.error(request, "Только менеджер может отключить рассылку.")
+            return redirect("clients:mailing_list")
 
         mailing = get_object_or_404(Mailing, id=mailing_id)
-        mailing.status = 'closed'
+        mailing.status = "closed"
         mailing.save()
-        messages.success(request, 'Рассылка успешно отключена.')
-        return redirect('clients:mailing_list')
-
+        messages.success(request, "Рассылка успешно отключена.")
+        return redirect("clients:mailing_list")
 
 
 class OfferFileCreateView(LoginRequiredMixin, View):
-    template_name = 'offer_file_create.html'
+    template_name = "offer_file_create.html"
     model = OfferFile
 
     def get(self, request):
         form = OfferFileForm()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {"form": form})
 
     def post(self, request):
         form = OfferFileForm(request.POST)
 
         if form.is_valid():
-            products = form.cleaned_data['products']
-            offer_file = generate_offer_file(
-                user=request.user,
-                products_queryset=products
+            generate_offer_file(
+                user=request.user, products_queryset=form.cleaned_data["products"]
             )
 
-            messages.success(request, 'Файл успешно сформирован.')
-            return redirect('clients:user_profile')
+            messages.success(request, "Файл успешно сформирован.")
+            return redirect("clients:user_profile")
 
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {"form": form})

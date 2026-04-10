@@ -10,46 +10,123 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Clients',
+            name="Clients",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=100, unique=True)),
-                ('name', models.CharField(max_length=100)),
-                ('comment', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("email", models.EmailField(max_length=100, unique=True)),
+                ("name", models.CharField(max_length=100)),
+                ("comment", models.TextField(blank=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('header', models.CharField(max_length=200)),
-                ('content', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("header", models.CharField(max_length=200)),
+                ("content", models.TextField()),
             ],
         ),
         migrations.CreateModel(
-            name='Mailing',
+            name="Mailing",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('datetime_start', models.DateTimeField(default=django.utils.timezone.now)),
-                ('datetime_end', models.DateTimeField(default=datetime.datetime(2025, 11, 23, 11, 36, 37, 10982, tzinfo=datetime.timezone.utc))),
-                ('status', models.CharField(choices=[('created', 'создана'), ('started', 'запущена'), ('completed', 'завершена')], default='created', max_length=10)),
-                ('recipients', models.ManyToManyField(to='clients.clients')),
-                ('message', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='clients.message')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "datetime_start",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                (
+                    "datetime_end",
+                    models.DateTimeField(
+                        default=datetime.datetime(
+                            2025,
+                            11,
+                            23,
+                            11,
+                            36,
+                            37,
+                            10982,
+                            tzinfo=datetime.timezone.utc,
+                        )
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("created", "создана"),
+                            ("started", "запущена"),
+                            ("completed", "завершена"),
+                        ],
+                        default="created",
+                        max_length=10,
+                    ),
+                ),
+                ("recipients", models.ManyToManyField(to="clients.clients")),
+                (
+                    "message",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="clients.message",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='MailingAttempt',
+            name="MailingAttempt",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('attempt_time', models.DateTimeField(auto_now_add=True)),
-                ('status', models.CharField(choices=[('success', 'успешно'), ('failed', 'неуспешно')], max_length=10)),
-                ('server_response', models.TextField(blank=True)),
-                ('mailing', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='clients.mailing')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("attempt_time", models.DateTimeField(auto_now_add=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("success", "успешно"), ("failed", "неуспешно")],
+                        max_length=10,
+                    ),
+                ),
+                ("server_response", models.TextField(blank=True)),
+                (
+                    "mailing",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="clients.mailing",
+                    ),
+                ),
             ],
         ),
     ]

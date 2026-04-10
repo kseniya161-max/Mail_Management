@@ -24,7 +24,7 @@ class MailingService:
 
                 MailingAttempt.objects.create(
                     mailing=mailing,
-                    status='success',
+                    status="success",
                     server_response=str(response),
                 )
                 success_count += 1
@@ -32,7 +32,7 @@ class MailingService:
             except Exception as e:
                 MailingAttempt.objects.create(
                     mailing=mailing,
-                    status='failed',
+                    status="failed",
                     server_response=str(e),
                 )
                 failed_count += 1
@@ -41,9 +41,9 @@ class MailingService:
             user=user,
             mailing=mailing,
             defaults={
-                'success_attempt_mailing': success_count,
-                'failed_attempt_mailing': failed_count,
-            }
+                "success_attempt_mailing": success_count,
+                "failed_attempt_mailing": failed_count,
+            },
         )
 
         return success_count, failed_count
