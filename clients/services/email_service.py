@@ -32,7 +32,7 @@ def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
 
 def send_email_via_brevo(to_email: str, subject: str, body: str):
     configuration = sib_api_v3_sdk.Configuration()
-    configuration.api_key['api-key'] = settings.BREVO_API_KEY
+    configuration.api_key["api-key"] = settings.BREVO_API_KEY
 
     api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
         sib_api_v3_sdk.ApiClient(configuration)

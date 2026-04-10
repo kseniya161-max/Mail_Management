@@ -7,18 +7,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0002_category_description'),
+        ("products", "0002_category_description"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='description',
-            field=models.CharField(blank=True, max_length=250, null=True, verbose_name='Описание товара'),
+            model_name="product",
+            name="description",
+            field=models.CharField(
+                blank=True, max_length=250, null=True, verbose_name="Описание товара"
+            ),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='products.category', verbose_name='Продукт'),
+            model_name="product",
+            name="category",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="products",
+                to="products.category",
+                verbose_name="Продукт",
+            ),
         ),
     ]

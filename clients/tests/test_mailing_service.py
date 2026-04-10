@@ -11,29 +11,17 @@ from clients.services.mailing_service import MailingService
 def test_send_mailing_success(mock_send_email):
     mock_send_email.return_value = {"id": "test-id", "status": "sent"}
 
-    user = User.objects.create_user(
-        username="test_user",
-        password="12345"
-    )
+    user = User.objects.create_user(username="test_user", password="12345")
 
     client = Clients.objects.create(
-        user=user,
-        email="client@test.com",
-        name="Test Client"
+        user=user, email="client@test.com", name="Test Client"
     )
 
     message = Message.objects.create(
-        user=user,
-        header="Test header",
-        content="Test content",
-        offer_file=None
+        user=user, header="Test header", content="Test content", offer_file=None
     )
 
-    mailing = Mailing.objects.create(
-        user=user,
-        message=message,
-        status="started"
-    )
+    mailing = Mailing.objects.create(user=user, message=message, status="started")
     mailing.recipients.add(client)
 
     success_count, failed_count = MailingService.send_mailing(mailing, user)

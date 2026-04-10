@@ -14,7 +14,7 @@ class ProductViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Product.objects.all()
-        category_id = self.request.query_params.get('category')
+        category_id = self.request.query_params.get("category")
 
         if category_id:
             queryset = queryset.filter(category_id=category_id)
@@ -27,4 +27,3 @@ class CategoryViewSet(ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [SessionAuthentication, BasicAuthentication]
-

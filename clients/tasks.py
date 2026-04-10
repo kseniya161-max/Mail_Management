@@ -9,5 +9,5 @@ def send_mailing_task(mailing_id):
 
     MailingService.send_mailing(mailing, mailing.user)
 
-    mailing.status = 'completed'
+    mailing.status = "completed"
     mailing.save()

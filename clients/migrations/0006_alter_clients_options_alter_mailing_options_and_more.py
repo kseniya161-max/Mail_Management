@@ -7,29 +7,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clients', '0005_clients_user_mailing_user_message_user_and_more'),
+        ("clients", "0005_clients_user_mailing_user_message_user_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='clients',
-            options={'permissions': [('can_manage_clients', 'Can manage clients')]},
+            name="clients",
+            options={"permissions": [("can_manage_clients", "Can manage clients")]},
         ),
         migrations.AlterModelOptions(
-            name='mailing',
-            options={'permissions': [('can_manage_mailing', 'Can manage mailing')]},
+            name="mailing",
+            options={"permissions": [("can_manage_mailing", "Can manage mailing")]},
         ),
         migrations.AlterModelOptions(
-            name='mailingattempt',
-            options={'permissions': [('can_manage_mailing', 'Can manage mailing')]},
+            name="mailingattempt",
+            options={"permissions": [("can_manage_mailing", "Can manage mailing")]},
         ),
         migrations.AlterModelOptions(
-            name='message',
-            options={'permissions': [('can_manage_message', 'Can manage message')]},
+            name="message",
+            options={"permissions": [("can_manage_message", "Can manage message")]},
         ),
         migrations.AlterField(
-            model_name='mailing',
-            name='datetime_end',
-            field=models.DateTimeField(default=datetime.datetime(2025, 11, 27, 22, 0, 43, 853824, tzinfo=datetime.timezone.utc)),
+            model_name="mailing",
+            name="datetime_end",
+            field=models.DateTimeField(
+                default=datetime.datetime(
+                    2025, 11, 27, 22, 0, 43, 853824, tzinfo=datetime.timezone.utc
+                )
+            ),
         ),
     ]
