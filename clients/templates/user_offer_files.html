@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Мои предложения{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mt-5 mb-4">Мои предложения</h2>
+    {% if offer_files %}
+        <ul class="list-group">
+            {% for offer in offer_files %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ offer.name }}</strong><br>
+                        <small class="text-muted">
+                            {{ offer.created_at|date:"d.m.Y H:i" }}
+                        </small>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a href="{{ offer.file.url }}" class="btn btn-sm btn-outline-primary" download>
+                            Скачать
+                        </a>
+                        <form method="post" action="{% url 'clients:offer_delete' offer.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                Удалить
+                            </button>
+                        </form>
+                    </div>
+
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">У вас пока нет предложений.</p>
+    {% endif %}
+</div>
+{% endblock %}

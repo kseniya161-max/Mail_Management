@@ -48,7 +48,7 @@
             <div class="col-md-4">
             <ul class="list-group no-bullets ">
                 <li>
-                    <a href="{% url 'clients:client_list' %}" class="list-group-item custom-link  list-group-item-primary">Мои сообщения</a>
+                    <a href="{% url 'clients:my_offers' %}" class="list-group-item custom-link  list-group-item-primary">Мои предложения</a>
                 </li>
                 <li>
                     <a href="{% url 'clients:email_statistic' %}" class="list-group-item custom-link list-group-item-success">Статистика рассылок</a>
@@ -73,28 +73,6 @@
                 </li>
             </ul>
         </div>
-        {% endif %}
-    </div>
-
-    <div class="mt-5">
-        <h4>Мои предложения</h4>
-
-        {% if offer_files %}
-            <ul class="list-group">
-                {% for offer in offer_files %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>{{ offer.name }}</strong><br>
-                            <small class="text-muted">{{ offer.created_at|date:"d.m.Y H:i" }}</small>
-                        </div>
-                        <a href="{{ offer.file.url }}" class="btn btn-sm btn-outline-primary" download>
-                            Скачать
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-muted">У вас пока нет сформированных предложений.</p>
         {% endif %}
     </div>
 </div>
