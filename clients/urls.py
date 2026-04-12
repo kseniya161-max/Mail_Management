@@ -13,6 +13,7 @@ from clients.views import (
     MailingUpdateView,
     MailingDeleteView,
     HomePageView,
+    UserOfferFilesView,
 )
 from clients.views import (
     MessageListView,
@@ -27,6 +28,7 @@ from clients.views import (
     UserProfileUpdateView,
     DeactivateMailingView,
     DeactivateMailingConfirmView,
+    OfferFileDeleteView,
 )
 from clients.views import OfferFileCreateView
 
@@ -68,4 +70,8 @@ urlpatterns = [
         name="deactivate_mailing_confirm",
     ),
     path("offer-file/create/", OfferFileCreateView.as_view(), name="offer_file_create"),
+    path("my-offers/", UserOfferFilesView.as_view(), name="my_offers"),
+    path(
+        "my-offers/delete/<int:pk>/", OfferFileDeleteView.as_view(), name="offer_delete"
+    ),
 ]

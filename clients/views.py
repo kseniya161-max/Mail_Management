@@ -98,6 +98,11 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     template_name = "message_create.html"
     success_url = reverse_lazy("clients:message_list")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -348,3 +353,23 @@ class OfferFileCreateView(LoginRequiredMixin, View):
             return redirect("clients:user_profile")
 
         return render(request, self.template_name, {"form": form})
+
+
+class UserOfferFilesView(LoginRequiredMixin, ListView):
+    template_name = "user_offer_files.html"
+    model = OfferFile
+    context_object_name = "offer_files"
+
+    def get_queryset(self):
+        return OfferFile.objects.filter(created_by=self.request.user).order_by(
+            "-created_at"
+        )
+
+
+class OfferFileDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = "user_offer_files_delete.html"
+    model = OfferFile
+    success_url = reverse_lazy("clients:my_offers")
+
+    def get_queryset(self):
+        return OfferFile.objects.filter(created_by=self.request.user)

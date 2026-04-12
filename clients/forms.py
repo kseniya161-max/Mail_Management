@@ -47,7 +47,9 @@ class MessageForm(ModelForm):
         fields = ["header", "content", "product", "offer_file"]
 
     def __init__(self, *args, **kwargs):
-        super(MessageForm, self).__init__(*args, **kwargs)
+        user = kwargs.pop("user", None)
+        super().__init__(*args, **kwargs)
+
         self.fields["header"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Введите Заголовок"}
         )
@@ -60,6 +62,11 @@ class MessageForm(ModelForm):
         self.fields["offer_file"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Файл"}
         )
+
+        if user:
+            self.fields["offer_file"].queryset = OfferFile.objects.filter(
+                created_by=user
+            )
 
 
 class MailingSendForm(forms.ModelForm):
