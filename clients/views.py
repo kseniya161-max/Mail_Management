@@ -280,7 +280,6 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-
 class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
@@ -361,9 +360,10 @@ class UserOfferFilesView(LoginRequiredMixin, ListView):
     model = OfferFile
     context_object_name = "offer_files"
 
-
     def get_queryset(self):
-        return OfferFile.objects.filter(created_by=self.request.user).order_by('-created_at')
+        return OfferFile.objects.filter(created_by=self.request.user).order_by(
+            "-created_at"
+        )
 
 
 class OfferFileDeleteView(LoginRequiredMixin, DeleteView):
