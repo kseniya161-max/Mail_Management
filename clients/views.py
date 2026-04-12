@@ -275,13 +275,6 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["offer_files"] = OfferFile.objects.filter(
-            created_by=self.request.user
-        ).order_by("-created_at")
-        return context
-
 
 class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
@@ -356,3 +349,13 @@ class OfferFileCreateView(LoginRequiredMixin, View):
             return redirect("clients:user_profile")
 
         return render(request, self.template_name, {"form": form})
+
+
+class UserOfferFilesView(LoginRequiredMixin, ListView):
+    template_name = "user_offer_files.html"
+    model = OfferFile
+    context_object_name = "offer_files"
+
+
+    def get_queryset(self):
+        return OfferFile.objects.filter(created_by=self.request.user).order_by('-created_at')
