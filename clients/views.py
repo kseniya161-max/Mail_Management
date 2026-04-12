@@ -275,6 +275,14 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["offer_files"] = OfferFile.objects.filter(
+            created_by=self.request.user
+        ).order_by("-created_at")
+        return context
+
+
 class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
