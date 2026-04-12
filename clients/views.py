@@ -359,3 +359,12 @@ class UserOfferFilesView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return OfferFile.objects.filter(created_by=self.request.user).order_by('-created_at')
+
+
+class OfferFileDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = "user_offer_files_delete.html"
+    model = OfferFile
+    success_url = reverse_lazy("clients:my_offers")
+
+    def get_queryset(self):
+        return OfferFile.objects.filter(created_by=self.request.user)
