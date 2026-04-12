@@ -16,6 +16,11 @@ Additionally, the system supports:
 
 The project demonstrates the development of a backend system for automating business workflows, including email campaigns and dynamic offer generation.
 
+Recently added:
+
+* Dedicated "My Offers" page for managing generated Excel files
+* File deletion functionality
+* User-level filtering of offer files in forms and views
 ---
 
 ## Deployment
@@ -55,6 +60,7 @@ This ensures code quality and stability across environments.
 
 * Create and manage messages
 * Attach generated Excel files
+* Select only user-specific generated files when attaching offers
 
 ### Mailing System
 
@@ -96,7 +102,10 @@ Features:
   * SMTP
   * Resend API
   * Brevo API
-* Support for file attachments
+  * Support for file attachments
+  * View generated files in a dedicated "My Offers" page
+  * Delete previously generated offer files
+  * User-specific access to generated files (each user sees only their own files)
 
 ---
 
