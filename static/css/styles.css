@@ -1,1 +1,25 @@
-/* custom styles */
+/* navbar styles */
+
+.navbar-custom {
+    background-color: #0b1f3a;
+}
+
+.navbar-custom .nav-link {
+    color: #cfd8e3;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #ffffff;
+}
+
+/* footer styles */
+
+.footer-custom {
+    background-color: #0b1f3a;
+    color: #cfd8e3;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-custom p {
+    margin: 0;
+}
