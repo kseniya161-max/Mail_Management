@@ -189,28 +189,46 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
         return Mailing.objects.filter(user=self.request.user)
 
 
-class MailingSendView(LoginRequiredMixin, CreateView):
-    form_class = MailingSendForm
-    template_name = "mailing_send.html"
-    success_url = reverse_lazy("clients:mailing_list")
+# class MailingSendView(LoginRequiredMixin, CreateView):
+#     form_class = MailingSendForm
+#     template_name = "mailing_send.html"
+#     success_url = reverse_lazy("clients:mailing_list")
+#
+#     def form_valid(self, form):
+#         mailing = form.save(commit=False)
+#         mailing.user = self.request.user
+#         mailing.status = "started"
+#         mailing.save()
+#         form.save_m2m()
+#
+#         if settings.USE_CELERY:
+#             send_mailing_task.delay(mailing.id)
+#             messages.success(self.request, "Рассылка поставлена в очередь на отправку")
+#         else:
+#             MailingService.send_mailing(mailing, self.request.user)
+#             mailing.status = "completed"
+#             mailing.save()
+#             messages.success(self.request, "Рассылка отправлена")
+#
+#         return redirect(self.success_url)
 
-    def form_valid(self, form):
-        mailing = form.save(commit=False)
-        mailing.user = self.request.user
+
+class MailingSendView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        mailing = get_object_or_404(Mailing, pk=pk, user=request.user)
         mailing.status = "started"
         mailing.save()
-        form.save_m2m()
 
         if settings.USE_CELERY:
             send_mailing_task.delay(mailing.id)
-            messages.success(self.request, "Рассылка поставлена в очередь на отправку")
+            messages.success(request, "Рассылка поставлена в очередь на отправку")
         else:
-            MailingService.send_mailing(mailing, self.request.user)
+            MailingService.send_mailing(mailing, request.user)
             mailing.status = "completed"
             mailing.save()
-            messages.success(self.request, "Рассылка отправлена")
+            messages.success(request, "Рассылка отправлена")
 
-        return redirect(self.success_url)
+        return redirect("clients:mailing_list")
 
 
 @method_decorator(cache_page(60 * 3), name="dispatch")
