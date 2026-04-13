@@ -23,3 +23,40 @@
 .footer-custom p {
     margin: 0;
 }
+/* btn styles */
+.btn-outline-custom {
+    background-color: #ffffff;
+    color: #0b1f3a;
+    border: 1px solid #6c757d; /* тёмно-серый */
+
+    border-radius: 0.5rem;
+    padding: 8px 18px;
+
+    transition: all 0.2s ease;
+}
+
+.btn-outline-custom:hover {
+    background-color: #0b1f3a;
+    color: #ffffff;
+    border-color: #0b1f3a;
+}
+
+
+.step-item {
+    background-color: #ffffff;
+    border: 1px solid #d0d5dd;
+    border-radius: 0.5rem;
+
+    padding: 16px 20px;
+    margin-bottom: 12px;
+
+    text-align: center;
+    font-weight: 500;
+
+    transition: all 0.2s ease;
+}
+
+.step-item:hover {
+    border-color: #0b1f3a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}

@@ -4,15 +4,79 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h3 class="text-center mb-4">Добро пожаловать в Mail Management</h3>
-    <p>
-        Система для управления клиентами, сообщениями, рассылками и коммерческими предложениями.
-    </p>
+    <div class="text-center mb-5">
+        <h1 class="mb-3">Mail Management</h1>
+        <p class="lead">
+            Система для управления клиентами, сообщениями, email-рассылками
+            и коммерческими предложениями.
+        </p>
+        <div class="mt-4">
+            <a href="{% url 'clients:client_list' %}" class="btn btn-outline-custom">Мои клиенты</a>
+            <a href="{% url 'clients:mailing_list' %}" class="btn btn-outline-custom">Мои рассылки</a>
+            <a href="{% url 'clients:offer_file_create' %}" class="btn btn-outline-custom">Сформировать предложение</a>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Клиенты</h5>
+                    <p class="card-text">Управление базой клиентов и их контактными данными.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Сообщения</h5>
+                    <p class="card-text">Создание и редактирование сообщений для email-рассылок.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Рассылки</h5>
+                    <p class="card-text">Отправка писем через SMTP, Resend и Brevo.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Предложения</h5>
+                    <p class="card-text">Генерация Excel-файлов по выбранным продуктам.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <h3 class="mb-4 text-center">Как это работает</h3>
+
+            <div class="mb-4">
+                <div class="step-item">1. Добавьте клиентов в систему</div>
+                <div class="step-item">2. Добавьте продукт и категорию</div>
+                <div class="step-item">3. Сформируйте Excel-предложение</div>
+                <div class="step-item">4. Создайте сообщение с предложением</div>
+                <div class="step-item">5. Запустите рассылку</div>
+                <div class="step-item">6. Управляйте системой через личный кабинет</div>
+            </div>
+
+<div class="text-center">
+    <a href="{% url 'clients:user_profile' %}" class="btn btn-outline-custom">
+        Перейти в личный кабинет
+    </a>
+</div>
+        <div class="text-center mt-4 mb-4">
+    <a href="{% url 'clients:user_profile' %}" class="btn btn-outline-custom">
+        Перейти в личный кабинет
+    </a>
+</div>
+    </div>
 </div>
 {% endblock %}
-
-
-
-
-
-
