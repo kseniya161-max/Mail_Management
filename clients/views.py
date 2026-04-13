@@ -35,7 +35,10 @@ from django.views.decorators.cache import cache_page
 from clients.services.file_service import generate_offer_file
 from clients.services.email_service import send_email_via_resend, send_email_via_brevo
 from clients.tasks import send_mailing_task
-from clients.services.statistics_service import get_email_statistics_for_user, get_email_statistics_summary
+from clients.services.statistics_service import (
+    get_email_statistics_for_user,
+    get_email_statistics_summary,
+)
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -240,7 +243,6 @@ class EmailStatisticsView(LoginRequiredMixin, ListView):
     model = EmailStatistics
     template_name = "email_statistic.html"
     context_object_name = "statistic"
-
 
     def get_queryset(self):
         return get_email_statistics_for_user(self.request.user)
