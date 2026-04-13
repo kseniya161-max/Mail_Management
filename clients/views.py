@@ -216,13 +216,6 @@ class MailingSendView(LoginRequiredMixin, CreateView):
 class HomePageView(TemplateView):
     template_name = "home.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["total_mailing"] = Mailing.objects.count()
-        context["active_mailing"] = Mailing.objects.filter(status="started").count()
-        context["unique_recipients"] = Clients.objects.count()
-        return context
-
 
 class EmailStatisticsView(LoginRequiredMixin, ListView):
     model = EmailStatistics

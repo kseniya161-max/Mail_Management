@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
-{% block title %} Главная страница {% endblock %}
+
+{% block title %}Главная страница{% endblock %}
+
 {% block content %}
-<h3 class="center mt-5 mb-5">Добро пожаловать на главную страницу</h3>
-<p>Информация о рассылках</p>
-<ul>
-    <li>Количество всех рассылок : {{ total_mailing }}</li>
-    <li>Количество активных рассылок : {{ active_mailing }}</li>
-    <li>Количество Уникальных получателей : {{ unique_recipients }}</li>
-</ul>
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Добро пожаловать в Mail Management</h3>
+    <p>
+        Система для управления клиентами, сообщениями, рассылками и коммерческими предложениями.
+    </p>
+</div>
 {% endblock %}
+
+
+
+
+
+
