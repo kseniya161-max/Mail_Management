@@ -27,7 +27,7 @@
 .btn-outline-custom {
     background-color: #ffffff;
     color: #0b1f3a;
-    border: 1px solid #6c757d; /* тёмно-серый */
+    border: 1px solid #6c757d;
 
     border-radius: 0.5rem;
     padding: 8px 18px;
@@ -36,9 +36,9 @@
 }
 
 .btn-outline-custom:hover {
-    background-color: #0b1f3a;
+    background-color: #6c757d;
     color: #ffffff;
-    border-color: #0b1f3a;
+    border-color: #6c757d;
 }
 
 
@@ -57,6 +57,6 @@
 }
 
 .step-item:hover {
-    border-color: #0b1f3a;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #0000FF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
