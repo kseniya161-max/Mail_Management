@@ -57,6 +57,12 @@
 }
 
 .step-item:hover {
-    border-color: #0000FF;
+    border-color: #0b1f3a;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.card-custom {
+    border: 1px solid #0b1f3a !important;
+    border-radius: 0.5rem;
 }
