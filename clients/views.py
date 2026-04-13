@@ -35,6 +35,7 @@ from django.views.decorators.cache import cache_page
 from clients.services.file_service import generate_offer_file
 from clients.services.email_service import send_email_via_resend, send_email_via_brevo
 from clients.tasks import send_mailing_task
+from clients.services.statistics_service import get_email_statistics_for_user, get_email_statistics_summary
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -222,36 +223,13 @@ class EmailStatisticsView(LoginRequiredMixin, ListView):
     template_name = "email_statistic.html"
     context_object_name = "statistic"
 
+
     def get_queryset(self):
-        if self.request.user.role == "manager":
-            return (
-                EmailStatistics.objects.select_related("mailing")
-                .values("mailing__message__header", "mailing__status", "user__username")
-                .annotate(
-                    total_success=Sum("success_attempt_mailing"),
-                    total_failed=Sum("failed_attempt_mailing"),
-                )
-                .order_by("mailing__message__header")
-            )
-        else:
-            return (
-                EmailStatistics.objects.filter(user=self.request.user)
-                .select_related("mailing")
-                .values("mailing__message__header", "mailing__status", "user__username")
-                .annotate(
-                    total_success=Sum("success_attempt_mailing"),
-                    total_failed=Sum("failed_attempt_mailing"),
-                )
-                .order_by("mailing__message__header")
-            )
+        return get_email_statistics_for_user(self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["total_success"] = sum(
-            stat["total_success"] for stat in self.object_list
-        )
-        context["total_failed"] = sum(stat["total_failed"] for stat in self.object_list)
-        context["total_attempts"] = context["total_success"] + context["total_failed"]
+        context.update(get_email_statistics_summary(self.object_list))
         return context
 
 
