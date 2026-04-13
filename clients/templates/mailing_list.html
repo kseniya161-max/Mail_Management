@@ -3,7 +3,6 @@
 {% block content %}
 <h3 class="mt-3 mb-2">Список Рассылок</h3>
 <a href="{% url 'clients:mailing_add' %}" class='btn btn-primary btn-sm mt-4 mb-4'>Создать Рассылку</a>
-<a href="{% url 'clients:mailing_send' %}" class='btn btn-primary btn-sm mt-4 mb-4'>Отправка рассылок</a>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -34,6 +33,12 @@
             <td>
                 <a href="{% url 'clients:mailing_update' mail.id %}" class='btn btn-primary btn-sm mt-2 mb-2'>Редактировать</a>
                 <a href="{% url 'clients:mailing_delete' mail.id %}" class='btn btn-danger btn-sm mt-2 mb-2'>Удалить</a>
+                {% if mail.status != 'completed' and mail.status != 'closed' %}
+                <form method="post" action="{% url 'clients:mailing_send' mail.id %}" style="display:inline;">
+                    {% csrf_token %}
+                <button type="submit" class='btn btn-success btn-sm mt-2 mb-2'>Отправить</button>
+                </form>
+                {% endif %}
                 {% if user.role == 'manager' %}
                 <form method="get" action="{% url 'clients:deactivate_mailing_confirm' mail.id %}">
                 {% csrf_token %}
