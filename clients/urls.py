@@ -51,7 +51,7 @@ urlpatterns = [
     path(
         "mailing/<int:pk>/delete/", MailingDeleteView.as_view(), name="mailing_delete"
     ),
-    path("mailing/send/", MailingSendView.as_view(), name="mailing_send"),
+    path("mailing/<int:pk>/send/", MailingSendView.as_view(), name="mailing_send"),
     path("home/", HomePageView.as_view(), name="home"),
     path("statistic/", EmailStatisticsView.as_view(), name="email_statistic"),
     path(

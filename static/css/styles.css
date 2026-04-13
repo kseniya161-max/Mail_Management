@@ -66,3 +66,25 @@
     border: 1px solid #0b1f3a !important;
     border-radius: 0.5rem;
 }
+
+/* my mailing styles */
+
+.mailing-table {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.mailing-table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.mailing-table tbody td {
+    vertical-align: middle;
+}
+
+button.btn {
+    height: 31px;
+}

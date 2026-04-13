@@ -1,54 +1,86 @@
 {% extends 'base.html' %}
-{% block title %} Список Рассылок {% endblock %}
+{% block title %}Список рассылок{% endblock %}
+
 {% block content %}
-<h3 class="mt-3 mb-2">Список Рассылок</h3>
-<a href="{% url 'clients:mailing_add' %}" class='btn btn-primary btn-sm mt-4 mb-4'>Создать Рассылку</a>
-<a href="{% url 'clients:mailing_send' %}" class='btn btn-primary btn-sm mt-4 mb-4'>Отправка рассылок</a>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>datetime_start</th>
-            <th>datetime_end</th>
-            <th>status</th>
-            <th>message</th>
-            <th>recipients</th>
-            <th>Действия с рассылками</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for mail in list_mailing %}
-        <tr>
-            <td>{{mail.id}}</td>
-            <td>{{mail.datetime_start}}</td>
-            <td>{{mail.datetime_end}}</td>
-            <td>{{mail.status}}</td>
-            <td>{{mail.message.header}}</td>
-            <td>
-                {% for recipient in mail.recipients.all %}
-                {{ recipient.name }}{% if not forloop.last %}, {% endif %}
-                {% empty %}
-                Нет получателей
-                {% endfor %}
-            </td>
-            <td>
-                <a href="{% url 'clients:mailing_update' mail.id %}" class='btn btn-primary btn-sm mt-2 mb-2'>Редактировать</a>
-                <a href="{% url 'clients:mailing_delete' mail.id %}" class='btn btn-danger btn-sm mt-2 mb-2'>Удалить</a>
-                {% if user.role == 'manager' %}
-                <form method="get" action="{% url 'clients:deactivate_mailing_confirm' mail.id %}">
-                {% csrf_token %}
-                <button type="submit" class='btn btn-danger btn-sm mt-2 mb-2'>Отключить</button>
-                </form>
-                {% endif %}
-            </td>
-        </tr>
-    {% empty %}
-    <tr>
-            <td colspan="8" class="text-center">Нет рассылок для отображения.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="mt-4 mb-3 text-center">
+    <h3 class="mb-0">Список рассылок</h3>
+</div>
+
+<div class="d-flex justify-content-end mb-4">
+    <a href="{% url 'clients:mailing_add' %}" class="btn btn-outline-custom">
+        Создать рассылку
+    </a>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover align-middle mailing-table">
+        <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">Начало</th>
+                <th class="text-center">Окончание</th>
+                <th class="text-center">Статус</th>
+                <th>Сообщение</th>
+                <th>Получатели</th>
+                <th class="text-center">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mail in list_mailing %}
+            <tr>
+                <td class="text-center">{{ mail.id }}</td>
+                <td class="text-center">{{ mail.datetime_start|date:"d.m.Y H:i" }}</td>
+                <td class="text-center">{{ mail.datetime_end|date:"d.m.Y H:i" }}</td>
+                <td class="text-center">{{ mail.status }}</td>
+                <td>
+                    <strong>{{ mail.message.header }}</strong>
+                </td>
+                <td>
+                    {% for recipient in mail.recipients.all %}
+                        {{ recipient.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        <span class="text-muted">Нет получателей</span>
+                    {% endfor %}
+                </td>
+                <td class="text-center">
+                                        <div class="d-flex flex-wrap gap-2 justify-content-center">
+
+                        <a href="{% url 'clients:mailing_update' mail.id %}" class="btn btn-outline-custom btn-sm">
+                            Редактировать
+                        </a>
+
+                        <a href="{% url 'clients:mailing_delete' mail.id %}" class="btn btn-danger btn-sm">
+                            Удалить
+                        </a>
+
+                        {% if mail.status != 'completed' and mail.status != 'closed' %}
+                        <form method="post" action="{% url 'clients:mailing_send' mail.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success btn-sm">
+                                Отправить
+                            </button>
+                                </form>
+                        {% endif %}
+
+                        {% if user.role == 'manager' %}
+                        <form method="get" action="{% url 'clients:deactivate_mailing_confirm' mail.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Отключить
+                            </button>
+                        </form>
+                        {% endif %}
+
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center text-muted py-4">
+                    Нет рассылок для отображения.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
-
-

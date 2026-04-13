@@ -35,6 +35,10 @@ from django.views.decorators.cache import cache_page
 from clients.services.file_service import generate_offer_file
 from clients.services.email_service import send_email_via_resend, send_email_via_brevo
 from clients.tasks import send_mailing_task
+from clients.services.statistics_service import (
+    get_email_statistics_for_user,
+    get_email_statistics_summary,
+)
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -188,28 +192,46 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
         return Mailing.objects.filter(user=self.request.user)
 
 
-class MailingSendView(LoginRequiredMixin, CreateView):
-    form_class = MailingSendForm
-    template_name = "mailing_send.html"
-    success_url = reverse_lazy("clients:mailing_list")
+# class MailingSendView(LoginRequiredMixin, CreateView):
+#     form_class = MailingSendForm
+#     template_name = "mailing_send.html"
+#     success_url = reverse_lazy("clients:mailing_list")
+#
+#     def form_valid(self, form):
+#         mailing = form.save(commit=False)
+#         mailing.user = self.request.user
+#         mailing.status = "started"
+#         mailing.save()
+#         form.save_m2m()
+#
+#         if settings.USE_CELERY:
+#             send_mailing_task.delay(mailing.id)
+#             messages.success(self.request, "Рассылка поставлена в очередь на отправку")
+#         else:
+#             MailingService.send_mailing(mailing, self.request.user)
+#             mailing.status = "completed"
+#             mailing.save()
+#             messages.success(self.request, "Рассылка отправлена")
+#
+#         return redirect(self.success_url)
 
-    def form_valid(self, form):
-        mailing = form.save(commit=False)
-        mailing.user = self.request.user
+
+class MailingSendView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        mailing = get_object_or_404(Mailing, pk=pk, user=request.user)
         mailing.status = "started"
         mailing.save()
-        form.save_m2m()
 
         if settings.USE_CELERY:
             send_mailing_task.delay(mailing.id)
-            messages.success(self.request, "Рассылка поставлена в очередь на отправку")
+            messages.success(request, "Рассылка поставлена в очередь на отправку")
         else:
-            MailingService.send_mailing(mailing, self.request.user)
+            MailingService.send_mailing(mailing, request.user)
             mailing.status = "completed"
             mailing.save()
-            messages.success(self.request, "Рассылка отправлена")
+            messages.success(request, "Рассылка отправлена")
 
-        return redirect(self.success_url)
+        return redirect("clients:mailing_list")
 
 
 @method_decorator(cache_page(60 * 3), name="dispatch")
@@ -223,35 +245,11 @@ class EmailStatisticsView(LoginRequiredMixin, ListView):
     context_object_name = "statistic"
 
     def get_queryset(self):
-        if self.request.user.role == "manager":
-            return (
-                EmailStatistics.objects.select_related("mailing")
-                .values("mailing__message__header", "mailing__status", "user__username")
-                .annotate(
-                    total_success=Sum("success_attempt_mailing"),
-                    total_failed=Sum("failed_attempt_mailing"),
-                )
-                .order_by("mailing__message__header")
-            )
-        else:
-            return (
-                EmailStatistics.objects.filter(user=self.request.user)
-                .select_related("mailing")
-                .values("mailing__message__header", "mailing__status", "user__username")
-                .annotate(
-                    total_success=Sum("success_attempt_mailing"),
-                    total_failed=Sum("failed_attempt_mailing"),
-                )
-                .order_by("mailing__message__header")
-            )
+        return get_email_statistics_for_user(self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["total_success"] = sum(
-            stat["total_success"] for stat in self.object_list
-        )
-        context["total_failed"] = sum(stat["total_failed"] for stat in self.object_list)
-        context["total_attempts"] = context["total_success"] + context["total_failed"]
+        context.update(get_email_statistics_summary(self.object_list))
         return context
 
 
