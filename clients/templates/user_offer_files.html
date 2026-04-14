@@ -17,12 +17,12 @@
                     </div>
 
                     <div class="d-flex gap-2">
-                        <a href="{{ offer.file.url }}" class="btn btn-sm btn-outline-primary" download>
+                        <a href="{{ offer.file.url }}" class="btn btn-outline-custom btn-sm mt-3 mb-3" download>
                             Скачать
                         </a>
                         <form method="post" action="{% url 'clients:offer_delete' offer.pk %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <button type="submit" class="btn btn-outline-custom btn-sm mt-3 mb-3" style="border: 1px solid red;">
                                 Удалить
                             </button>
                         </form>
