@@ -103,3 +103,21 @@ button.btn {
     text-decoration: none;
     color: #c82333;
 }
+
+/* btn r and login styles */
+.btn-outline-custom-r {
+    background-color: #ffffff;
+    color: #0b1f3a;
+    border: 1px solid #0b1f3a;
+
+    border-radius: 1rem;
+    padding: 2px 30px;
+
+    transition: all 0.2s ease;
+}
+
+.btn-outline-custom-r:hover {
+    background-color: #0b1f3a;
+    color: #ffffff;
+    border-color: #6c757d;
+}
