@@ -9,7 +9,7 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit" class="btn btn-primary btn-sm">Сформировать файл</button>
-    <a href="{% url 'clients:user_profile' %}" class="btn btn-secondary btn-sm">Отмена</a>
+    <button type="submit" class="btn btn-outline-custom btn-sm mt-3 mb-3">Сформировать файл</button>
+    <a href="{% url 'clients:user_profile' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Отмена</a>
 </form>
 {% endblock %}

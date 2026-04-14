@@ -6,7 +6,7 @@
 <form method="post">
     {% csrf_token %}
 
-    <button type="submit" class="btn btn-danger btn-sm mt-2 mb-2">Удалить</button>
-    <a href="{% url 'products:category_list' %}" class="btn btn-primary btn-sm mt-2 mb-2">Отмена</a>
+    <button type="submit" class="btn btn-outline-custom btn-sm mt-3 mb-3" style="border: 1px solid red;">Удалить</button>
+    <a href="{% url 'products:category_list' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Отмена</a>
 </form>
 {% endblock %}

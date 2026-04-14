@@ -32,14 +32,14 @@
             </li>
 
            {% if user.is_authenticated %}
-    <li class="nav-item me-2">
-        <form method="post" action="{% url 'Users:logout' %}" class="m-0 d-flex align-items-center h-100">
+            <li class="nav-item me-2 d-flex align-items-center">
+            <form method="post" action="{% url 'Users:logout' %}" class="m-0">
             {% csrf_token %}
-            <button type="submit" class="btn btn-link nav-link border-0 bg-transparent px-3 py-2 m-0">
-                Выйти
-            </button>
-        </form>
-    </li>
+            <button type="submit" class="nav-link border-0 bg-transparent p-0">
+            Выйти
+        </button>
+    </form>
+</li>
 {% else %}
     <li class="nav-item me-2">
         <a class="nav-link" href="{% url 'Users:register' %}">Регистрация</a>

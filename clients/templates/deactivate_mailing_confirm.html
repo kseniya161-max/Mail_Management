@@ -5,7 +5,7 @@
 <p>Вы уверены, что хотите отключить рассылку "{{ mailing.message.header }}"?</p>
 <form method="post">
     {% csrf_token %}
-     <button type="submit" class="btn btn-danger btn-sm mt-3 mb-3">Отключить</button>
-     <a href="{% url 'clients:mailing_list' %}" class="btn btn-primary btn-sm mt-3 mb-3">Отмена</a>
+     <button type="submit" class="btn btn-outline-custom btn-sm mt-3 mb-3">Отключить</button>
+     <a href="{% url 'clients:mailing_list' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Отмена</a>
 </form>
 {% endblock %}
