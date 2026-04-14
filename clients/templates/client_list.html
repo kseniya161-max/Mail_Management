@@ -2,28 +2,33 @@
 {% block title %} Список Клиентов {% endblock %}
 {% block content %}
 {{ form.errors }}
-<h3 class="mt-3 mb-2">Список клиентов</h3>
-<a href="{% url 'clients:client_add' %}" class="btn btn-primary btn-sm mt-4 mb-4">Добавить клиента</a>
-<table class="table table-bordered">
+<div class="mt-4 mb-3 text-center">
+    <h3>Список клиентов</h3>
+</div>
+<a href="{% url 'clients:client_add' %}" class="btn btn-outline-custom mb-3">Добавить клиента</a>
+<div class="table-responsive">
+<table class="table table-hover align-middle mailing-table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>ИМЯ</th>
-            <th>Email</th>
-            <th>Комментарий</th>
-            <th>Действия</th>
+            <th class="text-center">ID</th>
+            <th class="text-center">ИМЯ</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Комментарий</th>
+            <th class="text-center">Действия</th>
         </tr>
     </thead>
     <tbody>
         {% for client in list_clients %}
         <tr>
-            <td>{{client.id}}</td>
-            <td>{{client.name}}</td>
-            <td>{{client.email}}</td>
-            <td>{{client.comment}}</td>
-            <td>
-                <a href="{% url 'clients:client_update' client.pk %}" class="btn btn-primary btn-sm mt-3 mb-3">Редактировать</a>
-                <a href="{% url 'clients:client_delete' client.pk %}" class="btn btn-danger btn-sm mt-3 mb-3">Удалить</a>
+            <td class="text-center">{{client.id}}</td>
+            <td class="text-center">{{client.name}}</td>
+            <td class="text-center">{{client.email}}</td>
+            <td class="text-center">{{client.comment}}</td>
+            <td class="text-center">
+                                        <div class="d-flex flex-wrap gap-2 justify-content-center">
+                <a href="{% url 'clients:client_update' client.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>
+                <a href="{% url 'clients:client_delete' client.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+                                            </div>
             </td>
         </tr>
     {% empty %}
