@@ -88,3 +88,18 @@
 button.btn {
     height: 31px;
 }
+
+.link-button {
+    background: none;
+    border: none;
+    color: #dc3545 !important;
+    text-decoration: underline !important;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.link-button:hover {
+    text-decoration: none;
+    color: #c82333;
+}

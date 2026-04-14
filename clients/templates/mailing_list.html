@@ -54,17 +54,17 @@
 
                         {% if mail.status != 'completed' and mail.status != 'closed' %}
                         <form method="post" action="{% url 'clients:mailing_send' mail.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-success btn-sm">
-                                Отправить
-                            </button>
-                                </form>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Отправить
+                        </button>
+                        </form>
                         {% endif %}
 
                         {% if user.role == 'manager' %}
                         <form method="get" action="{% url 'clients:deactivate_mailing_confirm' mail.id %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm">
+                            <button type="submit" class="link-button">
                                 Отключить
                             </button>
                         </form>
