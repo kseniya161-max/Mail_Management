@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block title %} Список сообщений {% endblock %}
 {% block content %}
-<h3 class="text-center mt-5 mb-2">Список сообщений</h3>
-<a href="{% url 'clients:message_add' %}" class='btn btn-outline-custom mt-5 mb-5'>Добавить сообщение</a>
+<div class="mt-4 mb-3 text-center">
+    <h3 class="mb-0">Мои сообщения</h3>
+</div>
+<a href="{% url 'clients:message_add' %}" class="btn btn-outline-custom mb-3">Добавить сообщение</a>
 <table class="table table-hover align-middle mailing-table">
     <thead>
         <tr>
@@ -21,6 +23,7 @@
             <td class="text-center">{{message.content}}</td>
             <td class="text-center">{{message.product}}</td>
             <td class="text-center">
+                <div class="d-flex flex-wrap gap-2 justify-content-center">
                 <a href="{% url 'clients:message_update' message.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>
                 <a href="{% url 'clients:message_delete' message.pk %}" class="btn btn-danger btn-sm">Удалить</a>
             </td>
@@ -30,6 +33,7 @@
             <td colspan="4" class="text-center">Нет сообщений для отображения.</td>
              </tr>
             {% endfor %}
+    </div>
     </body>
 </table>
 {% endblock %}
