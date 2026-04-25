@@ -92,18 +92,17 @@ class MailingSendForm(forms.ModelForm):
         self.fields["datetime_end"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Дата окончания"}
         )
-        if user and user.role != 'manager':
-            self.fields['recipients'].queryset = Clients.objects.filter(user=user)
+        if user and user.role != "manager":
+            self.fields["recipients"].queryset = Clients.objects.filter(user=user)
 
-        if user and user.role == 'manager':
-            self.fields['recipients'].queryset = Clients.objects.all()
+        if user and user.role == "manager":
+            self.fields["recipients"].queryset = Clients.objects.all()
 
+        if user and user.role != "manager":
+            self.fields["message"].queryset = Message.objects.filter(user=user)
 
-        if user and user.role != 'manager':
-            self.fields['message'].queryset = Message.objects.filter(user=user)
-
-        if user and user.role == 'manager':
-            self.fields['recipients'].queryset = Message.objects.all()
+        if user and user.role == "manager":
+            self.fields["recipients"].queryset = Message.objects.all()
 
     def clean(self):
         cleaned_data = super().clean()

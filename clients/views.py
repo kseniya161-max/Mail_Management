@@ -95,10 +95,9 @@ class MessageListView(LoginRequiredMixin, ListView):
     template_name = "message_list.html"
     context_object_name = "list_messages"
 
-
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.role == 'manager':
+        if self.request.user.role == "manager":
             return queryset
         return Message.objects.filter(user=self.request.user)
 
