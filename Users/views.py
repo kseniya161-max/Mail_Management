@@ -4,7 +4,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LoginView,
     LogoutView,
-    PasswordResetView,
     PasswordResetDoneView,
     PasswordResetCompleteView,
     PasswordResetConfirmView,
@@ -19,11 +18,16 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.views.generic import CreateView, ListView, DetailView
 from itsdangerous import URLSafeTimedSerializer
-from Users.forms import UserRegisterForm, CustomAuthenticationForm
+from Users.forms import (
+    UserRegisterForm,
+    CustomAuthenticationForm,
+    CustomPasswordResetForm,
+)
 from Users.models import User
 from clients.models import EmailStatistics
 from config import settings
 from django.core.mail import send_mail
+from django.contrib.auth.views import PasswordResetView
 
 
 class UserListView(LoginRequiredMixin, ListView):
@@ -44,12 +48,6 @@ class CreateUserView(CreateView):
     form_class = UserRegisterForm
     template_name = "register.html"
     success_url = reverse_lazy("Users:login")
-
-    # def form_valid(self, form):
-    #     user = form.save()
-    #     self.send_confirmation_email(user)
-    #     messages.success(self.request, 'Ваш аккаунт был успешно создан! Проверьте Вашу почту для подтверждения.')
-    #     return super().form_valid(form)
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -144,6 +142,9 @@ class CustomLogoutView(LogoutView):
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = "registration/password_reset_form.html"
+    email_template_name = "Users/password_reset_email.html"
+    subject_template_name = "Users/password_reset_subject.txt"
+    form_class = CustomPasswordResetForm
     success_url = reverse_lazy("Users:password_reset_done")
 
 
