@@ -141,9 +141,9 @@ class CustomLogoutView(LogoutView):
 class CustomPasswordResetView(PasswordResetView):
     template_name = "registration/password_reset_form.html"
     email_template_name = "Users/password_reset_email.html"
-    subject_template_name = "registration/password_reset_subject.txt"
-    success_url = reverse_lazy("Users:password_reset_done")
+    subject_template_name = "Users/password_reset_subject.txt"
     form_class = CustomPasswordResetForm
+    success_url = reverse_lazy("Users:password_reset_done")
 
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):
