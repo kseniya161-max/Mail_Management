@@ -19,7 +19,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.views.generic import CreateView, ListView, DetailView
 from itsdangerous import URLSafeTimedSerializer
-from Users.forms import UserRegisterForm, CustomAuthenticationForm
+from Users.forms import UserRegisterForm, CustomAuthenticationForm, CustomPasswordResetForm
 from Users.models import User
 from clients.models import EmailStatistics
 from config import settings
@@ -143,6 +143,7 @@ class CustomPasswordResetView(PasswordResetView):
     email_template_name = "Users/password_reset_email.html"
     subject_template_name = "registration/password_reset_subject.txt"
     success_url = reverse_lazy("Users:password_reset_done")
+    form_class = CustomPasswordResetForm
 
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):
