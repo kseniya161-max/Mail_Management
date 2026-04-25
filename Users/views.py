@@ -24,6 +24,7 @@ from Users.models import User
 from clients.models import EmailStatistics
 from config import settings
 from django.core.mail import send_mail
+from django.contrib.auth.views import PasswordResetView
 
 
 class UserListView(LoginRequiredMixin, ListView):
@@ -45,11 +46,6 @@ class CreateUserView(CreateView):
     template_name = "register.html"
     success_url = reverse_lazy("Users:login")
 
-    # def form_valid(self, form):
-    #     user = form.save()
-    #     self.send_confirmation_email(user)
-    #     messages.success(self.request, 'Ваш аккаунт был успешно создан! Проверьте Вашу почту для подтверждения.')
-    #     return super().form_valid(form)
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -144,6 +140,8 @@ class CustomLogoutView(LogoutView):
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = "registration/password_reset_form.html"
+    email_template_name = "Users/password_reset_email.html"
+    subject_template_name = "registration/password_reset_subject.txt"
     success_url = reverse_lazy("Users:password_reset_done")
 
 

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from Users.models import User
+from clients.services.email_service import send_email_via_resend
 
 
 class UserRegisterForm(UserCreationForm):
