@@ -1,12 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
-from django.template.loader import render_to_string
 from Users.models import User
 from clients.services.email_service import send_email_via_resend
 from django.contrib.auth.forms import PasswordResetForm
 from django.template.loader import render_to_string
-
 
 
 class UserRegisterForm(UserCreationForm):
@@ -89,5 +87,3 @@ class CustomPasswordResetForm(PasswordResetForm):
             subject=subject,
             body=body,
         )
-
-
