@@ -95,6 +95,12 @@ class MessageListView(LoginRequiredMixin, ListView):
     template_name = "message_list.html"
     context_object_name = "list_messages"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.role == "manager":
+            return queryset
+        return Message.objects.filter(user=self.request.user)
+
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
@@ -151,6 +157,11 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingSendForm
     template_name = "mailing_create.html"
     success_url = reverse_lazy("clients:mailing_list")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.user = self.request.user

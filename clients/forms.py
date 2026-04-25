@@ -75,6 +75,7 @@ class MailingSendForm(forms.ModelForm):
         fields = ["recipients", "message", "status", "datetime_start", "datetime_end"]
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
         super(MailingSendForm, self).__init__(*args, **kwargs)
         self.fields["recipients"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Введите получателя"}
@@ -91,6 +92,17 @@ class MailingSendForm(forms.ModelForm):
         self.fields["datetime_end"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Дата окончания"}
         )
+        if user and user.role != "manager":
+            self.fields["recipients"].queryset = Clients.objects.filter(user=user)
+
+        if user and user.role == "manager":
+            self.fields["recipients"].queryset = Clients.objects.all()
+
+        if user and user.role != "manager":
+            self.fields["message"].queryset = Message.objects.filter(user=user)
+
+        if user and user.role == "manager":
+            self.fields["recipients"].queryset = Message.objects.all()
 
     def clean(self):
         cleaned_data = super().clean()
