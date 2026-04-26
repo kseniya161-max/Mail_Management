@@ -14,7 +14,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="clients",
             name="phone_number",
-            field=models.CharField(max_length=20, verbose_name="Номер телефона"),
+            field=models.CharField(
+                blank=True,
+                max_length=20,
+                null=True,
+                verbose_name="Номер телефона",
+            ),
         ),
         migrations.AlterField(
             model_name="mailing",
