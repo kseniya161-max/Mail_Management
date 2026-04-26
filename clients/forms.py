@@ -26,6 +26,7 @@ class ClientForm(ModelForm):
         self.fields["phone_number"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Введите телефон"}
         )
+        self.fields["phone_number"].required = True
         self.fields["comment"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Напишите комментарий"}
         )
