@@ -3,6 +3,11 @@
 {% block title %}Мои предложения{% endblock %}
 
 {% block content %}
+<div class="container mt-3">
+    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+        ← Назад
+    </button>
+</div>
 <div class="container mt-4">
     <h2 class="mt-5 mb-4">Мои предложения</h2>
     {% if offer_files %}

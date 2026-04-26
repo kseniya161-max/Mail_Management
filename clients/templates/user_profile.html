@@ -21,6 +21,11 @@
 {% block title %} Ваш профиль {% endblock %}
 
 {% block content %}
+<div class="container mt-3">
+    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+        ← Назад
+    </button>
+</div>
 <div class="container mt-4">
     <h2 class="mt-5 mb-5">{{ user_profile.username }} ({{ user_profile.role }})</h2>
 
