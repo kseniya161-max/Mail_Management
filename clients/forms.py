@@ -37,7 +37,10 @@ class ClientForm(ModelForm):
     def clean_email(self):
         """Валидация email"""
         email = self.cleaned_data.get("email")
-        if Clients.objects.filter(email=email).exists():
+        queryset = Clients.objects.filter(email=email)
+        if self.instance.pk:
+            queryset = queryset.exclude(pk=self.instance.pk)
+        if queryset.exists():
             raise ValidationError("Пользовталь с таким email уже существует")
         return email
 
