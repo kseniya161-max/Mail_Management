@@ -13,7 +13,7 @@ class ClientForm(ModelForm):
 
     class Meta:
         model = Clients
-        fields = ["email", "name", "comment", "location"]
+        fields = ["email", "name", "comment", "location", "phone_number"]
 
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
@@ -22,6 +22,9 @@ class ClientForm(ModelForm):
         )
         self.fields["name"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Введите Имя"}
+        )
+        self.fields["phone_number"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите телефон"}
         )
         self.fields["comment"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Напишите комментарий"}
