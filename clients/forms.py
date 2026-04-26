@@ -101,14 +101,14 @@ class MailingSendForm(forms.ModelForm):
         if user and user.role != "manager":
             self.fields["recipients"].queryset = Clients.objects.filter(user=user)
 
-        if user and user.role == "manager":
-            self.fields["recipients"].queryset = Clients.objects.all()
-
         if user and user.role != "manager":
             self.fields["message"].queryset = Message.objects.filter(user=user)
 
         if user and user.role == "manager":
-            self.fields["recipients"].queryset = Message.objects.all()
+            self.fields["recipients"].queryset = Clients.objects.all()
+
+        if user and user.role == "manager":
+            self.fields["message"].queryset = Message.objects.all()
 
     def clean(self):
         cleaned_data = super().clean()
