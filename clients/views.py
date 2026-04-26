@@ -38,6 +38,7 @@ from clients.tasks import send_mailing_task
 from clients.services.statistics_service import (
     get_email_statistics_for_user,
     get_email_statistics_summary,
+    get_email_statistics_by_category,
 )
 
 
@@ -261,6 +262,7 @@ class EmailStatisticsView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(get_email_statistics_summary(self.object_list))
+        context["category_statistics"] = get_email_statistics_by_category(self.request.user)
         return context
 
 

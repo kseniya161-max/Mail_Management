@@ -34,3 +34,21 @@ def get_email_statistics_summary(statistics):
         "total_failed": total_failed,
         "total_attempts": total_success + total_failed,
     }
+
+
+def get_email_statistics_by_category(user):
+    queryset = EmailStatistics.objects.all()
+
+    if user.role != "manager":
+        queryset = queryset.filter(user=user)
+
+    return (
+        queryset
+        .values("mailing__message__product__category__name")
+        .annotate(
+            total_success=Sum("success_attempt_mailing"),
+            total_failed=Sum("failed_attempt_mailing"),
+        )
+        .order_by("mailing__message__product__category__name")
+    )
+
