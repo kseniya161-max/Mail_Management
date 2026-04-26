@@ -43,12 +43,10 @@ def get_email_statistics_by_category(user):
         queryset = queryset.filter(user=user)
 
     return (
-        queryset
-        .values("mailing__message__product__category__name")
+        queryset.values("mailing__message__product__category__name")
         .annotate(
             total_success=Sum("success_attempt_mailing"),
             total_failed=Sum("failed_attempt_mailing"),
         )
         .order_by("mailing__message__product__category__name")
     )
-

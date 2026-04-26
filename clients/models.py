@@ -11,12 +11,12 @@ from products.models import Product
 class Clients(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     email = models.EmailField(max_length=100, unique=True)
-    name = models.CharField(max_length=100, verbose_name='Имя клиента')
-    comment = models.TextField(blank=True, verbose_name='Комментарий')
+    name = models.CharField(max_length=100, verbose_name="Имя клиента")
+    comment = models.TextField(blank=True, verbose_name="Комментарий")
     location = models.CharField(
         max_length=100, null=True, blank=True, verbose_name="Укажите город"
     )
-    phone_number = models.CharField(max_length=20, verbose_name='Номер телефона')
+    phone_number = models.CharField(max_length=20, verbose_name="Номер телефона")
 
     def __str__(self):
         return self.name
