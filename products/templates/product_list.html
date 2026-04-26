@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block title %} Список Продуктов {% endblock %}
 {% block content %}
+<div class="container mt-3">
+    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+        ← Назад
+    </button>
+</div>
 <div class="mt-4 mb-3 text-center">
 <h3 class="mb-0">Список товаров</h3>
     </div>
@@ -14,7 +19,8 @@
             <th class="text-center">Фото</th>
             <th class="text-center">Категория товара</th>
             <th class="text-center">Количество/тн.</th>
-            <th class="text-center">Описание</th>
+            <th class="text-center">Цена</th>
+            <th class="text-center">Сталь</th>
             <th class="text-center">Действия</th>
         </tr>
     </thead>
@@ -32,7 +38,9 @@
             </td>
                 <td class="text-center">{{product.category}}</td>
                 <td class="text-center">{{product.quantity}}</td>
+                <td class="text-center">{{product.price}}</td>
                 <td class="text-center">{{product.description}}</td>
+
 
             <td class="text-center">
                                         <div class="d-flex flex-wrap gap-2 justify-content-center">
@@ -51,3 +59,4 @@
 {% endblock %}
 
 
+</div>

@@ -13,7 +13,7 @@ class ClientForm(ModelForm):
 
     class Meta:
         model = Clients
-        fields = ["email", "name", "comment", "location"]
+        fields = ["email", "name", "comment", "location", "phone_number"]
 
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
@@ -22,6 +22,9 @@ class ClientForm(ModelForm):
         )
         self.fields["name"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Введите Имя"}
+        )
+        self.fields["phone_number"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите телефон"}
         )
         self.fields["comment"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Напишите комментарий"}
@@ -34,7 +37,10 @@ class ClientForm(ModelForm):
     def clean_email(self):
         """Валидация email"""
         email = self.cleaned_data.get("email")
-        if Clients.objects.filter(email=email).exists():
+        queryset = Clients.objects.filter(email=email)
+        if self.instance.pk:
+            queryset = queryset.exclude(pk=self.instance.pk)
+        if queryset.exists():
             raise ValidationError("Пользовталь с таким email уже существует")
         return email
 
@@ -95,14 +101,14 @@ class MailingSendForm(forms.ModelForm):
         if user and user.role != "manager":
             self.fields["recipients"].queryset = Clients.objects.filter(user=user)
 
-        if user and user.role == "manager":
-            self.fields["recipients"].queryset = Clients.objects.all()
-
         if user and user.role != "manager":
             self.fields["message"].queryset = Message.objects.filter(user=user)
 
         if user and user.role == "manager":
-            self.fields["recipients"].queryset = Message.objects.all()
+            self.fields["recipients"].queryset = Clients.objects.all()
+
+        if user and user.role == "manager":
+            self.fields["message"].queryset = Message.objects.all()
 
     def clean(self):
         cleaned_data = super().clean()

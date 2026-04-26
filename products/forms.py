@@ -1,5 +1,4 @@
 from django.forms import ModelForm
-
 from products.models import Category, Product
 
 
@@ -39,11 +38,14 @@ class ProductForm(ModelForm):
             {"class": "form-control", "placeholder": "Фото"}
         )
         self.fields["description"].widget.attrs.update(
-            {"class": "form-control", "placeholder": "Описание товара"}
+            {"class": "form-control", "placeholder": "Описание товара/сталь"}
         )
         self.fields["category"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Категория товара"}
         )
         self.fields["quantity"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Количество товара"}
+        )
+        self.fields["price"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Цена"}
         )

@@ -2,6 +2,11 @@
 {% block title %} Список Клиентов {% endblock %}
 {% block content %}
 {{ form.errors }}
+<div class="container mt-3">
+    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+        ← Назад
+    </button>
+</div>
 <div class="mt-4 mb-3 text-center">
     <h3 class="mb-0">Список клиентов</h3>
 </div>
@@ -12,6 +17,7 @@
         <tr>
             <th class="text-center">ID</th>
             <th class="text-center">ИМЯ</th>
+            <th class="text-center">Телефон</th>
             <th class="text-center">Email</th>
             <th class="text-center">Комментарий</th>
             <th class="text-center">Действия</th>
@@ -22,8 +28,10 @@
         <tr>
             <td class="text-center">{{client.id}}</td>
             <td class="text-center">{{client.name}}</td>
+            <td class="text-center">{{client.phone_number}}</td>
             <td class="text-center">{{client.email}}</td>
             <td class="text-center">{{client.comment}}</td>
+
             <td class="text-center">
                 <div class="d-flex flex-wrap gap-2 justify-content-center">
                 <a href="{% url 'clients:client_update' client.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>

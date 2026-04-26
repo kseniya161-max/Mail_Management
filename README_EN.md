@@ -68,6 +68,23 @@ This ensures code quality and stability across environments.
 * Send emails to selected recipients
 * Disable mailings (manager role)
 
+### Email Statistics
+
+Implemented email campaign analytics:
+
+* aggregation by mailings
+* statistics by product categories
+* role-based access control (manager / user)
+* tracking successful and failed delivery attempts
+
+Built using Django ORM:
+* annotate()
+* values()
+* aggregations (Sum)
+* relational queries using __ (JOIN-like behavior)
+
+* analytical queries (group by / aggregation)
+
 ### User Management
 
 * Authentication and registration

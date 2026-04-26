@@ -21,6 +21,11 @@
 {% block title %} Ваш профиль {% endblock %}
 
 {% block content %}
+<div class="container mt-3">
+    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+        ← Назад
+    </button>
+</div>
 <div class="container mt-4">
     <h2 class="mt-5 mb-5">{{ user_profile.username }} ({{ user_profile.role }})</h2>
 
@@ -44,36 +49,57 @@
             <p>Роль Пользователя: {{ user_profile.role }}</p>
         </div>
 
+        <div class="col-md-4">
+    <ul class="list-group no-bullets">
+
+        <li>
+            <a href="{% url 'clients:my_offers' %}" class="list-group-item custom-link list-group-item-primary">
+                Мои предложения
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'clients:client_list' %}" class="list-group-item custom-link list-group-item-primary">
+                Список клиентов
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'clients:mailing_list' %}" class="list-group-item custom-link list-group-item-primary">
+                Список рассылок
+            </a>
+        </li>
+
         {% if user_profile.role == 'manager' %}
-            <div class="col-md-4">
-            <ul class="list-group no-bullets ">
-                <li>
-                    <a href="{% url 'clients:my_offers' %}" class="list-group-item custom-link  list-group-item-primary">Мои предложения</a>
-                </li>
-                <li>
-                    <a href="{% url 'clients:email_statistic' %}" class="list-group-item custom-link list-group-item-success">Статистика рассылок</a>
-                </li>
-                <li>
-                    <a href="{% url 'products:category_list' %}" class="list-group-item custom-link  list-group-item-info">Список категорий</a>
-                </li>
-                <li>
-                    <a href="{% url 'Users:user_list' %}" class="list-group-item custom-link  list-group-item-secondary">Список пользователей</a>
-                </li>
-                <li>
-                    <a href="{% url 'products:product_list' %}" class="list-group-item custom-link  list-group-item-primary">Список продуктов</a>
-                </li>
-                <li>
-                    <a href="{% url 'clients:mailing_list' %}" class="list-group-item custom-link  list-group-item-success">Список рассылок</a>
-                </li>
-                <li>
-                    <a href="{% url 'clients:message_list' %}" class="list-group-item custom-link  list-group-item-info">Список сообщений</a>
-                </li>
-                <li>
-                    <a href="{% url 'clients:client_list' %}" class="list-group-item custom-link  list-group-item-primary">Список клиентов</a>
-                </li>
-            </ul>
-        </div>
+            <li>
+                <a href="{% url 'clients:email_statistic' %}" class="list-group-item custom-link list-group-item-primary">
+                    Статистика рассылок
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'products:category_list' %}" class="list-group-item custom-link list-group-item-primary">
+                    Список категорий
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'Users:user_list' %}" class="list-group-item custom-link list-group-item-primary">
+                    Список пользователей
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'products:product_list' %}" class="list-group-item custom-link list-group-item-primary">
+                    Список продуктов
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'clients:message_list' %}" class="list-group-item custom-link list-group-item-primary">
+                    Список сообщений
+                </a>
+            </li>
         {% endif %}
+
+    </ul>
+</div>
     </div>
 </div>
 {% endblock %}

@@ -19,7 +19,7 @@ def generate_offer_file(user, products_queryset, file_name=None):
     worksheet = workbook.active
     worksheet.title = "Предложение"
 
-    worksheet.append(["Название", "Категория", "Количество", "Описание"])
+    worksheet.append(["Название", "Категория", "Количество", "Цена", "Описание/сталь"])
 
     for product in products_queryset:
         worksheet.append(
@@ -27,6 +27,7 @@ def generate_offer_file(user, products_queryset, file_name=None):
                 product.name,
                 product.category.name if product.category else "",
                 product.quantity,
+                product.price,
                 product.description or "",
             ]
         )

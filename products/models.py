@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 
 
@@ -38,6 +40,9 @@ class Product(models.Model):
     quantity = models.IntegerField(verbose_name="Количество")
     photo = models.ImageField(
         upload_to="photo/product/", blank=True, null=True, verbose_name="фото"
+    )
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, default=Decimal("0.00"), verbose_name="Цена"
     )
     description = models.CharField(
         max_length=250, blank=True, null=True, verbose_name="Описание товара"
