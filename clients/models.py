@@ -16,6 +16,7 @@ class Clients(models.Model):
     location = models.CharField(
         max_length=100, null=True, blank=True, verbose_name="Укажите город"
     )
+    phone_number = models.CharField(max_length=20, verbose_name='Номер телефона')
 
     def __str__(self):
         return self.name
