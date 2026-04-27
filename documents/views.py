@@ -56,7 +56,7 @@ class ClientOfferFileCreateView(LoginRequiredMixin, View):
 
 
 class ClientOfferFilesView(LoginRequiredMixin, ListView):
-    template_name = "client_offer_files.html"
+    template_name = "documents/client_offer_files.html"
     model = OfferFile
     context_object_name = "client_offer_files"
 
