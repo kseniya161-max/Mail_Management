@@ -23,4 +23,20 @@
 <div>
  <a href="{% url 'documents:client_offer_create' client_detail.pk %}" class="btn btn-outline-custom btn-sm">Сформировать файл</a>
 </div>
+<h4 class="mt-4">Предложения для клиента</h4>
+
+{% if client_detail.offer_files.all %}
+    <ul>
+        {% for offer in client_detail.offer_files.all %}
+            <li>
+                <a href="{{ offer.file.url }}" target="_blank">
+                    {{ offer.name }}
+                </a>
+                ({{ offer.created_at }})
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет предложений</p>
+{% endif %}
 {% endblock %}
