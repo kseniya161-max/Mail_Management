@@ -94,11 +94,15 @@ class InvoiceCreateView(LoginRequiredMixin, View):
         form = InvoiceForm()
         formset = InvoiceItemFormSet()
 
-        return render(request, self.template_name, {
-            "client": client,
-            "form": form,
-            "formset": formset,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                "client": client,
+                "form": form,
+                "formset": formset,
+            },
+        )
 
     def post(self, request, client_id):
         client = get_object_or_404(Clients, pk=client_id)
@@ -121,8 +125,12 @@ class InvoiceCreateView(LoginRequiredMixin, View):
 
             return redirect("clients:client_detail", pk=client.pk)
 
-        return render(request, self.template_name, {
-            "client": client,
-            "form": form,
-            "formset": formset,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                "client": client,
+                "form": form,
+                "formset": formset,
+            },
+        )

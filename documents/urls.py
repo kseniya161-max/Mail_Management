@@ -1,5 +1,9 @@
 from django.urls import path
-from documents.views import ClientOfferFileCreateView, ClientOfferFilesView, InvoiceCreateView
+from documents.views import (
+    ClientOfferFileCreateView,
+    ClientOfferFilesView,
+    InvoiceCreateView,
+)
 
 app_name = "documents"
 
