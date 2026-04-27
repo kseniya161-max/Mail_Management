@@ -97,11 +97,9 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "client_detail"
 
     def get_queryset(self):
-        if self.request == 'manager':
+        if self.request == "manager":
             return Clients.objects.all()
         return Clients.objects.filter(user=self.request.user)
-
-
 
 
 class MessageListView(LoginRequiredMixin, ListView):
