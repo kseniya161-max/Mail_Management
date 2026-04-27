@@ -91,6 +91,19 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
         return Clients.objects.filter(user=self.request.user)
 
 
+class ClientDetailView(LoginRequiredMixin, DetailView):
+    model = Clients
+    template_name = "client_detail.html"
+    context_object_name = "client_detail"
+
+    def get_queryset(self):
+        if self.request == 'manager':
+            return Clients.objects.all()
+        return Clients.objects.filter(user=self.request.user)
+
+
+
+
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
     template_name = "message_list.html"
