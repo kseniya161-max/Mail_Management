@@ -1,7 +1,7 @@
 from django.forms import forms, inlineformset_factory
 
 from documents.models import Invoice, InvoiceItem
-
+from django import forms
 
 class InvoiceForm(forms.ModelForm):
     """Форма Создания клиента"""

@@ -1,12 +1,13 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import ListView
 
 from clients.forms import OfferFileForm
 from clients.models import Clients, OfferFile
 from clients.services.file_service import generate_offer_file
-from django.contrib import messages
+from .forms import InvoiceForm, InvoiceItemFormSet
 
 
 class ClientOfferFileCreateView(LoginRequiredMixin, View):
@@ -82,3 +83,46 @@ class ClientOfferFilesView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["client"] = self.client
         return context
+
+
+class InvoiceCreateView(LoginRequiredMixin, View):
+    template_name = "documents/invoice_form.html"
+
+    def get(self, request, client_id):
+        client = get_object_or_404(Clients, pk=client_id)
+
+        form = InvoiceForm()
+        formset = InvoiceItemFormSet()
+
+        return render(request, self.template_name, {
+            "client": client,
+            "form": form,
+            "formset": formset,
+        })
+
+    def post(self, request, client_id):
+        client = get_object_or_404(Clients, pk=client_id)
+
+        form = InvoiceForm(request.POST)
+        formset = InvoiceItemFormSet(request.POST)
+
+        if form.is_valid() and formset.is_valid():
+            invoice = form.save(commit=False)
+            invoice.client = client
+            invoice.created_by = request.user
+            invoice.save()
+
+            items = formset.save(commit=False)
+
+            for item in items:
+                item.invoice = invoice
+                item.product_name = item.product.name
+                item.save()
+
+            return redirect("clients:client_detail", pk=client.pk)
+
+        return render(request, self.template_name, {
+            "client": client,
+            "form": form,
+            "formset": formset,
+        })

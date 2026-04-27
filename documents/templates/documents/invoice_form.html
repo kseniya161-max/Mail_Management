@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Сформировать счёт для {{ client }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <!-- Основная форма -->
+    <div>
+        {{ form.number.label_tag }}
+        {{ form.number }}
+    </div>
+
+    <hr>
+
+    <h4>Позиции</h4>
+
+    <!-- ВАЖНО: management_form -->
+    {{ formset.management_form }}
+
+    {% for form in formset %}
+        <div style="margin-bottom: 10px;">
+            {{ form.product }}
+            {{ form.quantity }}
+            {{ form.unit }}
+            {{ form.unit_price }}
+
+            {% if form.DELETE %}
+                {{ form.DELETE }} удалить
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit">Создать счёт</button>
+
+</form>
+
+{% endblock %}
