@@ -12,7 +12,7 @@ def slugify_name(name):
     return name.strip("_")
 
 
-def generate_offer_file(user, products_queryset, file_name=None):
+def generate_offer_file(user, products_queryset, file_name=None, client=None):
     """Создание Excel файла с продуктами"""
 
     workbook = Workbook()
@@ -53,6 +53,7 @@ def generate_offer_file(user, products_queryset, file_name=None):
     offer_file = OfferFile.objects.create(
         name=file_name,
         created_by=user,
+        client=client,
     )
 
     offer_file.file.save(file_name, ContentFile(buffer.read()), save=True)
