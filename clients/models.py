@@ -34,6 +34,14 @@ class Clients(models.Model):
 
 class OfferFile(models.Model):
     name = models.CharField(max_length=200, verbose_name="Название файла")
+    client = models.ForeignKey(
+        Clients,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="offer_files",
+        verbose_name="Клиент",
+    )
     file = models.FileField(upload_to="price_files/", verbose_name="Файл")
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name="Создатель файла"

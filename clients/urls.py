@@ -6,6 +6,7 @@ from clients.views import (
     ClientUpdateView,
     ClientDeleteView,
     EmailStatisticsView,
+    ClientDetailView,
 )
 from clients.views import (
     MailingListView,
@@ -38,6 +39,7 @@ urlpatterns = [
     path("", ClientListView.as_view(), name="client_list"),
     path("client/add/", ClientCreateView.as_view(), name="client_add"),
     path("client/<int:pk>/edit/", ClientUpdateView.as_view(), name="client_update"),
+    path("client/<int:pk>/detail/", ClientDetailView.as_view(), name="client_detail"),
     path("client/<int:pk>/delete/", ClientDeleteView.as_view(), name="client_delete"),
     path("message/", MessageListView.as_view(), name="message_list"),
     path("message/add/", MessageCreateView.as_view(), name="message_add"),
