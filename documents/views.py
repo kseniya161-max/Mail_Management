@@ -118,9 +118,14 @@ class InvoiceCreateView(LoginRequiredMixin, View):
 
             items = formset.save(commit=False)
 
-            for item in items:
+            for item_form, item in zip(formset.forms, items):
                 item.invoice = invoice
-                item.product_name = item.product.name
+
+                item.product_name = item_form.cleaned_data["product_name_input"]
+
+                if item.product:
+                    item.product_name = item.product.name
+
                 item.save()
 
             return redirect("clients:client_detail", pk=client.pk)
