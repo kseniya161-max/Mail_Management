@@ -9,6 +9,7 @@ from clients.models import Clients, OfferFile
 from clients.services.file_service import generate_offer_file
 from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
+from documents.services.invoice_generator import generate_invoice_docx
 
 
 class ClientOfferFileCreateView(LoginRequiredMixin, View):
@@ -131,7 +132,7 @@ class InvoiceCreateView(LoginRequiredMixin, View):
                     item.product_name = item.product.name
 
                 item.save()
-
+            generate_invoice_docx(invoice)
             return redirect("clients:client_detail", pk=client.pk)
 
         return render(
