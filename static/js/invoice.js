@@ -47,3 +47,28 @@ document.addEventListener("input", function (event) {
 document.addEventListener("DOMContentLoaded", function () {
     calculateInvoiceTotals();
 });
+
+function fillPriceByProductName(input) {
+    const productName = input.value;
+    const options = document.querySelectorAll("#products-list option");
+
+    options.forEach(function (option) {
+        if (option.value === productName) {
+            const price = option.dataset.price;
+
+            const itemForm = input.closest(".item-form");
+            const priceInput = itemForm.querySelector('input[name$="-unit_price"]');
+
+            if (priceInput && price) {
+                priceInput.value = price;
+                calculateInvoiceTotals();
+            }
+        }
+    });
+}
+
+document.addEventListener("change", function (event) {
+    if (event.target.matches('input[name$="-product_name_input"]')) {
+        fillPriceByProductName(event.target);
+    }
+});

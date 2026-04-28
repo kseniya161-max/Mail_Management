@@ -7,6 +7,7 @@ from django.views.generic import ListView
 from clients.forms import OfferFileForm
 from clients.models import Clients, OfferFile
 from clients.services.file_service import generate_offer_file
+from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
 
 
@@ -89,6 +90,7 @@ class InvoiceCreateView(LoginRequiredMixin, View):
     template_name = "documents/invoice_form.html"
 
     def get(self, request, client_id):
+        products = Product.objects.all()
         client = get_object_or_404(Clients, pk=client_id)
 
         form = InvoiceForm()
@@ -101,6 +103,7 @@ class InvoiceCreateView(LoginRequiredMixin, View):
                 "client": client,
                 "form": form,
                 "formset": formset,
+                "products": products,
             },
         )
 
@@ -109,6 +112,7 @@ class InvoiceCreateView(LoginRequiredMixin, View):
 
         form = InvoiceForm(request.POST)
         formset = InvoiceItemFormSet(request.POST)
+        products = Product.objects.all()
 
         if form.is_valid() and formset.is_valid():
             invoice = form.save(commit=False)
@@ -137,5 +141,6 @@ class InvoiceCreateView(LoginRequiredMixin, View):
                 "client": client,
                 "form": form,
                 "formset": formset,
+                "products": products,
             },
         )

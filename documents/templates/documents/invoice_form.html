@@ -17,6 +17,14 @@
     <h4 class="mt-4 mb-3">Товары / услуги счёта</h4>
 
     {{ formset.management_form }}
+    <datalist id="products-list">
+    {% for product in products %}
+        <option
+            value="{{ product.name }}"
+            data-price="{{ product.price }}"
+        ></option>
+    {% endfor %}
+</datalist>
 
     <div id="items">
         {% for item_form in formset %}

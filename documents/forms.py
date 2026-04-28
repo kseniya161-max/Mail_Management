@@ -29,6 +29,7 @@ class InvoiceItemForm(forms.ModelForm):
             attrs={
                 "class": "form-control",
                 "placeholder": "Введите или выберите товар",
+                "list": "products-list",
             }
         ),
     )
