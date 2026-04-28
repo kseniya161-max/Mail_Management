@@ -55,6 +55,9 @@ This ensures code quality and stability across environments.
 ### Client Management
 
 * Create, view, update, and delete clients
+* Client detail page with contact information and quick actions.
+* Excel offer generation for a specific client. 
+* Generated offer files can be linked to a client and viewed in the client’s offer history.
 
 ### Message Management
 
