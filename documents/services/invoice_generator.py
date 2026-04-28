@@ -50,8 +50,11 @@ def fill_invoice_table(document, invoice):
 
     return total
 
+
 def generate_invoice_docx(invoice):
-    template = InvoiceTemplate.objects.filter(is_active=True).order_by("-created_at").first()
+    template = (
+        InvoiceTemplate.objects.filter(is_active=True).order_by("-created_at").first()
+    )
 
     if not template:
         raise ValueError("Не найден активный шаблон счёта.")
