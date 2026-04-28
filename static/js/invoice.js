@@ -133,3 +133,28 @@ document.addEventListener("change", function (event) {
         fillPriceByProductName(event.target);
     }
 });
+
+document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("remove-item")) {
+        const itemForm = event.target.closest(".item-form");
+
+        if (!itemForm) return;
+
+        const totalForms = document.querySelector('input[name$="-TOTAL_FORMS"]');
+        const forms = document.querySelectorAll(".item-form");
+
+        // не даём удалить последнюю строку
+        if (forms.length === 1) {
+            itemForm.querySelectorAll("input").forEach(input => input.value = "");
+            itemForm.querySelector(".item-total").value = "0.00";
+            calculateInvoiceTotals();
+            return;
+        }
+
+        itemForm.remove();
+
+        totalForms.value = forms.length - 1;
+
+        calculateInvoiceTotals();
+    }
+});
