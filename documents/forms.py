@@ -23,16 +23,16 @@ class InvoiceForm(forms.ModelForm):
 
 class InvoiceItemForm(forms.ModelForm):
     product_name_input = forms.CharField(
-        label='Товар',
+        label="Товар",
         required=True,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control",
                 "placeholder": "Введите или выберите товар",
-
             }
         ),
     )
+
     class Meta:
         model = InvoiceItem
         fields = ["product_name_input", "product", "quantity", "unit", "unit_price"]
