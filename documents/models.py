@@ -38,7 +38,9 @@ class InvoiceItem(models.Model):
     unit = models.CharField(max_length=10, choices=UNIT_CHOICES, default=UNIT_PIECE)
     product_name = models.CharField(max_length=255)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    product = models.ForeignKey(
+        Product, blank=True, null=True, on_delete=models.PROTECT
+    )
     quantity = models.DecimalField(
         max_digits=10, decimal_places=3, default=Decimal("1.000")
     )
