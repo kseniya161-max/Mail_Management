@@ -1,115 +1,117 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block content %}
 
 <div class="container mt-4">
-<h2 class="text-center mt-4 mb-4">
-    Сформировать счёт для {{ client }}</h2>
-    </div>
 
-<form method="post">
-    {% csrf_token %}
+    <h2 class="text-center mt-4 mb-4">
+        Сформировать счёт для {{ client }}
+    </h2>
 
-    <div class="card mb-4">
-    <div class="card-body">
+    <form method="post">
+        {% csrf_token %}
 
-        <div class="row">
-            <div class="col-md-4">
-                <label class="form-label">Номер счёта</label>
-                {{ form.number }}
-            </div>
-        </div>
-
-    </div>
-</div>
-
-    <hr>
-
-    <h4 class="mt-4 mb-3">Товары / услуги счёта</h4>
-
-    {{ formset.management_form }}
-    <datalist id="products-list">
-    {% for product in products %}
-        <option
-            value="{{ product.name }}"
-            data-price="{{ product.price }}"
-        ></option>
-    {% endfor %}
-</datalist>
-
-    <div id="items">
-        {% for item_form in formset %}
-            <div class="card mb-3 item-form">
-                <div class="card-body">
-                    <div class="row g-3 align-items-end">
-
-                        <div class="col-md-4">
-                            <label class="form-label">Товар</label>
-                            {{ item_form.product_name_input }}
-                            {{ item_form.product }}
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="form-label">Количество</label>
-                            {{ item_form.quantity }}
-                        </div>
-
-                        <div class="col-md-1">
-                            <label class="form-label">Ед.</label>
-                            {{ item_form.unit }}
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="form-label">Цена</label>
-                            {{ item_form.unit_price }}
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="form-label">Итого</label>
-                            <input type="text" class="form-control item-total" value="0.00" readonly>
-                        </div>
-
-                        <div class="col-md-1">
-                            <button type="button" class="btn btn-link text-danger remove-item p-0">
-                                удалить
-                            </button>
-                        </div>
-
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Номер счёта</label>
+                        {{ form.number }}
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+        </div>
 
-    <div class="mt-4 border-top pt-3">
-        <p class="mb-1">
-            <strong>Итого без НДС:</strong>
-            <span id="subtotal">0.00</span>
-        </p>
+        <hr>
 
-        <p class="mb-1">
-            <strong>НДС 22%:</strong>
-            <span id="vat">0.00</span>
-        </p>
+        <h4 class="mt-4 mb-3">Товары / услуги счёта</h4>
 
-        <p class="mb-1">
-            <strong>Итого с НДС:</strong>
-            <span id="grand-total">0.00</span>
-        </p>
-    </div>
+        {{ formset.management_form }}
 
-    <div class="mt-3">
-        <button type="button" id="add-item" class="btn btn-outline-custom btn-sm">
-            Добавить товар
-        </button>
-    </div>
+        <datalist id="products-list">
+            {% for product in products %}
+                <option value="{{ product.name }}" data-price="{{ product.price }}"></option>
+            {% endfor %}
+        </datalist>
 
-    <div class="mt-4">
-        <button type="submit" class="btn btn-outline-custom btn-sm">
-            Создать счёт
-        </button>
-    </div>
+        <div id="items">
+            {% for item_form in formset %}
+                <div class="card mb-3 item-form">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-end">
 
-</form>
+                            <div class="col-md-4">
+                                <label class="form-label">Товар</label>
+                                {{ item_form.product_name_input }}
+                                {{ item_form.product }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="form-label">Количество</label>
+                                {{ item_form.quantity }}
+                            </div>
+
+                            <div class="col-md-1">
+                                <label class="form-label">Ед.</label>
+                                {{ item_form.unit }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="form-label">Цена</label>
+                                {{ item_form.unit_price }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="form-label">Итого</label>
+                                <input type="text" class="form-control item-total" value="0.00" readonly>
+                            </div>
+
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-link text-danger remove-item p-0">
+                                    удалить
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-4 border-top pt-3">
+            <p class="mb-1">
+                <strong>Итого без НДС:</strong>
+                <span id="subtotal">0.00</span>
+            </p>
+
+            <p class="mb-1">
+                <strong>НДС 22%:</strong>
+                <span id="vat">0.00</span>
+            </p>
+
+            <p class="mb-1">
+                <strong>Итого с НДС:</strong>
+                <span id="grand-total">0.00</span>
+            </p>
+        </div>
+
+        <div class="mt-3">
+            <button type="button" id="add-item" class="btn btn-outline-custom btn-sm">
+                Добавить товар
+            </button>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-outline-custom btn-sm">
+                Создать счёт
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
 <script src="{% static 'js/invoice.js' %}"></script>
+
 {% endblock %}
