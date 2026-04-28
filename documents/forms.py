@@ -11,14 +11,14 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = ["number"]
 
-    widgets = {
-        "number": forms.TextInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Например: 001/2026",
-            }
-        )
-    }
+        widgets = {
+            "number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Введите номер счёта",
+                }
+            )
+        }
 
 
 class InvoiceItemForm(forms.ModelForm):
