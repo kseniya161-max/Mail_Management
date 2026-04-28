@@ -22,15 +22,22 @@ class InvoiceForm(forms.ModelForm):
 
 
 class InvoiceItemForm(forms.ModelForm):
+    product_name_input = forms.CharField(
+        label='Товар',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Введите или выберите товар",
+
+            }
+        ),
+    )
     class Meta:
         model = InvoiceItem
-        fields = ["product", "quantity", "unit", "unit_price"]
+        fields = ["product_name_input", "product", "quantity", "unit", "unit_price"]
         widgets = {
-            "product": forms.Select(
-                attrs={
-                    "class": "form-select",
-                }
-            ),
+            "product": forms.HiddenInput(),
             "quantity": forms.NumberInput(
                 attrs={
                     "class": "form-control",
@@ -57,6 +64,6 @@ InvoiceItemFormSet = inlineformset_factory(
     Invoice,
     InvoiceItem,
     form=InvoiceItemForm,
-    extra=3,
+    extra=1,
     can_delete=True,
 )
