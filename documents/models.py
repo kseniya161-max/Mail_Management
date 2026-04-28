@@ -52,3 +52,20 @@ class InvoiceItem(models.Model):
     @property
     def total(self):
         return self.quantity * self.unit_price
+
+
+class InvoiceTemplate(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Название шаблона")
+    file = models.FileField(
+        upload_to="invoice_templates/",
+        verbose_name="Файл шаблона",
+    )
+    is_active = models.BooleanField(default=True, verbose_name="Активный")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Шаблон счёта"
+        verbose_name_plural = "Шаблоны счетов"
+
+    def __str__(self):
+        return self.name
