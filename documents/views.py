@@ -163,7 +163,7 @@ class ClientInvoiceListView(View):
 
 
 class InvoiceDeleteView(View):
-    def post(self,request, pk):
+    def post(self, request, pk):
         invoice = get_object_or_404(Invoice, pk=pk)
         client_id = invoice.client.id
         if invoice.file:

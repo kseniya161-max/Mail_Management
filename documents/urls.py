@@ -4,7 +4,7 @@ from documents.views import (
     ClientOfferFilesView,
     InvoiceCreateView,
     ClientInvoiceListView,
-    InvoiceDeleteView
+    InvoiceDeleteView,
 )
 
 app_name = "documents"
