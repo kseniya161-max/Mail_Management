@@ -133,7 +133,10 @@ class InvoiceCreateView(LoginRequiredMixin, View):
                     item.product_name = item.product.name
 
                 item.save()
-            generate_invoice_docx(invoice)
+            file_path = generate_invoice_docx(invoice)
+
+            invoice.file = file_path
+            invoice.save()
             return redirect("clients:client_detail", pk=client.pk)
 
         return render(
