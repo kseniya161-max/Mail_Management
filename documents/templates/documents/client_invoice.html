@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Счета клиента{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Счета клиента: {{ client }}</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Дата</th>
+                <th>Сумма</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+                <tr>
+                    <td>{{ invoice.number }}</td>
+                    <td>{{ invoice.created_at }}</td>
+                    <td>{{ invoice.get_total_with_vat }}</td>
+                    <td>
+                        <a href="{{ invoice.file.url }}" class="btn btn-sm btn-success">
+                            Скачать
+                        </a>
+
+                        <a href="#" class="btn btn-sm btn-warning">
+                            Отправить
+                        </a>
+
+                        <a href="#" class="btn btn-sm btn-danger">
+                            Удалить
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Нет счетов</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

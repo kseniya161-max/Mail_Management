@@ -10,6 +10,7 @@ from clients.services.file_service import generate_offer_file
 from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
 from documents.services.invoice_generator import generate_invoice_docx
+from .models import Invoice
 
 
 class ClientOfferFileCreateView(LoginRequiredMixin, View):
@@ -145,3 +146,10 @@ class InvoiceCreateView(LoginRequiredMixin, View):
                 "products": products,
             },
         )
+
+
+class ClientInvoiceListView(View):
+    def get(self, request, client_id):
+        client = get_object_or_404(Clients, pk=client_id)
+        invoices = Invoice.objects.filter(client=client).order_by("-created_at")
+        return render(request, "documents/client_invoice.html", {"client":client, "invoices":invoices},)
