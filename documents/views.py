@@ -152,4 +152,8 @@ class ClientInvoiceListView(View):
     def get(self, request, client_id):
         client = get_object_or_404(Clients, pk=client_id)
         invoices = Invoice.objects.filter(client=client).order_by("-created_at")
-        return render(request, "documents/client_invoice.html", {"client":client, "invoices":invoices},)
+        return render(
+            request,
+            "documents/client_invoice.html",
+            {"client": client, "invoices": invoices},
+        )
