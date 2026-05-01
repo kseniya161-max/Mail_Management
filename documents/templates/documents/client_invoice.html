@@ -24,18 +24,30 @@
                     <td>{{ invoice.created_at }}</td>
                     <td>{{ invoice.get_total_with_vat }}</td>
                     <td>
-                        <a href="{{ invoice.file.url }}" class="btn btn-sm btn-success">
-                            Скачать
-                        </a>
+    <div class="d-flex gap-2">
 
-                        <a href="#" class="btn btn-sm btn-warning">
-                            Отправить
-                        </a>
+        {% if invoice.file %}
+            <a href="{{ invoice.file.url }}" class="btn btn-sm btn-success">
+                Скачать
+            </a>
+        {% else %}
+            <span class="text-muted">Нет файла</span>
+        {% endif %}
 
-                        <a href="#" class="btn btn-sm btn-danger">
-                            Удалить
-                        </a>
-                    </td>
+        <a href="#" class="btn btn-sm btn-warning">
+            Отправить
+        </a>
+
+        <form method="post"
+              action="{% url 'documents:invoice_delete' invoice.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger">
+                Удалить
+            </button>
+        </form>
+
+    </div>
+</td>
                 </tr>
             {% empty %}
                 <tr>

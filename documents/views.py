@@ -160,3 +160,13 @@ class ClientInvoiceListView(View):
             "documents/client_invoice.html",
             {"client": client, "invoices": invoices},
         )
+
+
+class InvoiceDeleteView(View):
+    def post(self,request, pk):
+        invoice = get_object_or_404(Invoice, pk=pk)
+        client_id = invoice.client.id
+        if invoice.file:
+            invoice.file.delete(save=False)
+        invoice.delete()
+        return redirect("documents:client_invoices", client_id=client_id)
