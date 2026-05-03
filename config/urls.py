@@ -20,6 +20,7 @@ urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
     path("users/", include("Users.urls", namespace="Users")),
     path("products/", include("products.urls", namespace="products")),
+    path("documents/", include("documents.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/docs/",
