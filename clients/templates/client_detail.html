@@ -27,12 +27,11 @@
                     Редактировать
                 </a>
 
-                <a href="{% url 'clients:client_delete' client_detail.pk %}" class="btn btn-danger btn-sm">
-                    Удалить
-                </a>
-
-                <a href="{% url 'clients:client_list' %}" class="btn btn-outline-custom btn-sm">
+                 <a href="{% url 'clients:client_list' %}" class="btn btn-outline-custom btn-sm">
                     Назад к списку клиентов
+                </a>
+                <a href="{% url 'clients:client_delete' client_detail.pk %}" class="btn btn-outline-custom btn-sm">
+                    Удалить
                 </a>
             </div>
 
