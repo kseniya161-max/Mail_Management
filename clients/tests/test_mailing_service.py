@@ -9,6 +9,11 @@ from clients.services.mailing_service import MailingService
 @pytest.mark.django_db
 @patch("clients.services.mailing_service.send_email_via_resend")
 def test_send_mailing_success(mock_send_email):
+    from django.conf import settings
+
+    settings.RESEND_FROM_EMAIL = "test@example.com"
+    settings.RESEND_API_KEY = "test_key"
+
     mock_send_email.return_value = {"id": "test-id", "status": "sent"}
 
     user = User.objects.create_user(username="test_user", password="12345")
