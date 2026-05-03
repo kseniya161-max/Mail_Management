@@ -27,12 +27,11 @@
                     Редактировать
                 </a>
 
-                <a href="{% url 'clients:client_delete' client_detail.pk %}" class="btn btn-danger btn-sm">
-                    Удалить
-                </a>
-
-                <a href="{% url 'clients:client_list' %}" class="btn btn-outline-custom btn-sm">
+                 <a href="{% url 'clients:client_list' %}" class="btn btn-outline-custom btn-sm">
                     Назад к списку клиентов
+                </a>
+                <a href="{% url 'clients:client_delete' client_detail.pk %}" class="btn btn-outline-custom btn-sm">
+                    Удалить
                 </a>
             </div>
 
@@ -53,6 +52,9 @@
 
                 <a href="{% url 'documents:client_offer_files' client_detail.pk %}" class="btn btn-outline-custom btn-sm">
                     Предложения клиента
+                </a>
+                <a href="{% url 'documents:client_invoices' client_detail.id %}" class="btn btn-outline-custom btn-sm">
+                   Счета клиента
                 </a>
             </div>
 

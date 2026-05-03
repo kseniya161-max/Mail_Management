@@ -390,3 +390,9 @@ class OfferFileDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return OfferFile.objects.filter(created_by=self.request.user)
+
+
+from django.http import JsonResponse
+
+def health_check(request):
+    return JsonResponse({"status": "ok"})

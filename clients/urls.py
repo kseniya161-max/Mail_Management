@@ -7,6 +7,7 @@ from clients.views import (
     ClientDeleteView,
     EmailStatisticsView,
     ClientDetailView,
+    health_check,
 )
 from clients.views import (
     MailingListView,
@@ -76,4 +77,5 @@ urlpatterns = [
     path(
         "my-offers/delete/<int:pk>/", OfferFileDeleteView.as_view(), name="offer_delete"
     ),
+    path("health/", health_check),
 ]

@@ -10,6 +10,7 @@ from clients.services.file_service import generate_offer_file
 from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
 from documents.services.invoice_generator import generate_invoice_docx
+from .models import Invoice
 
 
 class ClientOfferFileCreateView(LoginRequiredMixin, View):
@@ -132,7 +133,10 @@ class InvoiceCreateView(LoginRequiredMixin, View):
                     item.product_name = item.product.name
 
                 item.save()
-            generate_invoice_docx(invoice)
+            file_path = generate_invoice_docx(invoice)
+
+            invoice.file = file_path
+            invoice.save()
             return redirect("clients:client_detail", pk=client.pk)
 
         return render(
@@ -145,3 +149,24 @@ class InvoiceCreateView(LoginRequiredMixin, View):
                 "products": products,
             },
         )
+
+
+class ClientInvoiceListView(View):
+    def get(self, request, client_id):
+        client = get_object_or_404(Clients, pk=client_id)
+        invoices = Invoice.objects.filter(client=client).order_by("-created_at")
+        return render(
+            request,
+            "documents/client_invoice.html",
+            {"client": client, "invoices": invoices},
+        )
+
+
+class InvoiceDeleteView(View):
+    def post(self, request, pk):
+        invoice = get_object_or_404(Invoice, pk=pk)
+        client_id = invoice.client.id
+        if invoice.file:
+            invoice.file.delete(save=False)
+        invoice.delete()
+        return redirect("documents:client_invoices", client_id=client_id)
