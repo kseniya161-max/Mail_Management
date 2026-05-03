@@ -58,19 +58,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# if os.getenv("DATABASE_URL"):
-#     DATABASES = {"default": dj_database_url.config(default=os.getenv("DATABASE_URL"))}
-# else:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.postgresql_psycopg2",
-#             "NAME": os.getenv("DATABASE_NAME"),
-#             "USER": os.getenv("DATABASE_USER"),
-#             "PASSWORD": os.getenv("DATABASE_PASSWORD"),
-#             "HOST": os.getenv("DATABASE_HOST"),
-#             "PORT": os.getenv("DATABASE_PORT", "5432"),
-#         }
-#     }
+if os.getenv("DATABASE_URL"):
+    DATABASES = {"default": dj_database_url.config(default=os.getenv("DATABASE_URL"))}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": os.getenv("DATABASE_NAME"),
+            "USER": os.getenv("DATABASE_USER"),
+            "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+            "HOST": os.getenv("DATABASE_HOST"),
+            "PORT": os.getenv("DATABASE_PORT", "5432"),
+        }
+    }
 
 # DATABASES = {
 #     'default': {
@@ -186,18 +186,18 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-if os.getenv("DATABASE_URL"):
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=os.getenv("DATABASE_URL"),
-            conn_max_age=600,
-            ssl_require=os.getenv("DB_SSL", "False") == "True",
-        )
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+# if os.getenv("DATABASE_URL"):
+#     DATABASES = {
+#         "default": dj_database_url.config(
+#             default=os.getenv("DATABASE_URL"),
+#             conn_max_age=600,
+#             ssl_require=os.getenv("DB_SSL", "False") == "True",
+#         )
+#     }
+# else:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
