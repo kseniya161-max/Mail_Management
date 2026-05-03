@@ -2,7 +2,7 @@
 {% block title %} Редактирование клиента {% endblock %}
 {% block content %}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
 </div>
@@ -43,7 +43,7 @@
     </div>
 
     <button type="submit" class="btn btn-outline-custom btn-sm mt-3 mb-3">Сохранить</button>
-    <a href="{% url 'clients:client_list' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3";>Отмена</a>
+    <a href="{% url 'clients:client_list' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Отмена</a>
 </form>
 
 {% endblock %}

@@ -3,19 +3,19 @@
 {% block content %}
 {{ form.errors }}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
 </div>
 <div class="mt-4 mb-3 text-center">
-    <h3 class="mb-0">Список клиентов</h3>
+    <h3 class="mb-0">Мои Клиенты</h3>
 </div>
-<a href="{% url 'clients:client_add' %}" class="btn btn-outline-custom mb-3">Добавить клиента</a>
+<a href="{% url 'clients:client_add' %}" class="btn btn-outline-custom btn-sm mb-5">Добавить клиента</a>
 <div class="table-responsive">
 <table class="table table-hover align-middle mailing-table">
     <thead>
         <tr>
-            <th class="text-center">ID</th>
+<!--            <th class="text-center">ID</th>-->
             <th class="text-center">ИМЯ</th>
             <th class="text-center">Телефон</th>
             <th class="text-center">Email</th>
@@ -26,7 +26,7 @@
     <tbody>
         {% for client in list_clients %}
         <tr>
-            <td class="text-center">{{client.id}}</td>
+<!--            <td class="text-center">{{client.id}}</td>-->
             <td class="text-center">{{client.name}}</td>
             <td class="text-center">{{client.phone_number}}</td>
             <td class="text-center">{{client.email}}</td>
@@ -36,7 +36,7 @@
                 <div class="d-flex flex-wrap gap-2 justify-content-center">
                 <a href="{% url 'clients:client_update' client.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>
                     <a href="{% url 'clients:client_detail' client.pk %}" class="btn btn-outline-custom btn-sm">Подробнее</a>
-                <a href="{% url 'clients:client_delete' client.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+                <a href="{% url 'clients:client_delete' client.pk %}" class="btn btn-outline-custom btn-sm">Удалить</a>
                 </div>
             </td>
         </tr>
