@@ -2,19 +2,18 @@
 {% block title %} Список Категорий {% endblock %}
 {% block content %}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
-</div>
 <div class="mt-4 mb-3 text-center">
-<h3 class="mb-0">Список Категорий</h3>
-    </div>
-<a href="{% url 'products:category_add' %}" class="btn btn-outline-custom mb-3">Добавить категорию</a>
+<h4 class="mb-0">Список Категорий</h4>
+</div>
+<a href="{% url 'products:category_add' %}" class="btn btn-outline-custom btn-sm mb-3">Добавить категорию</a>
 <div class="table-responsive">
 <table class="table table-hover align-middle mailing-table">
     <thead>
         <tr>
-            <th class="text-center">ID</th>
+<!--            <th class="text-center">ID</th>-->
             <th class="text-center">Наименование</th>
             <th>Фото</th>
             <th class="text-center">Описание</th>
@@ -24,7 +23,7 @@
     <tbody>
         {% for category in categories %}
         <tr>
-            <td class="text-center">{{category.id}}</td>
+<!--            <td class="text-center">{{category.id}}</td>-->
             <td class="text-center">{{category.name}}</td>
             <td>
                 {% if category.photo %}
@@ -37,10 +36,7 @@
 
                 <td class="text-center">
                                         <div class="d-flex flex-wrap gap-2 justify-content-center">
-
-                <a href="{% url 'products:category_edit' category.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>
                 <a href="{% url 'products:category_detail' category.pk %}" class="btn btn-outline-custom btn-sm">Подробнее</a>
-                <a href="{% url 'products:category_delete' category.pk %}" class="btn btn-danger btn-sm">Удалить</a>
                                         </div>
             </td>
 
@@ -54,7 +50,7 @@
     </tbody>
 </table>
     </div>
-
+</div>
 {% endblock %}
 
 

@@ -9,7 +9,7 @@ def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
     resend.api_key = settings.RESEND_API_KEY
 
     params = {
-        "from": settings.RESEND_FROM_EMAIL,
+        "from": f"{settings.EMAIL_FROM_NAME} <{settings.RESEND_FROM_EMAIL}>",
         "to": [to_email],
         "subject": subject,
         "text": body,
