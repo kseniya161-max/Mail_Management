@@ -4,7 +4,9 @@ import resend
 import sib_api_v3_sdk
 
 from config import settings
+
 # from django.conf import settings
+
 
 def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
     resend.api_key = settings.RESEND_API_KEY
