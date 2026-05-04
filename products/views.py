@@ -58,6 +58,7 @@ class ProductListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return super().get_queryset()
 
+
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "product_detail.html"

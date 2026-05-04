@@ -26,7 +26,25 @@ def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
             }
         ]
 
-    return resend.Emails.send(params)
+    try:
+        print("SENDING EMAIL:", params)
+
+        response = resend.Emails.send(params)
+
+        print("RESEND RESPONSE:", response)
+
+        return response
+
+    except Exception as e:
+        print("RESEND ERROR:", e)
+
+        params["from"] = settings.RESEND_FROM_EMAIL
+
+        response = resend.Emails.send(params)
+
+        print("RESEND FALLBACK RESPONSE:", response)
+
+        return response
 
 
 def send_email_via_brevo(to_email: str, subject: str, body: str):
