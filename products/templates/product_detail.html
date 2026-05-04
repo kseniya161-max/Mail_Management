@@ -1,20 +1,31 @@
 {% extends 'base.html' %}
-{% block title %} Редактирование {% endblock %}
+{% block title %} Товары {% endblock %}
 {% block content %}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
+
+<h4 class="mt-3 mb-4">Товар: {{ product_detail.name }}</h4>
+
+<div class="row">
+  <div class="coll-md-4">
+    {% if product.photo %}
+    <img src="{{ product_detail.photo.url }}" alt="{{ product_detail.name }}" class="img-fluid">
+        {% else %}
+            <p>Фото не загружено.</p>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <p><strong>Наименование товара:</strong> {{ product_detail.name }}</p>
+        <p><strong>Цена товара</strong> {{ product_detail.price }}</p>
+        <p><strong>Описание товара</strong> {{ product_detail.description }}</p>
+    </div>
 </div>
-<h3 class="mt-3 mb-2">Редактирование товара</h3>
 
+    <a href="{% url 'products:product_update' product_detail.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>
+    <a href="{% url 'products:product_delete' product_detail.pk %}" class="btn btn-outline-custom btn-sm">Удалить</a>
+<a href="{% url 'products:product_list' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Назад к списку товаров</a>
 
-<form method="post" novalidate>
-    {% csrf_token %}
-    {{form.as_p}}
-
-    <button type="submit" class="btn btn-outline-custom btn-sm mt-3 mb-3">Сохранить изменения</button>
-    <a href="{% url 'products:product_list' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Отмена</a>
-</form>
-
+    </div>
 {% endblock %}
