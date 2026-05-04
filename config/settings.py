@@ -176,4 +176,4 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-EMAIL_FROM_NAME = os.getenv("EMAIL_FROM_NAME")
+EMAIL_FROM_NAME = os.getenv("EMAIL_FROM_NAME", "Mail Management")
