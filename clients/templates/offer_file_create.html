@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom btn-sm">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
 
@@ -18,7 +18,7 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit" class="btn btn-outline-custom btn-sm mt-3 mb-3">Сформировать файл</button>
+    <button type="submit" class="btn-save btn-sm mt-3 mb-3">Сформировать файл</button>
     <a href="{% url 'clients:user_profile' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Отмена</a>
 </form>
 </div>

@@ -8,9 +8,9 @@
     </button>
 </div>
 <div class="mt-4 mb-3 text-center">
-    <h3 class="mb-0">Мои Клиенты</h3>
+    <h4 class="mb-0">Мои Клиенты</h4>
 </div>
-<a href="{% url 'clients:client_add' %}" class="btn btn-outline-custom btn-sm mb-5">Добавить клиента</a>
+<a href="{% url 'clients:client_add' %}" class="btn btn-outline-custom btn-sm mb-3">Добавить клиента</a>
 <div class="table-responsive">
 <table class="table table-hover align-middle mailing-table">
     <thead>
@@ -36,7 +36,6 @@
                 <div class="d-flex flex-wrap gap-2 justify-content-center">
                 <a href="{% url 'clients:client_update' client.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>
                     <a href="{% url 'clients:client_detail' client.pk %}" class="btn btn-outline-custom btn-sm">Подробнее</a>
-                <a href="{% url 'clients:client_delete' client.pk %}" class="btn btn-outline-custom btn-sm">Удалить</a>
                 </div>
             </td>
         </tr>
