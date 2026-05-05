@@ -6,6 +6,7 @@ from django.views.generic import ListView
 
 from clients.forms import OfferFileForm
 from clients.models import Clients, OfferFile
+from clients.services.email_service import send_invoice_email
 from clients.services.file_service import generate_offer_file
 from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
@@ -174,10 +175,11 @@ class InvoiceDeleteView(View):
 
 class InvoiceSendView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        invoice = get_object_or_404(Invoice, pk=pk, user=request.user)
+        invoice = get_object_or_404(Invoice, pk=pk, created_by=request.user)
         try:
             send_invoice_email(invoice)
-            messages.success(invoice, request.user, "Счет отправлен на email")
+            messages.success(request,"Счет отправлен на email")
         except Exception as e:
-            messages.error(invoice, request.user, f'Ошибка отправки {e}')
+            messages.error(request, f'Ошибка отправки {e}')
         return redirect ("documents:client_invoices", client_id=invoice.client.id)
+

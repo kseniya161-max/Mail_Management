@@ -67,3 +67,18 @@ def send_email_via_brevo(to_email: str, subject: str, body: str):
     )
 
     return api_instance.send_transac_email(send_smtp_email)
+
+
+def send_invoice_email(invoice):
+    client = invoice.client
+    if not client.email:
+        raise ValueError("У клиента нет email")
+    if not invoice.file:
+        raise ValueError("У счета нет файла")
+    with open(invoice.file.path, "rb") as f:
+        send_email_via_resend(
+            to_email=client.email,
+            subject=f"Счет № {invoice.number}",
+            body="Добрый день! Во вложении ваш счет.",
+            file=f,
+        )

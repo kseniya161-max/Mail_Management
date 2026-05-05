@@ -20,7 +20,7 @@ class Invoice(models.Model):
     vat_rate = models.DecimalField(
         max_digits=5, decimal_places=2, default=Decimal("22.00")
     )
-
+    is_sent = models.BooleanField(default=False)
     class Meta:
         verbose_name = "Счет"
         verbose_name_plural = "Счета"

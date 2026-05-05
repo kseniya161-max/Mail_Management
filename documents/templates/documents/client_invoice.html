@@ -38,9 +38,13 @@
             <span class="text-muted">Нет файла</span>
         {% endif %}
 
-        <a href="#" class="btn btn-outline-custom btn-sm mt-3 mb-3">
-            Отправить
-        </a>
+        <form method="post"
+      action="{% url 'documents:invoice_send' invoice.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn-save btn-sm mt-3 mb-3">
+        Отправить
+    </button>
+</form>
 
         <form method="post"
               action="{% url 'documents:invoice_delete' invoice.id %}">
@@ -61,7 +65,6 @@
         </tbody>
     </table>
 
-</div>
 </div>
 
 {% endblock %}
