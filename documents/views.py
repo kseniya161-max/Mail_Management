@@ -62,7 +62,7 @@ class ClientOfferFileCreateView(LoginRequiredMixin, View):
 
 class ClientOfferDeleteView(LoginRequiredMixin, View):
 
-    def post(self, request,pk):
+    def post(self, request, pk):
         offer = get_object_or_404(OfferFile, pk=pk, created_by=request.user)
 
         if offer.file:
@@ -71,6 +71,7 @@ class ClientOfferDeleteView(LoginRequiredMixin, View):
         offer.delete()
 
         return redirect("documents:client_offer_files", pk=client_id)
+
 
 class ClientOfferFilesView(LoginRequiredMixin, ListView):
     template_name = "documents/client_offer_files.html"

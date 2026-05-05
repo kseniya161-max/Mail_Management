@@ -96,7 +96,7 @@ def send_offer_email(offer):
     with open(offer.file.path, "rb") as f:
         send_email_via_resend(
             to_email=client.email,
-            subject=f"Коммерческое предложение",
+            subject="Коммерческое предложение",
             body="Добрый день! Во вложении предложение.",
             file=f,
         )
