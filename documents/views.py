@@ -180,9 +180,7 @@ class InvoiceSendView(LoginRequiredMixin, View):
             send_invoice_email(invoice)
             invoice.is_sent = True
             invoice.save()
-            messages.success(request,"Счет отправлен на email")
+            messages.success(request, "Счет отправлен на email")
         except Exception as e:
-            messages.error(request, f'Ошибка отправки {e}')
-        return redirect ("documents:client_invoices", client_id=invoice.client.id)
-
-
+            messages.error(request, f"Ошибка отправки {e}")
+        return redirect("documents:client_invoices", client_id=invoice.client.id)
