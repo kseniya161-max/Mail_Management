@@ -82,3 +82,21 @@ def send_invoice_email(invoice):
             body="Добрый день! Во вложении ваш счет.",
             file=f,
         )
+
+
+def send_offer_email(offer):
+    client = offer.client
+
+    if not client.email:
+        raise ValueError("У клиента нет email")
+
+    if not offer.file:
+        raise ValueError("Нет файла предложения")
+
+    with open(offer.file.path, "rb") as f:
+        send_email_via_resend(
+            to_email=client.email,
+            subject=f"Коммерческое предложение",
+            body="Добрый день! Во вложении предложение.",
+            file=f,
+        )

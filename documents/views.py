@@ -6,7 +6,7 @@ from django.views.generic import ListView
 
 from clients.forms import OfferFileForm
 from clients.models import Clients, OfferFile
-from clients.services.email_service import send_invoice_email
+from clients.services.email_service import send_invoice_email, send_offer_email
 from clients.services.file_service import generate_offer_file
 from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
@@ -196,3 +196,16 @@ class InvoiceSendView(LoginRequiredMixin, View):
         except Exception as e:
             messages.error(request, f"Ошибка отправки {e}")
         return redirect("documents:client_invoices", client_id=invoice.client.id)
+
+
+class ClientOfferSendView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        offer = get_object_or_404(OfferFile, pk=pk, created_by=request.user)
+
+        try:
+            send_offer_email(offer)
+            messages.success(request, "Предложение отправлено")
+        except Exception as e:
+            messages.error(request, f"Ошибка: {e}")
+
+        return redirect("documents:client_offer_files", pk=offer.client.id)
