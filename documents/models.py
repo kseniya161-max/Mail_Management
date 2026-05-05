@@ -21,6 +21,15 @@ class Invoice(models.Model):
         max_digits=5, decimal_places=2, default=Decimal("22.00")
     )
     is_sent = models.BooleanField(default=False)
+
+    def get_total(self):
+        return sum(item.total for item in self.items.all())
+
+    def get_total_with_vat(self):
+        subtotal = self.get_total()
+        vat = subtotal * (self.vat_rate / 100)
+        return subtotal + vat
+
     class Meta:
         verbose_name = "Счет"
         verbose_name_plural = "Счета"

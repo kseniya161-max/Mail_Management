@@ -29,21 +29,24 @@
                     <td>
     <div class="d-flex gap-2">
 
+            {% if not invoice.is_sent %}
+    <form method="post" action="{% url 'documents:invoice_send' invoice.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-save btn-sm mt-3 mb-3">
+            Отправить
+        </button>
+    </form>
+{% else %}
+    <span class="text-success mt-3 mb-3">✔ Отправлено</span>
+{% endif %}
 
-        {% if invoice.file %}
+         {% if invoice.file %}
             <a href="{{ invoice.file.url }}" class="btn btn-outline-custom btn-sm mt-3 mb-3">
                 Скачать
             </a>
         {% else %}
             <span class="text-muted">Нет файла</span>
         {% endif %}
-
-        <form method="post"
-      action="{% url 'documents:invoice_send' invoice.id %}">
-    {% csrf_token %}
-    <button type="submit" class="btn-save btn-sm mt-3 mb-3">
-        Отправить
-    </button>
 </form>
 
         <form method="post"

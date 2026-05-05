@@ -37,7 +37,7 @@ urlpatterns = [
         name="invoice_delete",
     ),
     path(
-        "invoices/<client_id>/send/",
+        "invoices/<int:pk>/send/",
         InvoiceSendView.as_view(),
         name="invoice_send",
     ),

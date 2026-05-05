@@ -4,14 +4,14 @@
 
 {% block content %}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
-</div>
 
-<h3 class="mt-4 mb-4">
+
+<h4 class="mt-4 mb-4">
     Предложения для: {{ client.name }}
-</h3>
+</h4>
 
 {% if client_offer_files %}
     <ul class="list-group">
@@ -32,7 +32,7 @@
                         Отправить
                     </a>
 
-                    <a href="{% url 'clients:offer_delete' offer.pk %}" class="btn btn-danger btn-sm">
+                    <a href="{% url 'clients:offer_delete' offer.pk %}" class="btn btn-outline-custom btn-sm">
                         Удалить
                     </a>
                 </div>
@@ -43,5 +43,5 @@
 {% else %}
     <p class="text-muted">Нет предложений</p>
 {% endif %}
-
+</div>
 {% endblock %}

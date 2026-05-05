@@ -178,8 +178,11 @@ class InvoiceSendView(LoginRequiredMixin, View):
         invoice = get_object_or_404(Invoice, pk=pk, created_by=request.user)
         try:
             send_invoice_email(invoice)
+            invoice.is_sent = True
+            invoice.save()
             messages.success(request,"Счет отправлен на email")
         except Exception as e:
             messages.error(request, f'Ошибка отправки {e}')
         return redirect ("documents:client_invoices", client_id=invoice.client.id)
+
 
