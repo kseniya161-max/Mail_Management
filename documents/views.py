@@ -170,3 +170,14 @@ class InvoiceDeleteView(View):
             invoice.file.delete(save=False)
         invoice.delete()
         return redirect("documents:client_invoices", client_id=client_id)
+
+
+class InvoiceSendView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        invoice = get_object_or_404(Invoice, pk=pk, user=request.user)
+        try:
+            send_invoice_email(invoice)
+            messages.success(invoice, request.user, "Счет отправлен на email")
+        except Exception as e:
+            messages.error(invoice, request.user, f'Ошибка отправки {e}')
+        return redirect ("documents:client_invoices", client_id=invoice.client.id)
