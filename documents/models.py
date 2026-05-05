@@ -27,8 +27,9 @@ class Invoice(models.Model):
 
     def get_total_with_vat(self):
         subtotal = self.get_total()
-        vat = subtotal * (self.vat_rate / 100)
-        return subtotal + vat
+        vat = subtotal * (self.vat_rate / Decimal("100"))
+        total = subtotal + vat
+        return total.quantize(Decimal("0.01"))
 
     class Meta:
         verbose_name = "Счет"
