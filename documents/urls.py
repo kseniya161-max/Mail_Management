@@ -31,7 +31,7 @@ urlpatterns = [
         name="client_invoices",
     ),
     path(
-        "clients/<int:client_id>/invoice/delete/",
+        "invoices/<int:pk>/delete/",
         InvoiceDeleteView.as_view(),
         name="invoice_delete",
     ),
