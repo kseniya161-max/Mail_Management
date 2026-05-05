@@ -6,6 +6,7 @@ from documents.views import (
     ClientInvoiceListView,
     InvoiceDeleteView,
     InvoiceSendView,
+    ClientOfferDeleteView,
 )
 
 app_name = "documents"
@@ -20,6 +21,11 @@ urlpatterns = [
         "client/<int:pk>/offers/",
         ClientOfferFilesView.as_view(),
         name="client_offer_files",
+    ),
+    path(
+        "offers/<int:pk>/delete/",
+        ClientOfferDeleteView.as_view(),
+        name="offer_delete",
     ),
     path(
         "clients/<int:client_id>/invoice/create/",
