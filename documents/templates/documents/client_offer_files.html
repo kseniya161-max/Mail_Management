@@ -4,14 +4,14 @@
 
 {% block content %}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
-</div>
 
-<h3 class="mt-4 mb-4">
+
+<h4 class="mt-4 mb-4">
     Предложения для: {{ client.name }}
-</h3>
+</h4>
 
 {% if client_offer_files %}
     <ul class="list-group">
@@ -24,17 +24,19 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    <a href="{{ offer.file.url }}" target="_blank" class="btn btn-outline-custom btn-sm">
+                    <a href="{{ offer.file.url }}" target="_blank" class="btn btn-outline-custom btn-sm mt-3 mb-3">
                         Скачать
                     </a>
 
-                    <a href="#" class="btn btn-outline-custom btn-sm">
-                        Отправить
-                    </a>
+                    <form method="post" action="{% url 'documents:offer_send' offer.id %}">
+                    {% csrf_token %}
+                    <button class="btn-save btn-sm mt-3 mb-3">Отправить</button>
+                    </form>
 
-                    <a href="{% url 'clients:offer_delete' offer.pk %}" class="btn btn-danger btn-sm">
-                        Удалить
-                    </a>
+                    <form method="post" action="{% url 'documents:offer_delete' offer.id %}">
+                    {% csrf_token %}
+                    <button class="btn-save btn-sm mt-3 mb-3">Удалить</button>
+                    </form>
                 </div>
 
             </li>
@@ -43,5 +45,5 @@
 {% else %}
     <p class="text-muted">Нет предложений</p>
 {% endif %}
-
+</div>
 {% endblock %}

@@ -10,7 +10,6 @@ class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
         fields = ["number"]
-
         widgets = {
             "number": forms.TextInput(
                 attrs={
@@ -19,6 +18,16 @@ class InvoiceForm(forms.ModelForm):
                 }
             )
         }
+
+    def clean_number(self):
+        number = self.cleaned_data["number"]
+        if Invoice.objects.filter(number=number).exists():
+            raise forms.ValidationError("Счет с таким номером существует")
+        return number
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["number"].required = True
 
 
 class InvoiceItemForm(forms.ModelForm):

@@ -2,19 +2,19 @@
 {% block title %} Список Продуктов {% endblock %}
 {% block content %}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
-</div>
+
 <div class="mt-4 mb-3 text-center">
-<h3 class="mb-0">Список товаров</h3>
+<h4 class="mb-0">Список товаров</h4>
     </div>
-<a href="{% url 'products:product_create' %}"  class="btn btn-outline-custom mb-3">Добавить товар</a>
+<a href="{% url 'products:product_create' %}"  class="btn btn-outline-custom btn-sm mb-3">Добавить товар</a>
 <div class="table-responsive">
 <table class="table table-hover align-middle mailing-table">
     <thead>
         <tr>
-            <th class="text-center">ID</th>
+<!--            <th class="text-center">ID</th>-->
             <th class="text-center">Наименование</th>
             <th class="text-center">Фото</th>
             <th class="text-center">Категория товара</th>
@@ -27,7 +27,7 @@
     <tbody>
         {% for product  in products %}
         <tr>
-            <td class="text-center">{{product.id}}</td>
+<!--            <td class="text-center">{{product.id}}</td>-->
             <td class="text-center">{{product.name}}</td>
             <td>
                 {% if product.photo %}
@@ -44,8 +44,7 @@
 
             <td class="text-center">
                                         <div class="d-flex flex-wrap gap-2 justify-content-center">
-                <a href="{% url 'products:product_update' product.pk %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Редактировать</a>
-                <a href="{% url 'products:product_delete' product.pk %}" class="btn btn-outline-custom btn-sm mt-3 mb-3" style="border: 1px solid red;">Удалить</a>
+                <a href="{% url 'products:product_detail' product.pk %}" class="btn btn-outline-custom btn-sm">Подробнее</a>
                                             </div>
             </td>
         </tr>
@@ -56,7 +55,8 @@
         {% endfor %}
     </tbody>
 </table>
+    </div>
+    </div>
 {% endblock %}
 
 
-</div>

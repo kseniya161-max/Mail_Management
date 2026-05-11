@@ -30,7 +30,8 @@
     border: 1px solid #6c757d;
 
     border-radius: 0.5rem;
-    padding: 0.15rem 0.75rem;
+    padding: 0.05rem 0.75rem;
+    font-size: 0.845rem;
 
     transition: all 0.2s ease;
 }
@@ -40,6 +41,31 @@
     color: #ffffff;
     border-color: #6c757d;
 }
+
+.btn-save {
+    background-color: #ffffff;
+    color: #0b1f3a;
+    border: 1px solid #6c757d;
+    border-radius: 0.5rem;
+    padding: 0.07rem 0.75rem;
+    font-size: 0.845rem;
+    transition: all 0.2s ease;
+
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1.5;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+
+.btn-save:hover {
+    background-color: #ff0000;
+    color: #ffffff;
+    border-color: #6c757d;
+}
+
 
 
 .step-item {

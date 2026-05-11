@@ -6,6 +6,7 @@ from django.views.generic import ListView
 
 from clients.forms import OfferFileForm
 from clients.models import Clients, OfferFile
+from clients.services.email_service import send_invoice_email, send_offer_email
 from clients.services.file_service import generate_offer_file
 from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
@@ -57,6 +58,19 @@ class ClientOfferFileCreateView(LoginRequiredMixin, View):
                 "client": client,
             },
         )
+
+
+class ClientOfferDeleteView(LoginRequiredMixin, View):
+
+    def post(self, request, pk):
+        offer = get_object_or_404(OfferFile, pk=pk, created_by=request.user)
+
+        if offer.file:
+            offer.file.delete(save=False)
+        client_id = offer.client.id
+        offer.delete()
+
+        return redirect("documents:client_offer_files", pk=client_id)
 
 
 class ClientOfferFilesView(LoginRequiredMixin, ListView):
@@ -164,9 +178,35 @@ class ClientInvoiceListView(View):
 
 class InvoiceDeleteView(View):
     def post(self, request, pk):
-        invoice = get_object_or_404(Invoice, pk=pk)
+        invoice = get_object_or_404(Invoice, pk=pk, created_by=request.user)
         client_id = invoice.client.id
         if invoice.file:
             invoice.file.delete(save=False)
         invoice.delete()
         return redirect("documents:client_invoices", client_id=client_id)
+
+
+class InvoiceSendView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        invoice = get_object_or_404(Invoice, pk=pk, created_by=request.user)
+        try:
+            send_invoice_email(invoice)
+            invoice.is_sent = True
+            invoice.save()
+            messages.success(request, "Счет отправлен на email")
+        except Exception as e:
+            messages.error(request, f"Ошибка отправки {e}")
+        return redirect("documents:client_invoices", client_id=invoice.client.id)
+
+
+class ClientOfferSendView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        offer = get_object_or_404(OfferFile, pk=pk, created_by=request.user)
+
+        try:
+            send_offer_email(offer)
+            messages.success(request, "Предложение отправлено")
+        except Exception as e:
+            messages.error(request, f"Ошибка: {e}")
+
+        return redirect("documents:client_offer_files", pk=offer.client.id)

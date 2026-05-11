@@ -14,12 +14,22 @@ class Invoice(models.Model):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invoices"
     )
-    number = models.CharField(max_length=50, blank=True)
+    number = models.CharField(max_length=50, unique=True)
     file = models.FileField(upload_to="invoices/", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     vat_rate = models.DecimalField(
         max_digits=5, decimal_places=2, default=Decimal("22.00")
     )
+    is_sent = models.BooleanField(default=False)
+
+    def get_total(self):
+        return sum(item.total for item in self.items.all())
+
+    def get_total_with_vat(self):
+        subtotal = self.get_total()
+        vat = subtotal * (self.vat_rate / Decimal("100"))
+        total = subtotal + vat
+        return total.quantize(Decimal("0.01"))
 
     class Meta:
         verbose_name = "Счет"

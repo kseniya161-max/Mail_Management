@@ -2,11 +2,12 @@
 {% block title %} Категория {% endblock %}
 {% block content %}
 <div class="container mt-3">
-    <button onclick="history.back()" class="btn btn-outline-custom me-3">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
         ← Назад
     </button>
-</div>
-<h3 class="mt-3 mb-3">Детали категории: {{ category_detail.name }}</h3>
+
+<h4 class="mt-3 mb-4">Категория: {{ category_detail.name }}</h4>
+
 <div class="row">
   <div class="coll-md-4">
     {% if category.photo %}
@@ -16,10 +17,15 @@
         {% endif %}
     </div>
     <div class="col-md-8">
-        <p><strong>ID:</strong> {{ category_detail.id }}</p>
+<!--        <p><strong>ID:</strong> {{ category_detail.id }}</p>-->
         <p><strong>Наименование:</strong> {{ category_detail.name }}</p>
         <p><strong>Описание</strong> {{ category_detail.description }}</p>
     </div>
 </div>
+
+    <a href="{% url 'products:category_edit' category_detail.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>
+    <a href="{% url 'products:category_delete' category_detail.pk %}" class="btn btn-outline-custom btn-sm">Удалить</a>
 <a href="{% url 'products:category_list' %}" class="btn btn-outline-custom btn-sm mt-3 mb-3">Назад к списку категорий</a>
+
+    </div>
 {% endblock %}

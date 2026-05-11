@@ -2,12 +2,12 @@ import base64
 import os
 import resend
 import sib_api_v3_sdk
-
 from django.conf import settings
 
 
 def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
     resend.api_key = settings.RESEND_API_KEY
+    print("API KEY:", settings.RESEND_API_KEY[:10])
 
     params = {
         "from": f"{settings.EMAIL_FROM_NAME} <{settings.RESEND_FROM_EMAIL}>",
@@ -27,7 +27,25 @@ def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
             }
         ]
 
-    return resend.Emails.send(params)
+    try:
+        print("SENDING EMAIL:", params)
+
+        response = resend.Emails.send(params)
+
+        print("RESEND RESPONSE:", response)
+
+        return response
+
+    except Exception as e:
+        print("RESEND ERROR:", e)
+
+        params["from"] = settings.RESEND_FROM_EMAIL
+
+        response = resend.Emails.send(params)
+
+        print("RESEND FALLBACK RESPONSE:", response)
+
+        return response
 
 
 def send_email_via_brevo(to_email: str, subject: str, body: str):
@@ -49,3 +67,36 @@ def send_email_via_brevo(to_email: str, subject: str, body: str):
     )
 
     return api_instance.send_transac_email(send_smtp_email)
+
+
+def send_invoice_email(invoice):
+    client = invoice.client
+    if not client.email:
+        raise ValueError("У клиента нет email")
+    if not invoice.file:
+        raise ValueError("У счета нет файла")
+    with open(invoice.file.path, "rb") as f:
+        send_email_via_resend(
+            to_email=client.email,
+            subject=f"Счет № {invoice.number}",
+            body="Добрый день! Во вложении ваш счет.",
+            file=f,
+        )
+
+
+def send_offer_email(offer):
+    client = offer.client
+
+    if not client.email:
+        raise ValueError("У клиента нет email")
+
+    if not offer.file:
+        raise ValueError("Нет файла предложения")
+
+    with open(offer.file.path, "rb") as f:
+        send_email_via_resend(
+            to_email=client.email,
+            subject="Коммерческое предложение",
+            body="Добрый день! Во вложении предложение.",
+            file=f,
+        )

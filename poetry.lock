@@ -431,6 +431,40 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-appconf"
+version = "1.2.0"
+description = "A helper class for handling configuration defaults of packaged apps gracefully."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "django_appconf-1.2.0-py3-none-any.whl", hash = "sha256:b81bce5ef0ceb9d84df48dfb623a32235d941c78cc5e45dbb6947f154ea277f4"},
+    {file = "django_appconf-1.2.0.tar.gz", hash = "sha256:15a88d60dd942d6059f467412fe4581db632ef03018a3c183fb415d6fc9e5cec"},
+]
+
+[package.dependencies]
+django = "*"
+
+[[package]]
+name = "django-phonenumber-field"
+version = "8.4.0"
+description = "An international phone number field for django models."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_phonenumber_field-8.4.0-py3-none-any.whl", hash = "sha256:7a1cb3a6456edb54d879f11ffa0acb227ded08c93b587035d0f28093f0e46511"},
+    {file = "django_phonenumber_field-8.4.0.tar.gz", hash = "sha256:2b83e843dac35eec6a69880a166487235b737a71a1e38c9a52e5ad67d6996083"},
+]
+
+[package.dependencies]
+Django = ">=4.2"
+
+[package.extras]
+phonenumbers = ["phonenumbers (>=7.0.2)"]
+phonenumberslite = ["phonenumberslite (>=7.0.2)"]
+
+[[package]]
 name = "django-redis"
 version = "6.0.0"
 description = "Full featured redis cache backend for Django."
@@ -448,6 +482,22 @@ redis = ">=4.0.2"
 
 [package.extras]
 hiredis = ["redis[hiredis] (>=4.0.2)"]
+
+[[package]]
+name = "django-select2"
+version = "8.4.8"
+description = "This is a Django_ integration of Select2_."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_select2-8.4.8-py3-none-any.whl", hash = "sha256:a2ce6a4c556dd2d4d57eb3753618d6f31f8d3910e9d9fa1b686d9340f50b14eb"},
+    {file = "django_select2-8.4.8.tar.gz", hash = "sha256:592e52effff2b5850cb7c98b265715b6704fb784699c4aedddfdd8ae1ffa1e81"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+django-appconf = ">=0.6.0"
 
 [[package]]
 name = "djangorestframework"
@@ -883,6 +933,18 @@ hyperscan = ["hyperscan (>=0.7)"]
 optional = ["typing-extensions (>=4)"]
 re2 = ["google-re2 (>=1.1)"]
 tests = ["pytest (>=9)", "typing-extensions (>=4.15)"]
+
+[[package]]
+name = "phonenumbers"
+version = "9.0.30"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+optional = false
+python-versions = ">=2.5"
+groups = ["main"]
+files = [
+    {file = "phonenumbers-9.0.30-py2.py3-none-any.whl", hash = "sha256:e0890d4cda206ef6ac18ef07e8f3ab225c31c7edce237ac870b4729d4c1d2520"},
+    {file = "phonenumbers-9.0.30.tar.gz", hash = "sha256:d42d232ccde69c1af1bb5916a7e46f4edbcc72975b02759830f4ea1fba7b00c9"},
+]
 
 [[package]]
 name = "pillow"
@@ -1674,4 +1736,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "36a6a24a2d659be1760ce4346aa3509c47488a400c121eec495e6b48c9413497"
+content-hash = "1d41076b63021e1b768542fb0ac5eb80ab2231c0d8e335f39dc54feb4d9f0fa2"

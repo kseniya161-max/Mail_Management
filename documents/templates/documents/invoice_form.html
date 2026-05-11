@@ -4,11 +4,13 @@
 {% block content %}
 
 <div class="container mt-4">
-
-    <h2 class="text-center mt-4 mb-4">
+    <button onclick="history.back()" class="btn btn-outline-custom btn-sm me-3">
+        ← Назад
+    </button>
+    <h4 class="text-center mt-4 mb-4">
         Сформировать счёт для {{ client }}
-    </h2>
-
+    </h4>
+    <h5 class="mt-4 mb-3">Введите номер счета</h5>
     <form method="post">
         {% csrf_token %}
 
@@ -25,7 +27,7 @@
 
         <hr>
 
-        <h4 class="mt-4 mb-3">Товары / услуги счёта</h4>
+        <h5 class="mt-4 mb-3">Товары / услуги счёта</h5>
 
         {{ formset.management_form }}
 
