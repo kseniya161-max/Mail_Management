@@ -28,10 +28,16 @@
                         Скачать
                     </a>
 
+                    {% if not offer.is_sent %}
                     <form method="post" action="{% url 'documents:offer_send' offer.id %}">
                     {% csrf_token %}
-                    <button class="btn-save btn-sm mt-3 mb-3">Отправить</button>
+                     <button class="btn-save btn-sm mt-3 mb-3">
+                    Отправить
+                    </button>
                     </form>
+                {% else %}
+                     <span class="text-success mt-3 mb-3">✔ Отправлено</span>
+                {% endif %}
 
                     <form method="post" action="{% url 'documents:offer_delete' offer.id %}">
                     {% csrf_token %}
