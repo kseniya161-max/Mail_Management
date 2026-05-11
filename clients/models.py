@@ -1,11 +1,10 @@
 from datetime import timedelta
-
 from django.db import models
 from django.db.models import PositiveIntegerField, CharField
 from django.utils import timezone
-
 from Users.models import User
 from products.models import Product
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Clients(models.Model):
@@ -16,7 +15,7 @@ class Clients(models.Model):
     location = models.CharField(
         max_length=100, null=True, blank=True, verbose_name="Укажите город"
     )
-    phone_number = models.CharField(
+    phone_number = models.PhoneNumberField(
         max_length=20,
         blank=True,
         null=True,
