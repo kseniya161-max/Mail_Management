@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from Users.models import User
-from clients.models import Message, Clients, Mailing, OfferFile
+from clients.models import Message, Clients, Mailing, OfferFile, City
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 from products.models import Product
@@ -17,6 +17,12 @@ class ClientForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
+
+        self.fields["location"].queryset = City.objects.order_by('name')
+        self.fields["location"].empty_label = "Выберите город ..."
+        self.fields["location"].widget.attrs.update(
+            {"class": "form-control select2", "data-placeholder": "Начните вводить название города..."}
+        )
         self.fields["email"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Введите email"}
         )
@@ -29,9 +35,6 @@ class ClientForm(ModelForm):
         self.fields["phone_number"].required = True
         self.fields["comment"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Напишите комментарий"}
-        )
-        self.fields["location"].widget.attrs.update(
-            {"class": "form-control", "placeholder": "Введите город"}
         )
         self.fields["location"].required = False
 

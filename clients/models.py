@@ -8,15 +8,24 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 
+class City(models.Model):
+    name = models.CharField(max_length=100, db_index=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Город"
+        verbose_name_plural = "Города"
+        ordering = ['name']
 
 class Clients(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     email = models.EmailField(max_length=100, unique=True)
     name = models.CharField(max_length=100, verbose_name="Имя клиента")
     comment = models.TextField(blank=True, verbose_name="Комментарий")
-    location = models.CharField(
-        max_length=100, null=True, blank=True, verbose_name="Укажите город"
-    )
+    location = models.ForeignKey(
+        City, null=True, blank=True,on_delete=models.SET_NULL, verbose_name="Укажите город")
     phone_number = PhoneNumberField(
         region="RU",
         blank=False,
@@ -31,6 +40,11 @@ class Clients(models.Model):
         permissions = [
             ("can_manage_clients", "Can manage clients"),
         ]
+
+
+
+
+
 
 
 class OfferFile(models.Model):

@@ -17,7 +17,7 @@ from clients.models import (
     Mailing,
     MailingAttempt,
     EmailStatistics,
-    OfferFile,
+    OfferFile, City,
 )
 
 
@@ -68,3 +68,9 @@ class OfferFileAdmin(admin.ModelAdmin):
         return ", ".join(product.name for product in obj.products.all())
 
     get_products.short_description = "Продукты"
+
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
