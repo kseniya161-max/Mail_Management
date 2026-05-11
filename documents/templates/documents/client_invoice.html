@@ -28,11 +28,7 @@
                     <td>{{ invoice.get_total_with_vat }}</td>
                     <td>
     <div class="d-flex gap-2">
-        <a href="{{ invoice.file.url }}"
-   target="_blank"
-   class="btn btn-outline-custom btn-sm mt-3 mb-3">
-    Предпросмотр
-</a>
+
 
             {% if not invoice.is_sent %}
     <form method="post" action="{% url 'documents:invoice_send' invoice.id %}">
