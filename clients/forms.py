@@ -1,15 +1,15 @@
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
-
 from Users.models import User
 from clients.models import Message, Clients, Mailing, OfferFile
 from django import forms
-
+from phonenumber_field.formfields import PhoneNumberField
 from products.models import Product
 
 
 class ClientForm(ModelForm):
     """Форма Создания клиента"""
+    phone_number = PhoneNumberField()
 
     class Meta:
         model = Clients
@@ -24,7 +24,7 @@ class ClientForm(ModelForm):
             {"class": "form-control", "placeholder": "Введите Имя"}
         )
         self.fields["phone_number"].widget.attrs.update(
-            {"class": "form-control", "placeholder": "Введите телефон"}
+            {"class": "form-control", "placeholder": "+79998887766"}
         )
         self.fields["phone_number"].required = True
         self.fields["comment"].widget.attrs.update(

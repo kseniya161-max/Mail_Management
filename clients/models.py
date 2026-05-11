@@ -7,6 +7,8 @@ from products.models import Product
 from phonenumber_field.modelfields import PhoneNumberField
 
 
+
+
 class Clients(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     email = models.EmailField(max_length=100, unique=True)
@@ -15,10 +17,10 @@ class Clients(models.Model):
     location = models.CharField(
         max_length=100, null=True, blank=True, verbose_name="Укажите город"
     )
-    phone_number = models.PhoneNumberField(
-        max_length=20,
-        blank=True,
-        null=True,
+    phone_number = PhoneNumberField(
+        region="RU",
+        blank=False,
+        null=False,
         verbose_name="Номер телефона",
     )
 
@@ -83,6 +85,8 @@ class Message(models.Model):
             ("can_manage_message", "Can manage message"),
         ]
 
+def get_default_end_date():
+    return timezone.now() + timedelta(days=1)
 
 class Mailing(models.Model):
     """Модель рассылки"""
@@ -95,11 +99,13 @@ class Mailing(models.Model):
     ]
 
     datetime_start = models.DateTimeField(default=timezone.now)
-    datetime_end = models.DateTimeField(default=timezone.now() + timedelta(days=1))
+    datetime_end = models.DateTimeField(default=get_default_end_date)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="created")
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     recipients = models.ManyToManyField(Clients)
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+
+
 
     def __str__(self):
         return f"Рассылка: {self.message.header}  - Статус: {self.get_status_display()}"
