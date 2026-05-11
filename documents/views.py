@@ -193,7 +193,6 @@ class InvoiceSendView(LoginRequiredMixin, View):
             send_invoice_email(invoice)
             invoice.is_sent = True
             invoice.save()
-            messages.success(request, "Счет отправлен на email")
         except Exception as e:
             messages.error(request, f"Ошибка отправки {e}")
         return redirect("documents:client_invoices", client_id=invoice.client.id)
@@ -205,7 +204,8 @@ class ClientOfferSendView(LoginRequiredMixin, View):
 
         try:
             send_offer_email(offer)
-            messages.success(request, "Предложение отправлено")
+            offer.is_sent = True
+            offer.save()
         except Exception as e:
             messages.error(request, f"Ошибка: {e}")
 

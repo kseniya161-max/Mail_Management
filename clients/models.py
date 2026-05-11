@@ -63,6 +63,7 @@ class OfferFile(models.Model):
     )
     products = models.ManyToManyField(Product, verbose_name="Выбранные продукты")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    is_sent = models.BooleanField(default=False, verbose_name="Отправлено")
 
     def __str__(self):
         return self.name
