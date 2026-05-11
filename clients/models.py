@@ -7,7 +7,6 @@ from products.models import Product
 from phonenumber_field.modelfields import PhoneNumberField
 
 
-
 class City(models.Model):
     name = models.CharField(max_length=100, db_index=True)
 
@@ -17,7 +16,8 @@ class City(models.Model):
     class Meta:
         verbose_name = "Город"
         verbose_name_plural = "Города"
-        ordering = ['name']
+        ordering = ["name"]
+
 
 class Clients(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
@@ -25,7 +25,12 @@ class Clients(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя клиента")
     comment = models.TextField(blank=True, verbose_name="Комментарий")
     location = models.ForeignKey(
-        City, null=True, blank=True,on_delete=models.SET_NULL, verbose_name="Укажите город")
+        City,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        verbose_name="Укажите город",
+    )
     phone_number = PhoneNumberField(
         region="RU",
         blank=False,
@@ -40,11 +45,6 @@ class Clients(models.Model):
         permissions = [
             ("can_manage_clients", "Can manage clients"),
         ]
-
-
-
-
-
 
 
 class OfferFile(models.Model):
@@ -99,8 +99,10 @@ class Message(models.Model):
             ("can_manage_message", "Can manage message"),
         ]
 
+
 def get_default_end_date():
     return timezone.now() + timedelta(days=1)
+
 
 class Mailing(models.Model):
     """Модель рассылки"""
@@ -118,8 +120,6 @@ class Mailing(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     recipients = models.ManyToManyField(Clients)
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
-
-
 
     def __str__(self):
         return f"Рассылка: {self.message.header}  - Статус: {self.get_status_display()}"

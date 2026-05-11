@@ -9,6 +9,7 @@ from products.models import Product
 
 class ClientForm(ModelForm):
     """Форма Создания клиента"""
+
     phone_number = PhoneNumberField()
 
     class Meta:
@@ -18,10 +19,13 @@ class ClientForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
 
-        self.fields["location"].queryset = City.objects.order_by('name')
+        self.fields["location"].queryset = City.objects.order_by("name")
         self.fields["location"].empty_label = "Выберите город ..."
         self.fields["location"].widget.attrs.update(
-            {"class": "form-control select2", "data-placeholder": "Начните вводить название города..."}
+            {
+                "class": "form-control select2",
+                "data-placeholder": "Начните вводить название города...",
+            }
         )
         self.fields["email"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Введите email"}

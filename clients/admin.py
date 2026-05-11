@@ -17,7 +17,8 @@ from clients.models import (
     Mailing,
     MailingAttempt,
     EmailStatistics,
-    OfferFile, City,
+    OfferFile,
+    City,
 )
 
 
@@ -72,5 +73,5 @@ class OfferFileAdmin(admin.ModelAdmin):
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
+    list_display = ("name",)
+    search_fields = ("name",)
