@@ -5,12 +5,11 @@ import dj_database_url
 
 load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
-# DEBUG = os.getenv("DEBUG") == "True"
-# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ".onrender.com,127.0.0.1,localhost").split(
-#     ","
-# )
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+DEBUG = os.getenv("DEBUG") == "True"
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ".onrender.com,127.0.0.1,localhost").split(
+    ","
+)
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
