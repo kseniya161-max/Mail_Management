@@ -10,8 +10,6 @@ from products.models import Product
 class ClientForm(ModelForm):
     """Форма Создания клиента"""
 
-    phone_number = PhoneNumberField()
-
     class Meta:
         model = Clients
         fields = ["email", "name", "comment", "location", "phone_number"]

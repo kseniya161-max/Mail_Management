@@ -75,8 +75,8 @@ class OfferFile(models.Model):
 
 class Message(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
-    header = models.CharField(max_length=200)
-    content = models.TextField()
+    header = models.CharField(max_length=200, verbose_name="Заголовок сообщения")
+    content = models.TextField(verbose_name="Сообщение")
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
