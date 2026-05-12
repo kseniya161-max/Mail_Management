@@ -10,6 +10,7 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ".onrender.com,127.0.0.1,localhost").
     ","
 )
 
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -141,6 +142,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 RESEND_FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL")
+EMAIL_FROM_NAME = os.getenv("EMAIL_FROM_NAME", "Mail Management")
 
 BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 BREVO_FROM_EMAIL = os.getenv("BREVO_FROM_EMAIL")
@@ -175,5 +177,3 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
-
-EMAIL_FROM_NAME = os.getenv("EMAIL_FROM_NAME", "Mail Management")
