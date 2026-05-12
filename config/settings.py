@@ -9,8 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ".onrender.com,127.0.0.1,localhost").split(
 #     ","
 # )
-DEBUG=True
-ALLOWED_HOSTS = ['*']
+DEBUG = True
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
