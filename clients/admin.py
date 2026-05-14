@@ -5,9 +5,10 @@ from clients.models import (
     Mailing,
     MailingAttempt,
     EmailStatistics,
-    OfferFile,
     City,
 )
+
+from documents.models import OfferFile
 
 
 @admin.register(Clients)

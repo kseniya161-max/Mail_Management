@@ -28,8 +28,8 @@ from clients.models import (
     Mailing,
     MailingAttempt,
     EmailStatistics,
-    OfferFile,
 )
+from documents.models import OfferFile
 from django.conf import settings
 from django.views.decorators.cache import cache_page
 from clients.services.file_service import generate_offer_file

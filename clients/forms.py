@@ -1,7 +1,8 @@
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from Users.models import User
-from clients.models import Message, Clients, Mailing, OfferFile, City
+from clients.models import Message, Clients, Mailing, City
+from documents.models import OfferFile
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 from products.models import Product
