@@ -5,7 +5,7 @@ from clients.models import Message, Clients, Mailing, City
 from documents.models import OfferFile
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
-from products.models import Product
+
 
 
 class ClientForm(ModelForm):
@@ -148,9 +148,4 @@ class UserForm(forms.ModelForm):
         }
 
 
-class OfferFileForm(forms.Form):
-    products = forms.ModelMultipleChoiceField(
-        queryset=Product.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        label="Выберите продукты",
-    )
+

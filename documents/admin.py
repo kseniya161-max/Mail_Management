@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Invoice, InvoiceItem, InvoiceTemplate
+from .models import Invoice, InvoiceItem, InvoiceTemplate, OfferFile
 
 
 class InvoiceItemInline(admin.TabularInline):
@@ -33,3 +33,14 @@ class InvoiceItemAdmin(admin.ModelAdmin):
 class InvoiceTemplateAdmin(admin.ModelAdmin):
     list_display = ("name", "is_active", "created_at")
     list_filter = ("is_active",)
+
+@admin.register(OfferFile)
+class OfferFileAdmin(admin.ModelAdmin):
+    list_display = ("id", "created_by", "name", "file", "created_at", "get_products")
+    search_fields = ("name", "created_by__email")
+    list_filter = ("created_at",)
+
+    def get_products(self, obj):
+        return ", ".join(product.name for product in obj.products.all())
+
+    get_products.short_description = "Продукты"

@@ -3,6 +3,16 @@ from django.forms import inlineformset_factory
 from documents.models import Invoice, InvoiceItem
 from django import forms
 
+from products.models import Product
+
+
+class OfferFileForm(forms.Form):
+    products = forms.ModelMultipleChoiceField(
+        queryset=Product.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Выберите продукты",
+    )
+
 
 class InvoiceForm(forms.ModelForm):
     """Форма Создания клиента"""

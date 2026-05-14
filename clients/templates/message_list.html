@@ -24,7 +24,7 @@
     <body>
         {% for message in list_messages %}
         <tr>
-<!--            <td class="text-center">{{message.id}}</td>-->
+
             <td class="text-center">{{message.header}}</td>
             <td class="text-center">{{message.content}}</td>
             <td class="text-center">{{message.product}}</td>
@@ -34,6 +34,7 @@
                 <a href="{% url 'clients:message_update' message.pk %}" class="btn btn-outline-custom btn-sm">Редактировать</a>
                 <a href="{% url 'clients:message_delete' message.pk %}" class="btn btn-outline-custom btn-sm">Удалить</a>
             </td>
+
             </tr>
             {% empty %}
             <tr>
