@@ -14,8 +14,7 @@ class Migration(migrations.Migration):
             state_operations=[
                 migrations.CreateModel(
                     name="OfferFile",
-                    fields=[
-                    ],
+                    fields=[],
                     options={
                         "db_table": "clients_offerfile",
                     },
