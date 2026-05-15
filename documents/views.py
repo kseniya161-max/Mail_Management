@@ -1,20 +1,70 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DeleteView
 
-from clients.forms import OfferFileForm
-from clients.models import Clients, OfferFile
+from documents.forms import OfferFileForm
+from clients.models import Clients
+from documents.models import OfferFile
 from clients.services.email_service import send_invoice_email, send_offer_email
-from clients.services.file_service import generate_offer_file
+from documents.services.file_service import generate_offer_file
 from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
 from documents.services.invoice_generator import generate_invoice_docx
 from .models import Invoice
 
 
+class OfferFileCreateView(LoginRequiredMixin, View):
+    template_name = "offer_file_create.html"
+    model = OfferFile
+
+    def get(self, request):
+        form = OfferFileForm()
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = OfferFileForm(request.POST)
+
+        if form.is_valid():
+            generate_offer_file(
+                user=request.user, products_queryset=form.cleaned_data["products"]
+            )
+
+            messages.success(request, "Файл успешно сформирован.")
+            return redirect("clients:user_profile")
+
+        return render(request, self.template_name, {"form": form})
+
+
+class UserOfferFilesView(LoginRequiredMixin, ListView):
+    template_name = "user_offer_files.html"
+    model = OfferFile
+    context_object_name = "offer_files"
+
+    def get_queryset(self):
+        return OfferFile.objects.filter(created_by=self.request.user).order_by(
+            "-created_at"
+        )
+
+
+class OfferFileDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = "user_offer_files_delete.html"
+    model = OfferFile
+    success_url = reverse_lazy("clients:my_offers")
+
+    def get_queryset(self):
+        return OfferFile.objects.filter(created_by=self.request.user)
+
+
+def health_check(request):
+    return JsonResponse({"status": "ok"})
+
+
 class ClientOfferFileCreateView(LoginRequiredMixin, View):
+    template_name = "offer_file_create.html"
     template_name = "offer_file_create.html"
 
     def get_client(self):

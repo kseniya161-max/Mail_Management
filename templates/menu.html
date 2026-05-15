@@ -28,7 +28,7 @@
                 <a class="nav-link" href="{% url 'products:product_list' %}">Товары</a>
             </li>
             <li class="nav-item me-4">
-                <a class="nav-link" href="{% url 'clients:offer_file_create' %}">Сформировать предложение</a>
+                <a class="nav-link" href="{% url 'documents:offer_file_create' %}">Сформировать предложение</a>
             </li>
 
            {% if user.is_authenticated %}

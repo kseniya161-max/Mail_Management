@@ -1,15 +1,41 @@
 from decimal import Decimal
-
 from django.db import models
-
-from clients.models import Clients
+from Users.models import User
 from config import settings
 from products.models import Product
 
 
+class OfferFile(models.Model):
+    name = models.CharField(max_length=200, verbose_name="Название файла")
+    client = models.ForeignKey(
+        "clients.Clients",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="offer_files",
+        verbose_name="Клиент",
+    )
+    file = models.FileField(upload_to="price_files/", verbose_name="Файл")
+    created_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name="Создатель файла"
+    )
+    products = models.ManyToManyField(Product, verbose_name="Выбранные продукты")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    is_sent = models.BooleanField(default=False, verbose_name="Отправлено")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = "clients_offerfile"
+
+        verbose_name = "Сгенерированный файл"
+        verbose_name_plural = "Сгенерированные файлы"
+
+
 class Invoice(models.Model):
     client = models.ForeignKey(
-        Clients, on_delete=models.CASCADE, related_name="invoices"
+        "clients.Clients", on_delete=models.CASCADE, related_name="invoices"
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invoices"

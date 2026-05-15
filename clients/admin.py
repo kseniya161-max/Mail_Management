@@ -5,9 +5,10 @@ from clients.models import (
     Mailing,
     MailingAttempt,
     EmailStatistics,
-    OfferFile,
     City,
 )
+
+from documents.models import OfferFile
 
 
 @admin.register(Clients)
@@ -45,18 +46,6 @@ class EmailStatisticsAdmin(admin.ModelAdmin):
         "success_attempt_mailing",
         "failed_attempt_mailing",
     )
-
-
-@admin.register(OfferFile)
-class OfferFileAdmin(admin.ModelAdmin):
-    list_display = ("id", "created_by", "name", "file", "created_at", "get_products")
-    search_fields = ("name", "created_by__email")
-    list_filter = ("created_at",)
-
-    def get_products(self, obj):
-        return ", ".join(product.name for product in obj.products.all())
-
-    get_products.short_description = "Продукты"
 
 
 @admin.register(City)

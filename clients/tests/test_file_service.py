@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 import pytest
 
-from clients.services.file_service import generate_offer_file
+from documents.services.file_service import generate_offer_file
 from products.models import Product, Category
 
 User = get_user_model()

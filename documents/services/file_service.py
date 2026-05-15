@@ -2,7 +2,7 @@ from datetime import datetime
 from openpyxl import Workbook
 from io import BytesIO
 from django.core.files.base import ContentFile
-from clients.models import OfferFile
+from documents.models import OfferFile
 import re
 
 

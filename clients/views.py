@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -20,27 +19,21 @@ from clients.forms import (
     ClientForm,
     MessageForm,
     UserForm,
-    OfferFileForm,
 )
 from clients.models import (
     Clients,
     Message,
     Mailing,
-    MailingAttempt,
     EmailStatistics,
-    OfferFile,
 )
 from django.conf import settings
 from django.views.decorators.cache import cache_page
-from clients.services.file_service import generate_offer_file
-from clients.services.email_service import send_email_via_resend, send_email_via_brevo
 from clients.tasks import send_mailing_task
 from clients.services.statistics_service import (
     get_email_statistics_for_user,
     get_email_statistics_summary,
     get_email_statistics_by_category,
 )
-from django.http import JsonResponse
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -325,49 +318,3 @@ class DeactivateMailingConfirmView(LoginRequiredMixin, View):
         mailing.save()
         messages.success(request, "Рассылка успешно отключена.")
         return redirect("clients:mailing_list")
-
-
-class OfferFileCreateView(LoginRequiredMixin, View):
-    template_name = "offer_file_create.html"
-    model = OfferFile
-
-    def get(self, request):
-        form = OfferFileForm()
-        return render(request, self.template_name, {"form": form})
-
-    def post(self, request):
-        form = OfferFileForm(request.POST)
-
-        if form.is_valid():
-            generate_offer_file(
-                user=request.user, products_queryset=form.cleaned_data["products"]
-            )
-
-            messages.success(request, "Файл успешно сформирован.")
-            return redirect("clients:user_profile")
-
-        return render(request, self.template_name, {"form": form})
-
-
-class UserOfferFilesView(LoginRequiredMixin, ListView):
-    template_name = "user_offer_files.html"
-    model = OfferFile
-    context_object_name = "offer_files"
-
-    def get_queryset(self):
-        return OfferFile.objects.filter(created_by=self.request.user).order_by(
-            "-created_at"
-        )
-
-
-class OfferFileDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = "user_offer_files_delete.html"
-    model = OfferFile
-    success_url = reverse_lazy("clients:my_offers")
-
-    def get_queryset(self):
-        return OfferFile.objects.filter(created_by=self.request.user)
-
-
-def health_check(request):
-    return JsonResponse({"status": "ok"})

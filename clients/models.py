@@ -47,32 +47,6 @@ class Clients(models.Model):
         ]
 
 
-class OfferFile(models.Model):
-    name = models.CharField(max_length=200, verbose_name="Название файла")
-    client = models.ForeignKey(
-        Clients,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name="offer_files",
-        verbose_name="Клиент",
-    )
-    file = models.FileField(upload_to="price_files/", verbose_name="Файл")
-    created_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="Создатель файла"
-    )
-    products = models.ManyToManyField(Product, verbose_name="Выбранные продукты")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
-    is_sent = models.BooleanField(default=False, verbose_name="Отправлено")
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "Сгенерированный файл"
-        verbose_name_plural = "Сгенерированные файлы"
-
-
 class Message(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     header = models.CharField(max_length=200, verbose_name="Заголовок сообщения")
@@ -85,7 +59,7 @@ class Message(models.Model):
         verbose_name="Наименование товара",
     )
     offer_file = models.ForeignKey(
-        OfferFile,
+        "documents.OfferFile",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
