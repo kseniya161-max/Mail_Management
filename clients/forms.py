@@ -7,7 +7,6 @@ from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 
 
-
 class ClientForm(ModelForm):
     """Форма Создания клиента"""
 
@@ -146,6 +145,3 @@ class UserForm(forms.ModelForm):
             "phone_number": forms.TextInput(attrs={"class": "form-control"}),
             "role": forms.TextInput(attrs={"class": "form-control"}),
         }
-
-
-

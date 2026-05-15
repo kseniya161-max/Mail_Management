@@ -9,7 +9,12 @@ from documents.views import (
     ClientOfferDeleteView,
     ClientOfferSendView,
 )
-from documents.views import (OfferFileCreateView,UserOfferFilesView,OfferFileDeleteView,health_check)
+from documents.views import (
+    OfferFileCreateView,
+    UserOfferFilesView,
+    OfferFileDeleteView,
+    health_check,
+)
 
 app_name = "documents"
 

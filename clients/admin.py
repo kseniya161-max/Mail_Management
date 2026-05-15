@@ -48,9 +48,6 @@ class EmailStatisticsAdmin(admin.ModelAdmin):
     )
 
 
-
-
-
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
     list_display = ("name",)

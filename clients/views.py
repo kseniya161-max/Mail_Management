@@ -41,7 +41,6 @@ from clients.services.statistics_service import (
 )
 
 
-
 class ClientListView(LoginRequiredMixin, ListView):
     model = Clients
     template_name = "client_list.html"
@@ -324,6 +323,3 @@ class DeactivateMailingConfirmView(LoginRequiredMixin, View):
         mailing.save()
         messages.success(request, "Рассылка успешно отключена.")
         return redirect("clients:mailing_list")
-
-
-

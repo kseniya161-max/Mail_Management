@@ -17,7 +17,6 @@ from documents.services.invoice_generator import generate_invoice_docx
 from .models import Invoice
 
 
-
 class OfferFileCreateView(LoginRequiredMixin, View):
     template_name = "offer_file_create.html"
     model = OfferFile
@@ -62,6 +61,7 @@ class OfferFileDeleteView(LoginRequiredMixin, DeleteView):
 
 def health_check(request):
     return JsonResponse({"status": "ok"})
+
 
 class ClientOfferFileCreateView(LoginRequiredMixin, View):
     template_name = "offer_file_create.html"

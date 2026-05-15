@@ -34,6 +34,7 @@ class InvoiceTemplateAdmin(admin.ModelAdmin):
     list_display = ("name", "is_active", "created_at")
     list_filter = ("is_active",)
 
+
 @admin.register(OfferFile)
 class OfferFileAdmin(admin.ModelAdmin):
     list_display = ("id", "created_by", "name", "file", "created_at", "get_products")
