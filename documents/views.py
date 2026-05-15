@@ -10,7 +10,7 @@ from documents.forms import OfferFileForm
 from clients.models import Clients
 from documents.models import OfferFile
 from clients.services.email_service import send_invoice_email, send_offer_email
-from clients.services.file_service import generate_offer_file
+from documents.services.file_service import generate_offer_file
 from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
 from documents.services.invoice_generator import generate_invoice_docx

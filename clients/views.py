@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -25,14 +24,10 @@ from clients.models import (
     Clients,
     Message,
     Mailing,
-    MailingAttempt,
     EmailStatistics,
 )
-from documents.models import OfferFile
 from django.conf import settings
 from django.views.decorators.cache import cache_page
-from clients.services.file_service import generate_offer_file
-from clients.services.email_service import send_email_via_resend, send_email_via_brevo
 from clients.tasks import send_mailing_task
 from clients.services.statistics_service import (
     get_email_statistics_for_user,
