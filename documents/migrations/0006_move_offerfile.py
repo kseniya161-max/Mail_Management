@@ -31,7 +31,6 @@ class Migration(migrations.Migration):
                         ("file", models.FileField(upload_to="price_files/")),
                         ("created_at", models.DateTimeField(auto_now_add=True)),
                         ("is_sent", models.BooleanField(default=False)),
-
                         (
                             "client",
                             models.ForeignKey(
@@ -42,7 +41,6 @@ class Migration(migrations.Migration):
                                 to="clients.clients",
                             ),
                         ),
-
                         (
                             "created_by",
                             models.ForeignKey(
