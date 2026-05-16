@@ -35,6 +35,8 @@ from clients.services.statistics_service import (
     get_email_statistics_by_category,
 )
 
+from clients.utils.permissions import is_manager
+
 
 class ClientListView(LoginRequiredMixin, ListView):
     model = Clients
@@ -91,7 +93,7 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "client_detail"
 
     def get_queryset(self):
-        if self.request.user.role == "manager":
+        if is_manager(self.request.user):
             return Clients.objects.all()
         return Clients.objects.filter(user=self.request.user)
 
@@ -103,7 +105,7 @@ class MessageListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.role == "manager":
+        if is_manager(self.request.user):
             return queryset
         return Message.objects.filter(user=self.request.user)
 
@@ -150,7 +152,7 @@ class MailingListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            if self.request.user.role == "manager":
+            if is_manager(self.request.user):
                 return Mailing.objects.all()
             else:
                 return Mailing.objects.filter(user=self.request.user)
@@ -181,7 +183,7 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("clients:mailing_list")
 
     def get_queryset(self):
-        if self.request.user.role == "manager":
+        if is_manager(self.request.user):
             return Mailing.objects.filter(user=self.request.user)
         return super().get_queryset()
 
@@ -204,7 +206,7 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("clients:mailing_list")
 
     def get_queryset(self):
-        if self.request.user.role == "manager":
+        if is_manager(self.request.user):
             return Mailing.objects.all()
         return Mailing.objects.filter(user=self.request.user)
 
@@ -292,7 +294,7 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 class DeactivateMailingView(LoginRequiredMixin, View):
     def post(self, request, mailing_id):
-        if request.user.role != "manager":
+        if not is_manager(self.request.user):
             messages.error(request, "Только менеджер может отключить рассылку.")
             return redirect("clients:mailing_list")
 
@@ -309,7 +311,7 @@ class DeactivateMailingConfirmView(LoginRequiredMixin, View):
         return render(request, "deactivate_mailing_confirm.html", {"mailing": mailing})
 
     def post(self, request, mailing_id):
-        if request.user.role != "manager":
+        if not is_manager(self.request.user):
             messages.error(request, "Только менеджер может отключить рассылку.")
             return redirect("clients:mailing_list")
 
