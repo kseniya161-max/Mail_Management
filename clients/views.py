@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -183,9 +183,8 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("clients:mailing_list")
 
     def get_queryset(self):
-        if is_manager(self.request.user):
-            return Mailing.objects.filter(user=self.request.user)
-        return super().get_queryset()
+        return Mailing.objects.filter(user=self.request.user)
+
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -196,7 +195,6 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             return super().form_valid(form)
         else:
-            print(form.errors)
             return self.form_invalid(form)
 
 
@@ -251,10 +249,13 @@ class EmailStatisticsView(LoginRequiredMixin, ListView):
         return context
 
 
-class ManegerClientListView(LoginRequiredMixin, ListView):
+class ManegerClientListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Clients
     template_name = "manager_client_list.html"
     context_object_name = "list_clients"
+
+    def test_func(self):
+        return is_manager(self.request.user)
 
     def get_queryset(self):
         return Clients.objects.all()
@@ -292,12 +293,12 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DeactivateMailingView(LoginRequiredMixin, View):
-    def post(self, request, mailing_id):
-        if not is_manager(self.request.user):
-            messages.error(request, "Только менеджер может отключить рассылку.")
-            return redirect("clients:mailing_list")
+class DeactivateMailingView(LoginRequiredMixin, UserPassesTestMixin, View):
 
+    def test_func(self):
+        return is_manager(self.request.user)
+
+    def post(self, request, mailing_id):
         mailing = get_object_or_404(Mailing, id=mailing_id)
         mailing.status = "closed"
         mailing.save()
@@ -305,16 +306,16 @@ class DeactivateMailingView(LoginRequiredMixin, View):
         return redirect("clients:mailing_list")
 
 
-class DeactivateMailingConfirmView(LoginRequiredMixin, View):
+class DeactivateMailingConfirmView(LoginRequiredMixin, UserPassesTestMixin, View):
+
+    def test_func(self):
+        return is_manager(self.request.user)
+
     def get(self, request, mailing_id):
         mailing = get_object_or_404(Mailing, id=mailing_id)
         return render(request, "deactivate_mailing_confirm.html", {"mailing": mailing})
 
     def post(self, request, mailing_id):
-        if not is_manager(self.request.user):
-            messages.error(request, "Только менеджер может отключить рассылку.")
-            return redirect("clients:mailing_list")
-
         mailing = get_object_or_404(Mailing, id=mailing_id)
         mailing.status = "closed"
         mailing.save()
