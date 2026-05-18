@@ -6,6 +6,7 @@ from Users.models import User
 from products.models import Product
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class City(models.Model):
     name = models.CharField(max_length=100, db_index=True)
 

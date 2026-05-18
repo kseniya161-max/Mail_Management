@@ -33,7 +33,6 @@ class OfferFile(models.Model):
         verbose_name_plural = "Сгенерированные файлы"
 
 
-
 class Invoice(models.Model):
     client = models.ForeignKey(
         "clients.Clients", on_delete=models.CASCADE, related_name="invoices"

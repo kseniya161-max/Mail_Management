@@ -185,7 +185,6 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return Mailing.objects.filter(user=self.request.user)
 
-
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["instance"] = self.get_object()
