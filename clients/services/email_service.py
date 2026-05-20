@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
     resend.api_key = settings.RESEND_API_KEY
     print("API KEY:", settings.RESEND_API_KEY[:10])
@@ -73,9 +74,7 @@ def send_email_via_brevo(to_email: str, subject: str, body: str):
 
 def send_invoice_email(invoice):
     client = invoice.client
-    logger.info(
-        f"Отправка Invoice id={invoice.id} клиенту {client.email}"
-    )
+    logger.info(f"Отправка Invoice id={invoice.id} клиенту {client.email}")
     if not client.email:
         raise ValueError("У клиента нет email")
     if not invoice.file:
@@ -87,16 +86,12 @@ def send_invoice_email(invoice):
             body="Добрый день! Во вложении ваш счет.",
             file=f,
         )
-        logger.info(
-            f"Отправка Invoice id={invoice.id} успешно отправлен"
-        )
+        logger.info(f"Отправка Invoice id={invoice.id} успешно отправлен")
 
 
 def send_offer_email(offer):
     client = offer.client
-    logger.info(
-        f"Отправка OfferFile id={offer.id} клиенту {client.email}"
-    )
+    logger.info(f"Отправка OfferFile id={offer.id} клиенту {client.email}")
 
     if not client.email:
         raise ValueError("У клиента нет email")
@@ -111,6 +106,4 @@ def send_offer_email(offer):
             body="Добрый день! Во вложении предложение.",
             file=f,
         )
-        logger.info(
-            f"OfferFile id={offer.id} успешно отправлен"
-        )
+        logger.info(f"OfferFile id={offer.id} успешно отправлен")

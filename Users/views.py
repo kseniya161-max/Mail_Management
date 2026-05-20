@@ -78,10 +78,7 @@ class CreateUserView(CreateView):
             },
         )
         send_email_via_resend(
-            to_email=user.email,
-            subject=subject,
-            body=message,
-            file=None
+            to_email=user.email, subject=subject, body=message, file=None
         )
         # send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
