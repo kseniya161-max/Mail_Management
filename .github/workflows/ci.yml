@@ -48,7 +48,7 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run pytest --nomigrations
+          poetry run pytest
 
       - name: Run flake8
         run: |

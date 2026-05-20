@@ -3,7 +3,9 @@ import os
 import resend
 import sib_api_v3_sdk
 from django.conf import settings
+import logging
 
+logger = logging.getLogger(__name__)
 
 def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
     resend.api_key = settings.RESEND_API_KEY
@@ -28,16 +30,16 @@ def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
         ]
 
     try:
-        print("SENDING EMAIL:", params)
+        logger.info(f"Отправка email на {to_email}")
 
         response = resend.Emails.send(params)
 
-        print("RESEND RESPONSE:", response)
+        logger.info(f"Email успешно отправлен на {to_email}")
 
         return response
 
     except Exception as e:
-        print("RESEND ERROR:", e)
+        logger.error(f"Ошибка отправки email на {to_email}: {e}")
 
         params["from"] = settings.RESEND_FROM_EMAIL
 
@@ -71,6 +73,9 @@ def send_email_via_brevo(to_email: str, subject: str, body: str):
 
 def send_invoice_email(invoice):
     client = invoice.client
+    logger.info(
+        f"Отправка Invoice id={invoice.id} клиенту {client.email}"
+    )
     if not client.email:
         raise ValueError("У клиента нет email")
     if not invoice.file:
@@ -82,10 +87,16 @@ def send_invoice_email(invoice):
             body="Добрый день! Во вложении ваш счет.",
             file=f,
         )
+        logger.info(
+            f"Отправка Invoice id={invoice.id} успешно отправлен"
+        )
 
 
 def send_offer_email(offer):
     client = offer.client
+    logger.info(
+        f"Отправка OfferFile id={offer.id} клиенту {client.email}"
+    )
 
     if not client.email:
         raise ValueError("У клиента нет email")
@@ -99,4 +110,7 @@ def send_offer_email(offer):
             subject="Коммерческое предложение",
             body="Добрый день! Во вложении предложение.",
             file=f,
+        )
+        logger.info(
+            f"OfferFile id={offer.id} успешно отправлен"
         )

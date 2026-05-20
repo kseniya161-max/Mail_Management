@@ -25,6 +25,7 @@ from Users.forms import (
 )
 from Users.models import User
 from clients.models import EmailStatistics
+from clients.services.email_service import send_email_via_resend
 from config import settings
 from django.core.mail import send_mail
 from django.contrib.auth.views import PasswordResetView
@@ -69,7 +70,6 @@ class CreateUserView(CreateView):
         confirmation_link = (
             f"https://{settings.SITE_DOMAIN}/users/confirm/{uid}/{token}/"
         )
-        # confirmation_link = f"http://localhost:8000/users/confirm/{uid}/{token}/"
         subject = "Подтверждение email"
         message = render_to_string(
             "email_confirmation.html",
@@ -77,7 +77,13 @@ class CreateUserView(CreateView):
                 "confirmation_link": confirmation_link,
             },
         )
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+        send_email_via_resend(
+            to_email=user.email,
+            subject=subject,
+            body=message,
+            file=None
+        )
+        # send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
 
 User = get_user_model()
