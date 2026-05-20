@@ -5,6 +5,7 @@ import sib_api_v3_sdk
 from django.conf import settings
 import logging
 
+
 logger = logging.getLogger(__name__)
 
 
