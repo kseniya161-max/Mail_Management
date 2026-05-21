@@ -27,7 +27,7 @@ class OfferFile(models.Model):
         return self.name
 
     class Meta:
-        db_table = "clients_offerfile"
+        db_table = "documents_offerfile"
 
         verbose_name = "Сгенерированный файл"
         verbose_name_plural = "Сгенерированные файлы"

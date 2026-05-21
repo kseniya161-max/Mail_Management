@@ -5,6 +5,10 @@ from django.core.files.base import ContentFile
 from documents.models import OfferFile
 import re
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def slugify_name(name):
     name = name.lower()
@@ -50,10 +54,21 @@ def generate_offer_file(user, products_queryset, file_name=None, client=None):
 
         file_name = f"offer_{base_name}_{count}items_{timestamp}.xlsx"
 
+    if not products_queryset.exists():
+        logger.warning(
+            f"Пользователь id={user.id} пытался создать товар OfferFile без товаров"
+        )
+
     offer_file = OfferFile.objects.create(
         name=file_name,
         created_by=user,
         client=client,
+    )
+    logger.info(
+        f"Пользователь id={user.id} создал "
+        f"OfferFile id={offer_file.id} "
+        f"Название файла {file_name} "
+        f"products_count={products_queryset.count()}"
     )
 
     offer_file.file.save(file_name, ContentFile(buffer.read()), save=True)

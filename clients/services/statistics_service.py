@@ -1,9 +1,10 @@
 from django.db.models import Sum
 from clients.models import EmailStatistics
+from clients.utils.permissions import is_manager
 
 
 def get_email_statistics_for_user(user):
-    if user.role == "manager":
+    if is_manager(user):
         return (
             EmailStatistics.objects.select_related("mailing")
             .values("mailing__message__header", "mailing__status", "user__username")
