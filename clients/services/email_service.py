@@ -43,19 +43,19 @@ def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
     except Exception as e:
         logger.error(f"Ошибка отправки email на {to_email}: {e}")
         try:
-            logger.warning(f'Пробуем fallback отправку на email={to_email}')
+            logger.warning(f"Пробуем fallback отправку на email={to_email}")
 
             params["from"] = settings.RESEND_FROM_EMAIL
 
             response = resend.Emails.send(params)
-            logger.info(f'Письмо успешно ушло на email={to_email}')
+            logger.info(f"Письмо успешно ушло на email={to_email}")
 
             # print("RESEND FALLBACK RESPONSE:", response)
 
             return response
 
         except Exception as fallback_error:
-            logger.critical(f'fallback отправка упала для {to_email}: {fallback_error}')
+            logger.critical(f"fallback отправка упала для {to_email}: {fallback_error}")
             raise
 
 
@@ -84,10 +84,10 @@ def send_invoice_email(invoice):
     client = invoice.client
     logger.info(f"Отправка Invoice id={invoice.id} клиенту {client.email}")
     if not client.email:
-        logger.error(f'У клиента id={client.id} нет email')
+        logger.error(f"У клиента id={client.id} нет email")
         raise ValueError("У клиента нет email")
     if not invoice.file:
-        logger.error(f'У Invoice id={invoice.id} не вложен файл')
+        logger.error(f"У Invoice id={invoice.id} не вложен файл")
         raise ValueError("У счета нет файла")
     with open(invoice.file.path, "rb") as f:
         send_email_via_resend(
@@ -104,11 +104,11 @@ def send_offer_email(offer):
     logger.info(f"Отправка OfferFile id={offer.id} клиенту {client.email}")
 
     if not client.email:
-        logger.error(f'У клиента id={client.id} нет email')
+        logger.error(f"У клиента id={client.id} нет email")
         raise ValueError("У клиента нет email")
 
     if not offer.file:
-        logger.error(f'У предложения id={offer.id} нет файла')
+        logger.error(f"У предложения id={offer.id} нет файла")
         raise ValueError("Нет файла предложения")
 
     with open(offer.file.path, "rb") as f:
