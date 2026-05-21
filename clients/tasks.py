@@ -15,7 +15,10 @@ def send_mailing_task(mailing_id):
     mailing.save()
 
 
-@shared_task
-def send_offerfile_task(offerfile_id):
-    offer = OfferFile.objects.get(id=offerfile_id)
-    send_offer_email(offer)
+@shared_task(bind=True, max_retries=3)
+def send_offerfile_task(self,offerfile_id):
+    try:
+        offer = OfferFile.objects.get(id=offerfile_id)
+        send_offer_email(offer)
+    except Exception as e:
+        raise self.retry(exc=e, countdown=30)
