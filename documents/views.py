@@ -15,7 +15,7 @@ from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
 from documents.services.invoice_generator import generate_invoice_docx
 from .models import Invoice
-from clients.tasks import send_offerfile_task
+from clients.tasks import send_offerfile_task, send_invoice_task
 from django.conf import settings
 
 
@@ -241,7 +241,10 @@ class InvoiceSendView(LoginRequiredMixin, View):
     def post(self, request, pk):
         invoice = get_object_or_404(Invoice, pk=pk, created_by=request.user)
         try:
-            send_invoice_email(invoice)
+            if settings.USE_CELERY:
+                send_invoice_task.delay(invoice.id)
+            else:
+                send_invoice_email(invoice)
             invoice.is_sent = True
             invoice.save()
         except Exception as e:
