@@ -7,6 +7,6 @@ class IsOwnerOrManager(BasePermission):
     """Permissions для менеджера. Потльзователь видит только своих клиентов а Менеджер всех"""
 
     def has_object_permission(self, request, view, obj):
-        if is_manager(self.request.user):
+        if is_manager(request.user):
             return True
         return obj.user == request.user

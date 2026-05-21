@@ -15,6 +15,8 @@ from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
 from documents.services.invoice_generator import generate_invoice_docx
 from .models import Invoice
+from clients.tasks import send_offerfile_task
+from django.conf import settings
 
 
 class OfferFileCreateView(LoginRequiredMixin, View):
@@ -252,7 +254,11 @@ class ClientOfferSendView(LoginRequiredMixin, View):
         offer = get_object_or_404(OfferFile, pk=pk, created_by=request.user)
 
         try:
-            send_offer_email(offer)
+            if settings.USE_CELERY:
+                send_offerfile_task.delay(offer.id)
+            else:
+                send_offer_email(offer)
+
             offer.is_sent = True
             offer.save()
         except Exception as e:
