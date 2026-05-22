@@ -36,6 +36,10 @@ from clients.services.statistics_service import (
 )
 
 from clients.utils.permissions import is_manager
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -61,7 +65,12 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        logger.info(
+            f"Пользователь {self.request.user.id}"
+            f"Создал клиента Clients {self.object.id}"
+        )
+        return response
 
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
@@ -75,7 +84,12 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        logger.info(
+            f"Пользователь {self.request.user.id}"
+            f"Отредактировал клиента Clients {self.object.id}"
+        )
+        return response
 
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
@@ -85,6 +99,15 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Clients.objects.filter(user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        logger.warning(
+            f"Пользователь id={request.user.id} " f"удалил Clients id={self.object.id}"
+        )
+
+        return super().delete(request, *args, **kwargs)
 
 
 class ClientDetailView(LoginRequiredMixin, DetailView):

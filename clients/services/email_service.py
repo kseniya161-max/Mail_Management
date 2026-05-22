@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
     resend.api_key = settings.RESEND_API_KEY
-    print("API KEY:", settings.RESEND_API_KEY[:10])
 
     params = {
         "from": f"{settings.EMAIL_FROM_NAME} <{settings.RESEND_FROM_EMAIL}>",

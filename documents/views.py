@@ -17,6 +17,10 @@ from documents.services.invoice_generator import generate_invoice_docx
 from .models import Invoice
 from clients.tasks import send_offerfile_task, send_invoice_task
 from django.conf import settings
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class OfferFileCreateView(LoginRequiredMixin, View):
@@ -31,8 +35,12 @@ class OfferFileCreateView(LoginRequiredMixin, View):
         form = OfferFileForm(request.POST)
 
         if form.is_valid():
-            generate_offer_file(
+            offer = generate_offer_file(
                 user=request.user, products_queryset=form.cleaned_data["products"]
+            )
+            logger.info(
+                f"Пользователь id={request.user.id} "
+                f"Создал предложение id={offer.id}"
             )
             messages.success(request, "Файл успешно сформирован.")
             return redirect("clients:user_profile")
@@ -66,7 +74,6 @@ def health_check(request):
 
 class ClientOfferFileCreateView(LoginRequiredMixin, View):
     template_name = "offer_file_create.html"
-    template_name = "offer_file_create.html"
 
     def get_client(self):
         queryset = Clients.objects.all()
@@ -92,12 +99,15 @@ class ClientOfferFileCreateView(LoginRequiredMixin, View):
         form = OfferFileForm(request.POST)
 
         if form.is_valid():
-            generate_offer_file(
+            offer = generate_offer_file(
                 user=request.user,
                 products_queryset=form.cleaned_data["products"],
                 client=client,
             )
-
+            logger.info(
+                f"Пользователь id={request.user.id} "
+                f"Успешно создал OfferFile id={offer.id}"
+            )
             messages.success(request, "Предложение для клиента успешно сформировано.")
             return redirect("clients:client_detail", pk=client.pk)
 
@@ -120,6 +130,9 @@ class ClientOfferDeleteView(LoginRequiredMixin, View):
             offer.file.delete(save=False)
         client_id = offer.client.id
         offer.delete()
+        logger.warning(
+            f"Пользователь id={request.user.id} " f"удалил OfferFile id={offer.id}"
+        )
 
         return redirect("documents:client_offer_files", pk=client_id)
 
@@ -202,6 +215,9 @@ class InvoiceCreateView(LoginRequiredMixin, View):
 
             invoice.file = file_path
             invoice.save()
+            logger.info(
+                f"Пользователь id={request.user.id} " f"создал Invoice id={invoice.id}"
+            )
             return redirect("clients:client_detail", pk=client.pk)
 
         return render(
@@ -234,6 +250,9 @@ class InvoiceDeleteView(View):
         if invoice.file:
             invoice.file.delete(save=False)
         invoice.delete()
+        logger.warning(
+            f"Пользователь id={request.user.id} " f"удалил Invoice id={invoice.id}"
+        )
         return redirect("documents:client_invoices", client_id=client_id)
 
 
@@ -243,8 +262,16 @@ class InvoiceSendView(LoginRequiredMixin, View):
         try:
             if settings.USE_CELERY:
                 send_invoice_task.delay(invoice.id)
+                logger.info(
+                    f"Пользователь id={request.user.id} "
+                    f"отправил Invoice id={invoice.id}"
+                )
             else:
                 send_invoice_email(invoice)
+                logger.info(
+                    f"Пользователь id={request.user.id} "
+                    f"отправил Invoice id={invoice.id}"
+                )
             invoice.is_sent = True
             invoice.save()
         except Exception as e:
