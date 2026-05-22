@@ -66,10 +66,11 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         response = super().form_valid(form)
-        logger.info(f'Пользователь {self.request.user.id}'
-                    f'Создал клиента Clients {self.object.id}')
+        logger.info(
+            f"Пользователь {self.request.user.id}"
+            f"Создал клиента Clients {self.object.id}"
+        )
         return response
-
 
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
@@ -84,11 +85,11 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         response = super().form_valid(form)
-        logger.info(f'Пользователь {self.request.user.id}'
-                    f'Отредактировал клиента Clients {self.object.id}')
+        logger.info(
+            f"Пользователь {self.request.user.id}"
+            f"Отредактировал клиента Clients {self.object.id}"
+        )
         return response
-
-
 
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
@@ -103,8 +104,7 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
         self.object = self.get_object()
 
         logger.warning(
-            f"Пользователь id={request.user.id} "
-            f"удалил Clients id={self.object.id}"
+            f"Пользователь id={request.user.id} " f"удалил Clients id={self.object.id}"
         )
 
         return super().delete(request, *args, **kwargs)

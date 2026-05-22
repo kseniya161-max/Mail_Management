@@ -25,7 +25,7 @@ def find_invoice_table(document):
 
         if "№" in first_row_text and "Наименование" in first_row_text:
             return table
-    logger.error('Не найдена таблица в шаблоне счета')
+    logger.error("Не найдена таблица в шаблоне счета")
     raise ValueError("Не найдена таблица товаров в шаблоне счёта.")
 
 
@@ -56,13 +56,13 @@ def fill_invoice_table(document, invoice):
 
 
 def generate_invoice_docx(invoice):
-    logger.info(f'Начало генерации файла Invoice id={invoice.id}')
+    logger.info(f"Начало генерации файла Invoice id={invoice.id}")
     template = (
         InvoiceTemplate.objects.filter(is_active=True).order_by("-created_at").first()
     )
 
     if not template:
-        logger.error('Нет активного шаблона InvoiceTemplate')
+        logger.error("Нет активного шаблона InvoiceTemplate")
         raise ValueError("Не найден активный шаблон счёта.")
 
     document = Document(template.file.path)
@@ -92,6 +92,6 @@ def generate_invoice_docx(invoice):
 
     with open(file_path, "rb") as docx_file:
         invoice.file.save(file_name, File(docx_file), save=True)
-        logger.info(f'Файл Invoice id={invoice.id} создан')
+        logger.info(f"Файл Invoice id={invoice.id} создан")
 
     return invoice.file

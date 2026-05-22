@@ -131,8 +131,7 @@ class ClientOfferDeleteView(LoginRequiredMixin, View):
         client_id = offer.client.id
         offer.delete()
         logger.warning(
-            f"Пользователь id={request.user.id} "
-            f"удалил OfferFile id={offer.id}"
+            f"Пользователь id={request.user.id} " f"удалил OfferFile id={offer.id}"
         )
 
         return redirect("documents:client_offer_files", pk=client_id)
@@ -201,7 +200,6 @@ class InvoiceCreateView(LoginRequiredMixin, View):
             invoice.created_by = request.user
             invoice.save()
 
-
             items = formset.save(commit=False)
 
             for item_form, item in zip(formset.forms, items):
@@ -218,8 +216,7 @@ class InvoiceCreateView(LoginRequiredMixin, View):
             invoice.file = file_path
             invoice.save()
             logger.info(
-                f"Пользователь id={request.user.id} "
-                f"создал Invoice id={invoice.id}"
+                f"Пользователь id={request.user.id} " f"создал Invoice id={invoice.id}"
             )
             return redirect("clients:client_detail", pk=client.pk)
 
@@ -254,8 +251,7 @@ class InvoiceDeleteView(View):
             invoice.file.delete(save=False)
         invoice.delete()
         logger.warning(
-            f"Пользователь id={request.user.id} "
-            f"удалил Invoice id={invoice.id}"
+            f"Пользователь id={request.user.id} " f"удалил Invoice id={invoice.id}"
         )
         return redirect("documents:client_invoices", client_id=client_id)
 
