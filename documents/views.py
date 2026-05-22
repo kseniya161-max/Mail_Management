@@ -15,7 +15,7 @@ from products.models import Product
 from .forms import InvoiceForm, InvoiceItemFormSet
 from documents.services.invoice_generator import generate_invoice_docx
 from .models import Invoice
-from clients.tasks import send_offerfile_task, send_invoice_task
+from clients.tasks import send_offerfile_task, send_invoice_task, generate_invoice_task
 from django.conf import settings
 import logging
 
@@ -38,6 +38,10 @@ class OfferFileCreateView(LoginRequiredMixin, View):
             offer = generate_offer_file(
                 user=request.user, products_queryset=form.cleaned_data["products"]
             )
+        # if settings.USE_CELERY:
+        #     generate_offer_task.delay(offer.id)
+        # else:
+        #     generate_offer_file(offer)
             logger.info(
                 f"Пользователь id={request.user.id} "
                 f"Создал предложение id={offer.id}"
@@ -211,10 +215,10 @@ class InvoiceCreateView(LoginRequiredMixin, View):
                     item.product_name = item.product.name
 
                 item.save()
-            file_path = generate_invoice_docx(invoice)
-
-            invoice.file = file_path
-            invoice.save()
+            if settings.USE_CELERY:
+                generate_invoice_task.delay(invoice.id)
+            else:
+                generate_invoice_docx(invoice)
             logger.info(
                 f"Пользователь id={request.user.id} " f"создал Invoice id={invoice.id}"
             )
