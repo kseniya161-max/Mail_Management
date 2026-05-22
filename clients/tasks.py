@@ -45,5 +45,3 @@ def generate_invoice_task(invoice_id):
 # def generate_offer_task(offer_id):
 #     offer = OfferFile.objects.get(id=offer_id)
 #     generate_offer_file(offer)
-
-

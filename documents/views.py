@@ -38,10 +38,10 @@ class OfferFileCreateView(LoginRequiredMixin, View):
             offer = generate_offer_file(
                 user=request.user, products_queryset=form.cleaned_data["products"]
             )
-        # if settings.USE_CELERY:
-        #     generate_offer_task.delay(offer.id)
-        # else:
-        #     generate_offer_file(offer)
+            # if settings.USE_CELERY:
+            #     generate_offer_task.delay(offer.id)
+            # else:
+            #     generate_offer_file(offer)
             logger.info(
                 f"Пользователь id={request.user.id} "
                 f"Создал предложение id={offer.id}"
