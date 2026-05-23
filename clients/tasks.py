@@ -5,6 +5,8 @@ from clients.services.mailing_service import MailingService
 from documents.models import OfferFile, Invoice
 from documents.services.file_service import generate_offer_file, generate_offer_excel
 from documents.services.invoice_generator import generate_invoice_docx
+from django.utils import timezone
+from clients.models import Mailing
 
 
 @shared_task
@@ -45,3 +47,12 @@ def generate_invoice_task(invoice_id):
 def generate_offer_task(offer_id):
     offer = OfferFile.objects.get(id=offer_id)
     generate_offer_excel(offer)
+
+
+@shared_task
+def check_and_start_mailings():
+    mailings = Mailing.objects.filter(status='created',datetime_start__lte=timezone.now(),)
+    for mailing in mailings:
+        mailing.status = 'started'
+        mailing.save()
+        send_mailing_task.delay(mailing.id)
