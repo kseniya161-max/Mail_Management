@@ -1,5 +1,4 @@
 from celery import shared_task
-from clients.models import Mailing
 from clients.services.email_service import send_offer_email, send_invoice_email
 from clients.services.mailing_service import MailingService
 from documents.models import OfferFile, Invoice
@@ -35,6 +34,7 @@ def send_mailing_task(mailing_id):
 #     except Exception as e:
 #         logger.error(f"Offer send failed id={offerfile_id}, error={e}")
 #         raise self.retry(exc=e, countdown=30)
+
 
 @shared_task(bind=True, max_retries=3)
 def send_offerfile_task(self, offerfile_id):
@@ -76,11 +76,13 @@ def generate_offer_task(offer_id):
     logger.info(f"FILE SAVED: {offer.file.name}")
 
 
-
 @shared_task
 def check_and_start_mailings():
-    mailings = Mailing.objects.filter(status='created',datetime_start__lte=timezone.now(),)
+    mailings = Mailing.objects.filter(
+        status="created",
+        datetime_start__lte=timezone.now(),
+    )
     for mailing in mailings:
-        mailing.status = 'started'
+        mailing.status = "started"
         mailing.save()
         send_mailing_task.delay(mailing.id)
