@@ -17,29 +17,7 @@ def slugify_name(name):
 
 
 def generate_offer_file(user, products_queryset, file_name=None, client=None):
-    """Создание Excel файла с продуктами"""
-
-    workbook = Workbook()
-    worksheet = workbook.active
-    worksheet.title = "Предложение"
-
-    worksheet.append(["Название", "Категория", "Количество", "Цена", "Описание/сталь"])
-
-    for product in products_queryset:
-        worksheet.append(
-            [
-                product.name,
-                product.category.name if product.category else "",
-                product.quantity,
-                product.price,
-                product.description or "",
-            ]
-        )
-
-    buffer = BytesIO()
-    workbook.save(buffer)
-    buffer.seek(0)
-
+    """Создает объект OfferFile без генерации Excel файла."""
     if not file_name:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
 
@@ -71,8 +49,35 @@ def generate_offer_file(user, products_queryset, file_name=None, client=None):
         f"products_count={products_queryset.count()}"
     )
 
-    offer_file.file.save(file_name, ContentFile(buffer.read()), save=True)
-
     offer_file.products.set(products_queryset)
 
     return offer_file
+
+
+def generate_offer_excel(offer):
+    """Генерирует Excel файл и сохраняет его в OfferFile."""
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.title = "Предложение"
+
+    worksheet.append(["Название", "Категория", "Количество", "Цена", "Описание/сталь"])
+
+    for product in offer.products.all():
+        worksheet.append(
+            [
+                product.name,
+                product.category.name if product.category else "",
+                product.quantity,
+                product.price,
+                product.description or "",
+            ]
+        )
+
+    buffer = BytesIO()
+    workbook.save(buffer)
+    buffer.seek(0)
+    file_name = offer.name
+    logger.info(f"BEFORE SAVE offer.file.name = {offer.file.name}")
+    offer.file.save(file_name, ContentFile(buffer.read()), save=True)
+    logger.info(f"AFTER SAVE offer.file = {offer.file.name}")
+    logger.info(f"файл Excel id={offer.id} успешно создан")

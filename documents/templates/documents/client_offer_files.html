@@ -24,10 +24,13 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    <a href="{{ offer.file.url }}" target="_blank" class="btn btn-outline-custom btn-sm mt-3 mb-3">
-                        Скачать
-                    </a>
-
+                    {% if offer.file and offer.file.name %}
+    <a href="{{ offer.file.url }}" target="_blank" class="btn btn-outline-custom btn-sm mt-3 mb-3">
+        Скачать
+    </a>
+{% else %}
+    <span class="text-muted">Файл не готов</span>
+{% endif %}
                     {% if not offer.is_sent %}
                     <form method="post" action="{% url 'documents:offer_send' offer.id %}">
                     {% csrf_token %}
