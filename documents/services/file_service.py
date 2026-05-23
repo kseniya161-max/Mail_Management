@@ -77,5 +77,7 @@ def generate_offer_excel(offer):
     workbook.save(buffer)
     buffer.seek(0)
     file_name = offer.name
+    logger.info(f"BEFORE SAVE offer.file.name = {offer.file.name}")
     offer.file.save(file_name, ContentFile(buffer.read()), save=True)
+    logger.info(f"AFTER SAVE offer.file = {offer.file.name}")
     logger.info(f"файл Excel id={offer.id} успешно создан")

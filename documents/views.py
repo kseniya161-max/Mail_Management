@@ -113,6 +113,11 @@ class ClientOfferFileCreateView(LoginRequiredMixin, View):
                 products_queryset=form.cleaned_data["products"],
                 client=client,
             )
+            if settings.USE_CELERY:
+                generate_offer_task.delay(offer.id)
+            else:
+                generate_offer_excel(offer)
+
             logger.info(
                 f"Пользователь id={request.user.id} "
                 f"Успешно создал OfferFile id={offer.id}"
