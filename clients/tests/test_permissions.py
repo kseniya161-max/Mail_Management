@@ -34,7 +34,6 @@ def test_client_list_visibility():
 
     client = Client()
 
-    # Логиним user1
     client.force_login(user1)
     response = client.get(reverse("clients:client_list"))
     assert response.status_code == 200
@@ -43,9 +42,25 @@ def test_client_list_visibility():
     assert client_user2 not in response.context["list_clients"]
     assert client_manager not in response.context["list_clients"]
 
-    # Логиним менеджера
     client.force_login(manager)
     response = client.get(reverse("clients:client_list"))
     assert client_manager in response.context["list_clients"]
     assert client_user1 not in response.context["list_clients"]
     assert client_user2 not in response.context["list_clients"]
+
+
+@pytest.mark.django_db
+def test_client_delete_view_non_owner():
+    owner = User.objects.create_user(
+        username="owner", email="del@test.com", password="pass", role="user"
+    )
+    other = User.objects.create_user(
+        username="other", email="del@test2.com", password="pass", role="user"
+    )
+    client_obj = Clients.objects.create(
+        user=owner, name="My client", email="del@test3.com", phone_number="+79123456789"
+    )
+    client = Client()
+    client.force_login(other)
+    response = client.get(reverse("clients:client_delete", args=[client_obj.id]))
+    assert response.status_code == 404
