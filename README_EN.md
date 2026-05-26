@@ -30,6 +30,28 @@ The project is deployed on Render (free tier).
 * The service may go to sleep after ~15 minutes of inactivity
 * The first request after inactivity may take 30–60 seconds
 
+## Environment Variables
+
+Required:
+
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+- `DATABASE_URL`
+- `SECRET_KEY`
+- `DEBUG`
+
+Optional:
+
+- `USE_CELERY=True/False`
+
+## Migrations
+
+Django migrations are used for schema changes.  
+Production considerations:
+- Checking existing data before `null=False`
+- Safe modification of nullable / non-nullable fields
+- Data cleansing before schema migrations
+
 ## CI (Continuous Integration)
 
 The project uses GitHub Actions for CI.
@@ -43,12 +65,35 @@ On every push and pull request:
 
 This ensures code quality and stability across environments.
 
-### Background processing
-
-* Locally: Celery + Redis for asynchronous mailing
-* Production (Render free tier): synchronous fallback (no worker)
-
 ---
+
+## Email Delivery & Domain Authentication
+
+To improve deliverability and avoid spam folders, the project implements:
+
+- **SPF (Sender Policy Framework)** – authorises Resend / Amazon SES to send emails on behalf of the domain.  
+  Example DNS record: `v=spf1 include:amazonses.com ~all`
+
+- **DKIM (DomainKeys Identified Mail)** – cryptographically signs outgoing emails.  
+  Configured via Resend as a TXT record (`resend._domainkey`).
+
+- **DMARC (Domain-based Message Authentication, Reporting & Conformance)** – defines a policy and provides reporting.  
+  Example record: `v=DMARC1; p=none;`
+
+Email sending is provided by Resend API (primary) and Brevo API (fallback).  
+Attachments (`.docx`, `.xlsx`) are supported via base64 encoding.
+
+## System Design Overview
+
+The project follows an asynchronous backend architecture:
+
+- Task queue system (Celery + Redis)
+- Email delivery pipeline
+- Document generation pipeline
+- Hybrid sync/async execution model
+- External API integrations (email providers)
+
+Business logic, background tasks, and external services are separated into distinct layers.
 
 ## Features
 
@@ -129,10 +174,46 @@ Features:
 
 ---
 
-## Background Tasks
+## Background Processing System (Celery + Redis)
 
-* Celery + Redis for async processing
-* Fallback to synchronous execution if Celery is unavailable
+The project uses Celery for distributed task processing.  
+**Monitoring**: Flower (run `celery -A config flower`)
+
+### Task Types
+
+1. **Email processing pipeline**  
+   - Sending mailings, invoices, offer files  
+   - Retry mechanism with exponential backoff  
+   - Sync fallback mode (when Celery is disabled)
+
+2. **Document generation pipeline**  
+   - Excel offer generation  
+   - DOCX invoice generation  
+   - File storage in media directory
+
+3. **Scheduler / automation**  
+   - Periodic check of scheduled mailings  
+   - Automatic campaign start
+
+### Queue Architecture (Routing)
+
+- `email_queue` – all email operations  
+- `documents_queue` – file generation  
+- `scheduler_queue` – periodic tasks
+
+### Reliability & Fault Tolerance
+
+- `max_retries` + `countdown` for failing tasks  
+- `autoretry_for` for email tasks  
+- Idempotent task design  
+- Exception logging and fallback handling
+
+### Hybrid Execution Model
+
+- **Async mode** (Celery enabled) – default for local development  
+- **Sync fallback mode** (Celery disabled) – for production environments without a worker (Render free tier)
+
+This allows the system to run even without a full Celery infrastructure.
 
 ---
 
@@ -144,6 +225,27 @@ Features:
 
 ---
 
+
+## Logging System
+
+Centralised logging is implemented using Python’s `logging` module.
+
+### Covered Areas
+
+- **Business events** – client creation, mailing creation, offer/invoice generation, email sending  
+- **Background processing** – task start/end, retries, errors  
+- **Email delivery pipeline** – success, fallback attempts, integration errors (Resend/Brevo)  
+- **Error tracking** – missing files, missing client emails, document generation failures
+
+### Log Levels
+
+- `INFO` – successful business operations  
+- `WARNING` – invalid user actions  
+- `ERROR` – operation failures  
+- `CRITICAL` – fallback failures (email delivery)
+
+Logs are written to a rotating file (`logs/app.log`) and also output to the console for development.
+
 ## Tech Stack
 
 * Python
@@ -152,6 +254,7 @@ Features:
 * PostgreSQL
 * Celery
 * Redis
+* Flower (monitoring)
 
 * OpenPyXL
 * Resend API
@@ -199,6 +302,26 @@ pytest
 
 ---
 
+## Installation
+
+1. Clone the repository:  
+   `git clone https://github.com/kseniya161-max/Mail_Management.git`
+2. Install dependencies:  
+   `poetry install`
+3. Activate the virtual environment:  
+   `poetry shell`
+4. Run migrations:  
+   `python manage.py migrate`
+5. Start the server:  
+   `python manage.py runserver`
+
+### Running background tasks
+
+- Start Redis: `redis-server`
+- Start Celery worker: `celery -A config worker --loglevel=info --pool=solo`
+
+For async mode, set `USE_CELERY=True` in your environment.
+
 ## Running the Project
 
 After starting the server, the application is available at:
@@ -206,6 +329,13 @@ After starting the server, the application is available at:
 - Web interface: `http://127.0.0.1:8000/`
 - API root: `http://127.0.0.1:8000/api/`
 - DRF login: `http://127.0.0.1:8000/api-auth/login/`
+
+### Running Celery with Flower
+
+```bash
+celery -A config flower --port=5555
+```
+Then open http://localhost:5555 to monitor queues and tasks.
 
 Note: In production, the project is deployed on Render.
 

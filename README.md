@@ -18,6 +18,19 @@
 
 Проект демонстрирует разработку backend-системы для автоматизации рассылок с генерацией коммерческих предложений и счетов (invoice) с автоматической генерацией документов и интеграцией с внешними email-сервисами.
 Проект включает покрытие ключевой бизнес-логики unit-тестами с использованием pytest и mock.
+Logging используется как lightweight observability layer для отслеживания бизнес-процессов и background job execution.
+
+### System Design Overview
+
+Проект представляет собой backend system с асинхронной обработкой бизнес-процессов:
+
+- task queue system (Celery + Redis)
+- email delivery pipeline
+- document generation pipeline
+- hybrid sync/async execution model
+- external API integrations (email providers)
+
+Архитектура проекта построена с разделением бизнес-логики, фоновых задач и интеграций с внешними сервисами.
 
 ## Особенности деплоя
 
@@ -231,13 +244,93 @@ Email-отправка:
 - агрегации (Sum)
 - работа со связанными моделями через __ (JOIN)
 
-### 8. Фоновая отправка
+### 8. Background Processing System (Celery + Redis)
 
-- Фоновая отправка рассылок через Celery
-- Redis используется как брокер очередей
-- Поддерживаются два режима:
-  - асинхронный (Celery + Redis)
-  - синхронный fallback (для production free-tier)
+Проект использует asynchronous task processing architecture на базе Celery.
+Для мониторинга очередей используется Flower (доступен после запуска celery -A config flower)
+
+#### Архитектура задач:
+
+Система разделена на 3 типа бизнес-процессов:
+
+### 1. Email processing pipeline
+- отправка рассылок (Mailing)
+- отправка invoice
+- отправка offer files
+- retry механизм при ошибках
+- fallback синхронный режим
+
+### Email Delivery System
+
+Проект поддерживает multi-provider email delivery architecture.
+
+#### Supported providers:
+- Resend API (primary)
+- Brevo API (fallback / alternative provider)
+
+---
+
+#### Features:
+
+### 1. Email sending with attachments
+- invoice (.docx)
+- offer files (.xlsx)
+- base64 encoding for API transport
+
+### 2. Fault tolerance
+- automatic fallback from Resend → retry with modified sender config
+- error handling with logging at ERROR/CRITICAL level
+
+### 3. Validation layer
+- email existence check before sending
+- file existence validation before attachment
+- structured exception handling
+
+---
+
+#### Observability:
+- logging of all email attempts
+- success/failure tracking per recipient
+- fallback attempt tracking
+
+### 2. Document generation pipeline
+- генерация Excel коммерческих предложений
+- генерация DOCX счетов (invoice)
+- сохранение файлов в media storage
+
+### 3. Scheduler / automation
+- периодическая проверка запланированных рассылок
+- автоматический запуск email кампаний
+
+---
+
+#### Queue architecture (Celery routing):
+
+Система использует разделение очередей:
+
+- email_queue - все email операции
+- documents_queue - генерация файлов
+- scheduler_queue - периодические задачи
+
+---
+
+#### Reliability & fault tolerance:
+
+- retry механизм (max_retries + countdown)
+- autoretry_for для email задач
+- exception logging + fallback handling
+- idempotent-safe task design
+
+---
+
+#### Hybrid execution model:
+
+Система поддерживает два режима работы:
+
+- Async mode (Celery enabled)
+- Sync fallback mode (Celery disabled for production constraints)
+
+Это позволяет запускать систему даже без worker инфраструктуры.
 
   
 ### 9 Email Delivery и доменная аутентификация.
@@ -273,7 +366,6 @@ v=spf1 include:amazonses.com ~all
 - HTML-писем (расширяемо)
 - писем с вложениями (счета .docx)
 
-
 ### 10 Ограничения email-доставки
 
 - На новых доменах возможны проблемы с доставкой (особенно Gmail)
@@ -292,6 +384,42 @@ v=spf1 include:amazonses.com ~all
 - OpenAPI schema: `/api/schema/`
 
 Это позволяет быстро просматривать и тестировать доступные API-эндпоинты проекта.
+
+
+###  12 Logging System
+
+Проект использует централизованное logging решение на базе Python logging module.
+
+#### Покрываемые зоны логирования:
+
+**1. Business events**
+- создание клиентов
+- создание рассылок
+- генерация offer/invoice файлов
+- отправка email
+- task lifecycle tracking
+
+**2. Background processing (Celery)**
+- запуск и завершение задач
+- retry событий
+- ошибки выполнения задач
+
+**3. Email delivery pipeline**
+- успешные отправки email
+- fallback попытки отправки
+- ошибки интеграций (Resend / Brevo)
+
+**4. Error tracking**
+- отсутствующие файлы
+- отсутствующие email у клиентов
+- ошибки генерации документов
+
+#### Логирование включает:
+- INFO: успешные бизнес операции
+- WARNING: некорректные действия пользователей
+- ERROR: ошибки выполнения операций
+- CRITICAL: fallback failures (email delivery)
+- Логи записываются в файл с ротацией, а также выводятся в консоль для разработки
 
 ## Технологии
 
