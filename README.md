@@ -429,6 +429,7 @@ v=spf1 include:amazonses.com ~all
 - PostgreSQL
 - Celery
 - Redis
+- Docker
 
 - OpenPyXL
 - Resend API
@@ -476,6 +477,50 @@ v=spf1 include:amazonses.com ~all
 - `RESEND_FROM_EMAIL`
 
 Дополнительно тестировалась интеграция с Brevo API.
+
+
+## Контейнеризация (Docker)
+
+Проект полностью контейнеризирован с использованием Docker и Docker Compose. 
+Для работы с Docker необходимо установить Docker Desktop и убедиться, что он запущен.
+Для локальной разработки и тестирования достаточно выполнить:
+
+```bash
+docker-compose up -d --build
+```
+В состав входят следующие сервисы:
+
+* app - Django-приложение (CRM)
+
+* db - PostgreSQL (база данных)
+
+* redis - Redis (брокер для Celery и кэш)
+
+* celery_worker - Celery worker для асинхронных задач
+
+* celery_beat - Celery beat для периодических задач
+
+После запуска необходимо применить миграции и создать суперпользователя:
+```bash
+docker-compose exec app python manage.py migrate
+```
+```bash
+docker-compose exec app python manage.py createsuperuser
+```
+
+Сайт будет доступен по адресу http://localhost:8000.
+
+Остановка всех контейнеров:
+```bash
+docker-compose down
+```
+
+Если требуется полная очистка (включая тома с данными БД и Redis):
+```bash
+docker-compose down -v
+```
+
+
 
 ### Тестирование
 
