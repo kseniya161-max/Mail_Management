@@ -255,6 +255,7 @@ Logs are written to a rotating file (`logs/app.log`) and also output to the cons
 * Celery
 * Redis
 * Flower (monitoring)
+* Docker
 
 * OpenPyXL
 * Resend API
@@ -321,6 +322,50 @@ pytest
 - Start Celery worker: `celery -A config worker --loglevel=info --pool=solo`
 
 For async mode, set `USE_CELERY=True` in your environment.
+
+
+## Containerization (Docker)
+
+The project is fully containerized using Docker and Docker Compose.  
+You need Docker Desktop installed and running.
+
+For local development and testing, run:
+
+```bash
+docker-compose up -d --build
+```
+
+The following services are included:
+
+* app – Django application (CRM)
+
+* db – PostgreSQL (database)
+
+* redis – Redis (broker for Celery and cache)
+
+* celery_worker – Celery worker for background tasks
+
+* celery_beat – Celery beat for periodic tasks
+
+After startup, apply migrations and create a superuser:
+
+```bash
+docker-compose exec app python manage.py migrate
+```
+```bash
+docker-compose exec app python manage.py createsuperuser
+```
+The site will be available at http://localhost:8000.
+
+Stop all containers:
+
+```bash
+docker-compose down
+```
+To perform a full cleanup (including database and Redis volumes):
+```bash
+docker-compose down -v
+```
 
 ## Running the Project
 
