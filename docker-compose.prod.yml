@@ -9,8 +9,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    ports: []
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -19,8 +19,7 @@ services:
 
   redis:
     image: redis:7
-    ports:
-      - "6379:6379"
+    ports: []
     volumes:
       - redis_data:/data
     healthcheck:
@@ -32,16 +31,13 @@ services:
   app:
     build: .
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
+    ports: []
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-clients}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - SECRET_KEY=${SECRET_KEY:-django-insecure-dev-key}
-      - DEBUG=True
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=False
       - USE_CELERY=True
     depends_on:
       db:
@@ -49,17 +45,27 @@ services:
       redis:
         condition: service_healthy
 
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./staticfiles:/static
+      - ./media:/media
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
   celery_worker:
     build: .
-    command: python -m celery -A config worker -l info --pool=solo
-    volumes:
-      - .:/app
+    command: python -m celery -A config worker -l info --pool=prefork
+    volumes: []
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-clients}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - SECRET_KEY=${SECRET_KEY:-django-insecure-dev-key}
-      - DEBUG=True
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=False
       - USE_CELERY=True
     depends_on:
       db:
@@ -70,14 +76,13 @@ services:
   celery_beat:
     build: .
     command: python -m celery -A config beat -l info
-    volumes:
-      - .:/app
+    volumes: []
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-clients}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - SECRET_KEY=${SECRET_KEY:-django-insecure-dev-key}
-      - DEBUG=True
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=False
       - USE_CELERY=True
     depends_on:
       db:
