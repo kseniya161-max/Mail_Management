@@ -256,6 +256,8 @@ Logs are written to a rotating file (`logs/app.log`) and also output to the cons
 * Redis
 * Flower (monitoring)
 * Docker
+* Gunicorn
+* Nginx
 
 * OpenPyXL
 * Resend API
@@ -365,6 +367,32 @@ docker-compose down
 To perform a full cleanup (including database and Redis volumes):
 ```bash
 docker-compose down -v
+```
+
+### Production build (Gunicorn + Nginx)
+
+For deploying the project to a server (e.g., Timeweb Cloud), a separate `docker-compose.prod.yml` file is used. It includes:
+- **Gunicorn** instead of the built‑in `runserver`.
+- **Nginx** as a reverse proxy to serve static and media files.
+
+The required files are already included in the repository:
+- `docker-compose.prod.yml` – production environment configuration.
+- `nginx.conf` – Nginx web server configuration.
+
+#### Preparation (locally or on the server)
+
+1. Make sure environment variables are set (especially `SECRET_KEY`, `POSTGRES_PASSWORD` and `DEBUG=False`).
+2. Collect static files:
+   ```bash
+   docker-compose -f docker-compose.prod.yml run --rm app python manage.py collectstatic --noinput
+   ```
+- Start the production stack:
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+- Apply migrations if needed:
+```bash
+docker-compose -f docker-compose.prod.yml exec app python manage.py migrate
 ```
 
 ## Running the Project
