@@ -430,6 +430,8 @@ v=spf1 include:amazonses.com ~all
 - Celery
 - Redis
 - Docker
+- Gunicorn
+- Nginx
 
 - OpenPyXL
 - Resend API
@@ -520,7 +522,33 @@ docker-compose down
 docker-compose down -v
 ```
 
+### Продакшен‑сборка (Gunicorn + Nginx)
 
+Для развёртывания проекта на сервере (например, Timeweb Cloud) используется отдельный файл `docker-compose.prod.yml`. В нём:
+- **Gunicorn** вместо встроенного `runserver`.
+- **Nginx** в качестве reverse proxy для отдачи статики и медиафайлов.
+
+Необходимые файлы уже включены в репозиторий:
+- `docker-compose.prod.yml` – конфигурация продакшен‑окружения.
+- `nginx.conf` – конфигурация веб‑сервера Nginx.
+
+#### Подготовка (локально или на сервере)
+
+1. Убедитесь, что переменные окружения заданы (особенно `SECRET_KEY`, `POSTGRES_PASSWORD` и `DEBUG=False`).
+2. Соберите статические файлы:
+   ```bash
+   docker-compose -f docker-compose.prod.yml run --rm app python manage.py collectstatic --noinput
+   ```
+   
+- Запустите продакшен‑стек:
+ ```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+- Примените миграции (при необходимости):
+```bash
+docker-compose -f docker-compose.prod.yml exec app python manage.py migrate
+```
 
 ### Тестирование
 
