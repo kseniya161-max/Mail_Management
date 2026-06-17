@@ -22,20 +22,6 @@ def send_mailing_task(mailing_id):
     mailing.save()
 
 
-# @shared_task(bind=True, max_retries=3)
-# def send_offerfile_task(self, offerfile_id):
-#     logger.info(f"START TASK offerfile_id={offerfile_id}")
-#     try:
-#         offer = OfferFile.objects.get(id=offerfile_id)
-#         generate_offer_excel(offer)
-#         logger.info(f"BEFORE EMAIL {offer.id}")
-#         send_offer_email(offer)
-#         logger.info(f"AFTER EMAIL {offer.id}")
-#     except Exception as e:
-#         logger.error(f"Offer send failed id={offerfile_id}, error={e}")
-#         raise self.retry(exc=e, countdown=30)
-
-
 @shared_task(bind=True, max_retries=3)
 def send_offerfile_task(self, offerfile_id):
     try:
