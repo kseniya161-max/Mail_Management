@@ -49,8 +49,6 @@ def send_email_via_resend(to_email: str, subject: str, body: str, file=None):
             response = resend.Emails.send(params)
             logger.info(f"Письмо успешно ушло на email={to_email}")
 
-            # print("RESEND FALLBACK RESPONSE:", response)
-
             return response
 
         except Exception as fallback_error:
