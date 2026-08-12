@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def send_mailing_task(mailing_id):
-    """ Отправка писем"""
+    """Отправка писем"""
     mailing = Mailing.objects.get(id=mailing_id)
 
     MailingService.send_mailing(mailing, mailing.user)
